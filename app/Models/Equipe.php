@@ -11,12 +11,12 @@ class Equipe extends Model
 
     public function projets()
     {
-        return $this->hasMany(Projet::class);
+        return $this->belongsTo(Projet::class);
     }
 
-    public function personnels()
+    public function users()
     {
-        return $this->belongsToMany(Personnel::class, 'membre_equipe')
+        return $this->belongsToMany(User::class, 'membre_equipe')
                     ->withPivot('role', 'statut', 'actif', 'date_debut', 'date_fin');
     }
 }
