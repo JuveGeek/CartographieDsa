@@ -43,7 +43,7 @@
                         <tr class="intro-x">
                             <td class="w-40">{{ $projet->nom }}</td>
                             <td class="text-center">{{ $projet->description }}</td>
-                            <td class="text-center"></td>
+                            <td class="text-center"> {{ $projet->structurePorteuse ? $projet->structurePorteuse->nom : 'Aucune structure porteuse' }}</td>
                             <td class="w-40">{{ $projet->date_debut }}</td>
                             <td class="w-40">{{ $projet->date_fin }}</td>
                             <td class="w-40">{{ $projet->statut }}</td>
@@ -51,7 +51,7 @@
                             <td class="table-report__action w-56">
 
                                 <div class="flex justify-center items-center">
-                                <a class="flex items-center text-primary whitespace-nowrap mr-3" href="{{route('details')}}">
+                                <a class="flex items-center text-primary whitespace-nowrap mr-3" href="{{ route('details', $projet->id) }}">
                                         <i data-lucide="eye" data-lucide="eye" class="w-4 h-4 mr-1"></i> View Details
                                     </a>
                                     <a class="flex items-center " href="javascript:;">

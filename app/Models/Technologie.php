@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Technologie extends Model
 {
-    protected $fillable = ['nom', 'description', 'role', 'version'];
+    protected $fillable = ['nom', 'description', 'role', 'version','statut'];
 
     public function projets()
     {

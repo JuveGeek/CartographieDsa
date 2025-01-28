@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FonctionnaliteController;
+use App\Http\Controllers\TechnologieController;
 use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\ColorSchemeController;
 
@@ -40,7 +42,7 @@ Route::middleware('auth')->group(function() {
         Route::get('transaction-detail-page', 'transactionDetail')->name('transaction-detail');
         Route::get('seller-list-page', 'sellerList')->name('seller-list');
         Route::get('seller-detail-page', 'sellerDetail')->name('seller-detail');
-        Route::get('details-page', 'details')->name('details');
+        Route::get('details-page/{id}', 'details')->name('details');
         Route::get('inbox-page', 'inbox')->name('inbox');
         Route::get('file-manager-page', 'fileManager')->name('file-manager');
         Route::get('point-of-sale-page', 'pointOfSale')->name('point-of-sale');
@@ -122,6 +124,11 @@ Route::middleware('auth')->group(function() {
 
         Route::delete('/user/delete', [UserController::class, 'destroy'])->name('users.delete');
 
+       // route pour les fonctionnalité
+       Route::post('/projets/{projet}/fonctionnalites', [FonctionnaliteController::class, 'store'])->name('fonctionnalites.store');
+       
+       // route pour les fonctionnalité
+       Route::post('/projets/{projet}/technologies', [TechnologieController::class, 'store'])->name('technologies.store');
 
     });
 });

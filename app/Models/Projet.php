@@ -16,7 +16,8 @@ class Projet extends Model
 
     public function technologies()
     {
-        return $this->belongsToMany(Technologie::class);
+        //return $this->belongsToMany(Technologie::class);
+        return $this->hasMany(Technologie::class);
     }
 
     public function difficulteProjets()
@@ -31,7 +32,7 @@ class Projet extends Model
 
     public function structurePorteuse()
     {
-        return $this->belongsTo(StructurePorteuse::class);
+        return $this->belongsTo(StructurePorteuse::class,'structure_porteuse_id');
     }
 
     public function equipe()

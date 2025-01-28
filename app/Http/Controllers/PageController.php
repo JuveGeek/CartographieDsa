@@ -162,9 +162,11 @@ class PageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function details()
+    public function details($id)
     {
-        return view('pages/details');
+        $projet = Projet::with(['fonctionnalites','technologies','difficulteProjets', 'amendements'])->findOrFail($id);
+
+        return view('pages/details',compact('projet'));
     }
 
     /**
@@ -817,6 +819,8 @@ class PageController extends Controller
      */
     public function projetsDataList()
     {
+        $projets = Projet::with('StructurePorteuse')->get();
+
         return view('pages/projets-data-list');
     }
 // Méthode pour enregistrer un Projet
