@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->text('description');
             $table->date('date');
-           // $table->foreignId('amendement_id')->constrained()->onDelete('cascade');
+            $table->string('file_path')->nullable();
             $table->timestamps();
         });
     }

@@ -8,6 +8,8 @@ use App\Http\Controllers\FonctionnaliteController;
 use App\Http\Controllers\TechnologieController;
 use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\ColorSchemeController;
+use App\Http\Controllers\DifficulteProjetController;
+use App\Http\Controllers\AmendementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,15 +35,12 @@ Route::middleware('auth')->group(function() {
         Route::get('projets-data-list-page', 'projetsDataList')->name('projets-data-list');
         Route::get('dashboard-overview-2-page', 'dashboardOverview2')->name('dashboard-overview-2');
         Route::get('dashboard-overview-3-page', 'dashboardOverview3')->name('dashboard-overview-3');
-        Route::get('dashboard-overview-4-page', 'dashboardOverview4')->name('dashboard-overview-4');
+
         Route::get('categories-page', 'categories')->name('categories');
         Route::get('add-product-page', 'addProduct')->name('add-product');
         Route::get('product-list-page', 'productList')->name('product-list');
         Route::get('product-grid-page', 'productGrid')->name('product-grid');
-        Route::get('transaction-list-page', 'transactionList')->name('transaction-list');
-        Route::get('transaction-detail-page', 'transactionDetail')->name('transaction-detail');
-        Route::get('seller-list-page', 'sellerList')->name('seller-list');
-        Route::get('seller-detail-page', 'sellerDetail')->name('seller-detail');
+
         Route::get('details-page/{id}', 'details')->name('details');
         Route::get('inbox-page', 'inbox')->name('inbox');
         Route::get('file-manager-page', 'fileManager')->name('file-manager');
@@ -68,19 +67,13 @@ Route::middleware('auth')->group(function() {
         Route::get('profile-overview-1-page', 'profileOverview1')->name('profile-overview-1');
         Route::get('profile-overview-2-page', 'profileOverview2')->name('profile-overview-2');
         Route::get('profile-overview-3-page', 'profileOverview3')->name('profile-overview-3');
-        Route::get('wizard-layout-1-page', 'wizardLayout1')->name('wizard-layout-1');
-        Route::get('wizard-layout-2-page', 'wizardLayout2')->name('wizard-layout-2');
-        Route::get('wizard-layout-3-page', 'wizardLayout3')->name('wizard-layout-3');
+
         Route::get('blog-layout-1-page', 'blogLayout1')->name('blog-layout-1');
         Route::get('blog-layout-2-page', 'blogLayout2')->name('blog-layout-2');
         Route::get('blog-layout-3-page', 'blogLayout3')->name('blog-layout-3');
         Route::get('amendements-page', 'amendements')->name('amendements');
         Route::get('difficultes-page', 'difficultes')->name('difficultes');
-        Route::get('invoice-layout-1-page', 'invoiceLayout1')->name('invoice-layout-1');
-        Route::get('invoice-layout-2-page', 'invoiceLayout2')->name('invoice-layout-2');
-        Route::get('faq-layout-1-page', 'faqLayout1')->name('faq-layout-1');
-        Route::get('faq-layout-2-page', 'faqLayout2')->name('faq-layout-2');
-        Route::get('faq-layout-3-page', 'faqLayout3')->name('faq-layout-3');
+
         //Route::get('login-page', 'login')->name('login');
         //Route::get('register-page', 'register')->name('register');
         Route::get('error-page-page', 'errorPage')->name('error-page');
@@ -98,18 +91,13 @@ Route::middleware('auth')->group(function() {
         Route::get('progress-bar-page', 'progressBar')->name('progress-bar');
         Route::get('tooltip-page', 'tooltip')->name('tooltip');
         Route::get('dropdown-page', 'dropdown')->name('dropdown');
-        Route::get('typography-page', 'typography')->name('typography');
-        Route::get('icon-page', 'icon')->name('icon');
-        Route::get('loading-icon-page', 'loadingIcon')->name('loading-icon');
+
+
         Route::get('regular-form-page', 'regularForm')->name('regular-form');
         Route::get('datepicker-page', 'datepicker')->name('datepicker');
         Route::get('tom-select-page', 'tomSelect')->name('tom-select');
         Route::get('file-upload-page', 'fileUpload')->name('file-upload');
-        Route::get('wysiwyg-editor-classic', 'wysiwygEditorClassic')->name('wysiwyg-editor-classic');
-        Route::get('wysiwyg-editor-inline', 'wysiwygEditorInline')->name('wysiwyg-editor-inline');
-        Route::get('wysiwyg-editor-balloon', 'wysiwygEditorBalloon')->name('wysiwyg-editor-balloon');
-        Route::get('wysiwyg-editor-balloon-block', 'wysiwygEditorBalloonBlock')->name('wysiwyg-editor-balloon-block');
-        Route::get('wysiwyg-editor-document', 'wysiwygEditorDocument')->name('wysiwyg-editor-document');
+
         Route::get('validation-page', 'validation')->name('validation');
         Route::get('chart-page', 'chart')->name('chart');
         Route::get('slider-page', 'slider')->name('slider');
@@ -126,9 +114,17 @@ Route::middleware('auth')->group(function() {
 
        // route pour les fonctionnalité
        Route::post('/projets/{projet}/fonctionnalites', [FonctionnaliteController::class, 'store'])->name('fonctionnalites.store');
-       
+
        // route pour les fonctionnalité
        Route::post('/projets/{projet}/technologies', [TechnologieController::class, 'store'])->name('technologies.store');
+        Route::post('/difficultes', [DifficulteProjetController::class, 'store'])->name('difficultes.store');
+        Route::get('/difficultes/{id}/proposition-solutions', [DifficulteProjetController::class, 'show'])->name('difficultes.show');
+        Route::post('/proposition-solution', [DifficulteProjetController::class, 'storeProposition'])->name('difficultes.storeProposition');
+
+        Route::post('/amendements', [AmendementController::class, 'store'])->name('amendements.store');
+        Route::get('/amendements/{id}/difficulte-amendements', [AmendementController::class, 'show'])->name('amendements.show');
+        Route::post('/difficulte-amendement', [AmendementController::class, 'storeDifficulteAmendement'])->name('amendements.storeDifficulteAmendement');
+
 
     });
 });

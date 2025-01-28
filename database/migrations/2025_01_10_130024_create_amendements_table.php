@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('source');
             $table->string('statut');
+            $table->string('file_path')->nullable();
             $table->date('date');
             //$table->foreignId('projet_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();

@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->text('description');
             $table->date('date');
-            //$table->foreignId('difficulte_projet_id')->constrained()->onDelete('cascade');
+            $table->string('status')->nullable();
+            $table->string('file_path')->nullable();
             $table->timestamps();
         });
     }

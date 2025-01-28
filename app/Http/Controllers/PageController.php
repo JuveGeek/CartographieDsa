@@ -1,15 +1,13 @@
 <?php
-
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
+
 use App\Http\Controllers\Controller;
-
-use App\Models\User;
-use Spatie\Permission\Models\Role;
-
-use App\Models\StructurePorteuse;
 use App\Models\Equipe;
 use App\Models\Projet;
+use App\Models\StructurePorteuse;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class PageController extends Controller
 {
@@ -24,7 +22,7 @@ class PageController extends Controller
         return view('pages/dashboard-overview-1', );
     }
 
-   /**
+    /**
      * Show specified view.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -164,9 +162,9 @@ class PageController extends Controller
      */
     public function details($id)
     {
-        $projet = Projet::with(['fonctionnalites','technologies','difficulteProjets', 'amendements'])->findOrFail($id);
+        $projet = Projet::with(['fonctionnalites', 'technologies', 'difficulteProjets', 'amendements'])->findOrFail($id);
 
-        return view('pages/details',compact('projet'));
+        return view('pages/details', compact('projet'));
     }
 
     /**
@@ -224,8 +222,6 @@ class PageController extends Controller
         return view('pages/calendar');
     }
 
-
-
     /**
      * Show specified view.
      *
@@ -248,7 +244,7 @@ class PageController extends Controller
         $users = User::paginate(10); // Récupérer les utilisateurs et les paginer par 10
 
         $roles = Role::all(); // Récupérer tous les rôles
-        //$userRoles = $user->getRoleNames(); // Récupérer les rôles de l'utilisateur
+                              //$userRoles = $user->getRoleNames(); // Récupérer les rôles de l'utilisateur
 
         //return view('pages/profile-overview-3', compact('user','roles', 'userRoles'));
 
@@ -313,14 +309,13 @@ class PageController extends Controller
         // Récupère l'utilisateur par son ID
         if (auth()->check()) {
             $userId = auth()->user()->id;
-            $user = User::findOrFail($userId);
+            $user   = User::findOrFail($userId);
         }
 
-        $roles = Role::all(); // Récupérer tous les rôles
+        $roles     = Role::all();           // Récupérer tous les rôles
         $userRoles = $user->getRoleNames(); // Récupérer les rôles de l'utilisateur
 
-        return view('pages/profile-overview-3', compact('user','roles', 'userRoles'));
-
+        return view('pages/profile-overview-3', compact('user', 'roles', 'userRoles'));
 
     }
 
@@ -797,21 +792,20 @@ class PageController extends Controller
         return view('pages/validation');
     }
 
-
-     /**
+    /**
      * Show specified view.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
 
-     public function projetsForm()
-     {
-         return view('pages/projets-form');
+    public function projetsForm()
+    {
+        return view('pages/projets-form');
 
-     }
+    }
 
-     /**
+    /**
      * Show specified view.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -825,152 +819,159 @@ class PageController extends Controller
     }
 // Méthode pour enregistrer un Projet
 
-     /**
+    /**
      * .
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function storeProjet(Request $request)
-{
-    // Validation des données
-    $validated = $request->validate([
-        'nom' => 'required|string|max:255',
-        'description' => 'required|string|max:255',
-        'date_debut' => 'required|date',
-        'date_fin' => 'required|date',
-        'statut' => 'required|string|max:255',
-        'structure_porteuse_id' => 'required|exists:structure_porteuses,id', // Vérifie si l'ID existe
-        'equipe_id' => 'required|exists:equipes,id', // Vérifie si l'ID existe
-    ]);
+    {
+        // Validation des données
+        $validated = $request->validate([
+            'nom'                   => 'required|string|max:255',
+            'description'           => 'required|string|max:255',
+            'date_debut'            => 'required|date',
+            'date_fin'              => 'required|date',
+            'statut'                => 'required|string|max:255',
+            'structure_porteuse_id' => 'required|exists:structure_porteuses,id', // Vérifie si l'ID existe
+            'equipe_id'             => 'required|exists:equipes,id',             // Vérifie si l'ID existe
+        ]);
 
-    // Vérification de l'existence d'un enregistrement avec les mêmes données
-    $existingProjet =Projet::where('nom', $validated['nom'])
-                                                  ->where('description', $validated['description'])
-                                                  ->where('date_debut', $validated['date_debut'])
-                                                  ->where('date_fin', $validated['date_fin'])
-                                                  ->where('statut', $validated['statut'])
-                                                  ->where('structure_porteuse_id', $validated['structure_porteuse_id'])
-                                                  ->where('equipe_id', $validated['equipe_id'])
-                                                  ->first();
-
-    /*if ($existingStructurePorteuse) {
-        return response()->json(['status' => 'error', 'message' => 'Cette structure porteuse existe déjà.'], 400);
-    }*/
-
-    // Enregistrement dans la base de données si aucune correspondance n'a été trouvée
-    $projet =Projet::create([
-        'nom' => $validated['nom'],
-        'description' => $validated['description'],
-        'date_debut' => $validated['date_debut'],
-        'date_fin' => $validated['date_fin'],
-        'statut' => $validated['statut'],
-        'structure_porteuse_id' => $validated['structure_porteuse_id'],
-        'equipe_id' => $validated['equipe_id'],
-    ]);
-
-    // Retourner une réponse JSON pour AJAX
-      return redirect('/projets-form-page')->with('success', 'projet ajouté avec succès!');
-}
+        // Vérification de l'existence d'un enregistrement avec les mêmes données
+        $existingProjet = Projet::where('nom', $validated['nom'])
+            ->where('description', $validated['description'])
+            ->where('date_debut', $validated['date_debut'])
+            ->where('date_fin', $validated['date_fin'])
+            ->where('statut', $validated['statut'])
+            ->where('structure_porteuse_id', $validated['structure_porteuse_id'])
+            ->where('equipe_id', $validated['equipe_id'])
+            ->first();
 
 
-public function showprojetsDataList()
-{
-    // Récupérer toutes les projets depuis la base de données
-    $projets = Projet::all();
+        // Enregistrement dans la base de données si aucune correspondance n'a été trouvée
+        $projet = Projet::create([
+            'nom'                   => $validated['nom'],
+            'description'           => $validated['description'],
+            'date_debut'            => $validated['date_debut'],
+            'date_fin'              => $validated['date_fin'],
+            'statut'                => $validated['statut'],
+            'structure_porteuse_id' => $validated['structure_porteuse_id'],
+            'equipe_id'             => $validated['equipe_id'],
+        ]);
 
-    // Passer les données à la vue
-    return view('pages/projets-data-list', compact('projets'));
+        return redirect('/projets-data-list-page')->with('success', 'projet ajouté avec succès!');
+    }
 
+    public function showprojetsDataList()
+    {
+        // Récupérer toutes les projets depuis la base de données
+        $projets = Projet::all();
 
-}
+        // Passer les données à la vue
+        return view('pages/projets-data-list', compact('projets'));
 
+    }
 
-     // Méthode pour enregistrer un Structre porteuse
+    // Méthode pour enregistrer un Structre porteuse
 
-     /**
+    /**
      * .
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storeStructureporteuse(Request $request)
-{
-    // Validation des données
-    $validated = $request->validate([
-        'nom' => 'required|string|max:255',
-        'adresse' => 'required|string|max:255',
-        'date' => 'required|date',
-    ]);
 
-    // Vérification de l'existence d'un enregistrement avec les mêmes données
-    $existingStructurePorteuse = StructurePorteuse::where('nom', $validated['nom'])
-                                                  ->where('adresse', $validated['adresse'])
-                                                  ->where('date', $validated['date'])
-                                                  ->first();
 
-    /*if ($existingStructurePorteuse) {
-        return response()->json(['status' => 'error', 'message' => 'Cette structure porteuse existe déjà.'], 400);
-    }*/
+     public function storeStructureporteuse(Request $request)
+     {
+         // Validation des données
+         $validated = $request->validate([
+             'nom' => 'required|string|max:255',
+             'adresse' => 'required|string|max:255',
+             'date' => 'required|date',
+         ]);
 
-    // Enregistrement dans la base de données si aucune correspondance n'a été trouvée
-    $structurePorteuse = StructurePorteuse::create([
-        'nom' => $validated['nom'],
-        'adresse' => $validated['adresse'],
-        'date' => $validated['date'],
-    ]);
+         // Vérification de l'existence d'un enregistrement avec les mêmes données
+         $existingStructurePorteuse = StructurePorteuse::where('nom', $validated['nom'])
+                                                       ->where('adresse', $validated['adresse'])
+                                                       ->where('date', $validated['date'])
+                                                       ->first();
 
-    // Retourner une réponse JSON pour AJAX
-      return redirect('/projets-form-page')->with('success', 'struture porteuse ajouté avec succès!');
-}
+         if ($existingStructurePorteuse) {
+             return response()->json(['status' => 'error', 'message' => 'Cette structure porteuse existe déjà.'], 400);
+         }
+
+         // Enregistrement dans la base de données
+         $structurePorteuse = StructurePorteuse::create([
+             'nom' => $validated['nom'],
+             'adresse' => $validated['adresse'],
+             'date' => $validated['date'],
+         ]);
+
+         // Retourner une réponse JSON
+         return response()->json([
+             'status' => 'success',
+             'message' => 'Structure porteuse ajoutée avec succès !',
+             'structure' => $structurePorteuse
+         ]);
+     }
+
 
 
 //Equipe
-
 
 public function storeEquipe(Request $request)
 {
     // Validation des données
     $validated = $request->validate([
-        'nom' => 'required|string|max:255',
+        'nom'        => 'required|string|max:255',
         'date_debut' => 'required|string|max:255',
-        'date_fin' => 'required|date',
+        'date_fin'   => 'required|date',
     ]);
 
     // Vérification de l'existence d'un enregistrement avec les mêmes données
     $existingEquipe = Equipe::where('nom', $validated['nom'])
-                                                  ->where('date_debut', $validated['date_debut'])
-                                                  ->where('date_fin', $validated['date_fin'])
-                                                  ->first();
+        ->where('date_debut', $validated['date_debut'])
+        ->where('date_fin', $validated['date_fin'])
+        ->first();
 
-    /* if ($existingEquipe) {
-        return response()->json(['status' => 'error', 'message' => ' Equipe existe déjà.'], 400);
-    }*/
+    if ($existingEquipe) {
+        return response()->json(['status' => 'error', 'message' => 'L\'équipe existe déjà.'], 400);
+    }
 
-    // Enregistrement dans la base de données si aucune correspondance n'a été trouvée
-    $equipe =Equipe::create([
-        'nom' => $validated['nom'],
+    // Enregistrement de l'équipe dans la base de données
+    $equipe = Equipe::create([
+        'nom'        => $validated['nom'],
         'date_debut' => $validated['date_debut'],
-        'date_fin' => $validated['date_fin'],
+        'date_fin'   => $validated['date_fin'],
     ]);
 
-    // Retourner une réponse JSON pour AJAX
-    return redirect('/projets-form-page')->with('success', 'Equipe ajouté avec succès!');
+    // Récupérer toutes les équipes après enregistrement
+    $equipes = Equipe::all();
+
+    // Retourner une réponse JSON avec les équipes mises à jour
+    return response()->json([
+        'status' => 'success',
+        'message' => 'L\'équipe a été enregistrée avec succès !',
+        'equipe' => $equipe, // Retourne l'équipe nouvellement créée
+        'equipes' => $equipes // Retourne toutes les équipes mises à jour
+    ]);
 }
+
 
 
     public function showprojetsForm()
-{
-    // Récupérer toutes les structures porteuses depuis la base de données
-    $structures = StructurePorteuse::all();
-      // Récupérer toutes les equipes depuis la base de données
-    $equipes = Equipe::all();
-    // Passer les données à la vue
-    return view('pages/projets-form', compact('structures','equipes'));
+    {
+        // Récupérer toutes les structures porteuses depuis la base de données
+        $structures = StructurePorteuse::all();
+        // Récupérer toutes les equipes depuis la base de données
+        $equipes = Equipe::all();
+        // Passer les données à la vue
+        return view('pages/projets-form', compact('structures', 'equipes'));
 
-
-}
-     /**
+    }
+    /**
      * Show specified view.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -982,44 +983,17 @@ public function storeEquipe(Request $request)
         return view('pages/users-form');
     }
 
-     /**
+    /**
      * Show specified view.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
 
-     public function amendementsForm()
-     {
-         return view('pages/amendements-form');
-     }
-
-      /**
-     * Show specified view.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-
-     public function instancesForm()
-     {
-         return view('pages/instances-form');
-     }
-
-
-      /**
-     * Show specified view.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-
-     public function difficultesForm()
-     {
-         return view('pages/difficultes-form');
-     }
-
-
+    public function amendementsForm()
+    {
+        return view('pages/amendements-form');
+    }
 
     /**
      * Show specified view.
@@ -1028,6 +1002,29 @@ public function storeEquipe(Request $request)
      * @return \Illuminate\Http\Response
      */
 
+    public function instancesForm()
+    {
+        return view('pages/instances-form');
+    }
+
+    /**
+     * Show specified view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function difficultesForm()
+    {
+        return view('pages/difficultes-form');
+    }
+
+    /**
+     * Show specified view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 
     public function chart()
     {

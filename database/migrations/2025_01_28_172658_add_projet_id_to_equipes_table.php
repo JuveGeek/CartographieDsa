@@ -13,13 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('difficulte_projets', function (Blueprint $table) {
-            $table->id();
-            $table->text('description');
-            $table->date('date');
-            $table->string('status')->nullable();
-            $table->string('file_path')->nullable();
-            $table->timestamps();
+        Schema::table('equipes', function (Blueprint $table) {
+            $table->foreignId('projet_id')->constrained()->onDelete('cascade');
         });
     }
 
@@ -30,6 +25,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('difficulte_projets');
+        Schema::table('equipes', function (Blueprint $table) {
+            $table->dropForeign(['projet_id']);
+            $table->dropColumn('projet_id');
+        });
     }
 };
