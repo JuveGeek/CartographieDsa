@@ -19,4 +19,5 @@ class Equipe extends Model
         return $this->belongsToMany(User::class, 'membre_equipe')
                     ->withPivot('role', 'statut', 'actif', 'date_debut', 'date_fin');
     }
+
 }

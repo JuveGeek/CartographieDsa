@@ -431,47 +431,58 @@
         </div>
         <!-- BEGIN: Data List -->
         <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
-            <table class="table table-report -mt-2">
-                <thead>
-                    <tr>
-                        <th class="whitespace-nowrap">Nom</th>
-                        <th class="text-center whitespace-nowrap">Statut</th>
-                        <th class="text-center whitespace-nowrap">Role</th>
-                        <th class="text-center whitespace-nowrap">Equipe</th>
-                        <th class="text-center whitespace-nowrap">Actif</th>
-                        <th class="text-center whitespace-nowrap">Date de début</th>
-                        <th class="text-center whitespace-nowrap">date de fin</th>
-                        <th class="text-center whitespace-nowrap">ACTIONS</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- @foreach (array_slice($fakers, 0, 2) as $faker)
-    -->
-                    <tr class="intro-x">
-                        <td class="w-40"></td>
-                        <td class="text-center"></td>
-                        <td class="w-40"></td>
-                        <td class="w-40"></td>
-                        <td class="w-40"></td>
-                        <td class="w-40"></td>
-                        <td class="w-40"></td>
-                        <td class="table-report__action w-56">
 
-                            <div class="flex justify-center items-center">
-                                <a class="flex items-center " href="javascript:;">
-                                    <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit
-                                </a>
-                                <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal"
-                                    data-tw-target="#delete-confirmation-modal-membre">
-                                    <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    <!--
-    @endforeach-->
-                </tbody>
-            </table>
+                <table class="table table-report -mt-2">
+                    <thead>
+                        <tr>
+                            <th class="whitespace-nowrap">ID</th>
+                            <th class="whitespace-nowrap">Nom et prénom</th>
+
+                            <th class="text-center whitespace-nowrap">Statut</th>
+                            <th class="text-center whitespace-nowrap">Rôle</th>
+
+                            <th class="text-center whitespace-nowrap">Actif</th>
+                            <th class="text-center whitespace-nowrap">Date de début</th>
+                            <th class="text-center whitespace-nowrap">Date de fin</th>
+                            <th class="text-center whitespace-nowrap">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($membres as $membre)
+                            <tr class="intro-x">
+                                <td class="w-10">{{ $membre->id }}</td>
+                                <td class="w-10">{{ $membre->name }} {{ $membre->firstname }}</td>
+
+                                <td class="text-center">{{ $membre->pivot->statut }}</td>
+                                <td class="text-center">{{ $membre->pivot->role }}</td>
+
+                                <td class="text-center">{{ $membre->pivot->actif ? 'Oui' : 'Non' }}</td>
+                                <td class="text-center">{{ $membre->pivot->date_debut }}</td>
+                                <td class="text-center">{{ $membre->pivot->date_fin }}</td>
+                                <td class="table-report__action w-56">
+                                    <div class="flex justify-center items-center">
+                                        <!-- Action Modifier -->
+                                        <a class="flex items-center" href="">
+                                            <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Modifier
+                                        </a>
+                                        <button type="submit" class="flex items-center text-danger" data-tw-toggle="modal"
+                                            data-tw-target="#delete-confirmation-modal-membre">
+                                            <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Supprimer
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="9" class="text-center text-gray-500">Aucun membre trouvé pour ce projet.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+
+
+
+
         </div>
         <!-- END: Data List -->
         <!-- BEGIN: Pagination -->
@@ -526,30 +537,87 @@
     </div>
     <!-- BEGIN: New Order Modal -->
     <div id="new-order-modal-membre" class="modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="font-medium text-base mr-auto">membres</h2>
-                </div>
-                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
-                    <div class="col-span-12">
-                        <label for="pos-form-1" class="form-label">Name</label>
-                        <input id="pos-form-1" type="text" class="form-control flex-1" placeholder="Customer name">
+                <form action="{{ route('membre_equipe.store') }}" method="POST">
+                    @csrf
+
+                    <div class="modal-header">
+                        <h2 class="font-medium text-base mr-auto">Ajouter un membre</h2>
                     </div>
-                    <div class="col-span-12">
-                        <label for="pos-form-2" class="form-label">Table</label>
-                        <input id="pos-form-2" type="text" class="form-control flex-1" placeholder="Customer table">
+
+                    <div class="modal-body">
+                        <div class="grid grid-cols-12 gap-6">
+                            <div class="intro-y col-span-12 lg:col-span-6">
+                                <div class="intro-y box">
+                                    <div class="p-1">
+                                        <div class="input-form">
+                                            <label>Sélectionner un membre</label>
+                                            <div class="mt-2">
+                                                <select id="users" name="users[]" data-placeholder="Sélectionner un membre" class="tom-select w-full" multiple required>
+                                                    @foreach ($users as $user)
+                                                        <option value="{{ $user->id }}">{{ $user->name }} {{ $user->firstname }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="input-form mt-3">
+                                            <label for="role" class="form-label">Rôle</label>
+                                            <select id="role" name="role" class="form-control" required>
+                                                <option value="Chef de projet">Chef de projet</option>
+                                                <option value="Développeur backend">Développeur backend</option>
+                                                <option value="developpeur_front">Développeur frontend</option>
+                                                <option value="Testeur">Testeur</option>
+                                                <option value="Expert métier">Expert métier</option>
+                                                <option value="Partenaire externe">Partenaire externe</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="input-form mt-3">
+                                            <label for="statut" class="form-label">Statut</label>
+                                            <select id="statut" name="statut" class="form-control" required>
+                                                <option value="technique">Membre technique</option>
+                                                <option value="suivie">Membre de suivie</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="intro-y col-span-12 lg:col-span-6">
+                                <div class="intro-y box">
+                                    <div class="p-1">
+                                        <div class="input-form">
+                                            <label for="actif" class="form-label">Sélectionner l'activité</label>
+                                            <select id="actif" name="actif" class="form-control" required>
+                                                <option value="1">Actif</option>
+                                                <option value="0">Inactif</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="input-form mt-3">
+                                            <label for="date_debut" class="form-label">Date de début</label>
+                                            <input id="date_debut" type="date" name="date_debut" class="form-control" required>
+                                        </div>
+
+                                        <div class="input-form mt-3">
+                                            <label for="date_fin" class="form-label">Date de fin</label>
+                                            <input id="date_fin" type="date" name="date_fin" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-span-12">
-                        <label for="pos-form-3" class="form-label">Number of People</label>
-                        <input id="pos-form-3" type="text" class="form-control flex-1" placeholder="People">
+
+                    <div class="modal-footer text-right">
+                        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Annuler</button>
+                        <button type="submit" class="btn btn-primary w-32">Enregistrer</button>
                     </div>
-                </div>
-                <div class="modal-footer text-right">
-                    <button type="button" data-tw-dismiss="modal"
-                        class="btn btn-outline-secondary w-32 mr-1">Cancel</button>
-                    <button type="button" class="btn btn-primary w-32">Create Ticket</button>
-                </div>
+                </form>
+
+
             </div>
         </div>
     </div>
@@ -1252,6 +1320,17 @@
         </script>
     @endif
     <!-- end: Difficultes script-->
+
+    @if (session('successMembre'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Membre ajouté avec succès!',
+                text: '{{ session('success') }}', // Message de succès passé depuis le contrôleur
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
 
     <!-- start: amendements script-->
     <script>

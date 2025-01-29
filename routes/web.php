@@ -10,6 +10,7 @@ use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\ColorSchemeController;
 use App\Http\Controllers\DifficulteProjetController;
 use App\Http\Controllers\AmendementController;
+use App\Http\Controllers\MembreEquipeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,6 +125,8 @@ Route::middleware('auth')->group(function() {
         Route::post('/amendements', [AmendementController::class, 'store'])->name('amendements.store');
         Route::get('/amendements/{id}/difficulte-amendements', [AmendementController::class, 'show'])->name('amendements.show');
         Route::post('/difficulte-amendement', [AmendementController::class, 'storeDifficulteAmendement'])->name('amendements.storeDifficulteAmendement');
+
+        Route::post('/membre-equipe', [MembreEquipeController::class, 'store'])->name('membre_equipe.store');
 
 
     });

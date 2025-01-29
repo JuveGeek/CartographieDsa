@@ -9,11 +9,11 @@ class Membre_equipe extends Model
 {
     protected $table = 'membre_equipe';
 
-    protected $fillable = ['role', 'statut', 'actif', 'date_debut', 'date_fin'];
+    protected $fillable = ['equipe_id', 'role', 'statut', 'actif', 'date_debut', 'date_fin', 'user_id',];
 
-    public function personnel()
+    public function user()
     {
-        return $this->belongsTo(Personnel::class);
+        return $this->belongsTo(User::class);
     }
 
     public function equipe()

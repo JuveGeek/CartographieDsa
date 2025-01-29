@@ -162,9 +162,14 @@ class PageController extends Controller
      */
     public function details($id)
     {
-        $projet = Projet::with(['fonctionnalites', 'technologies', 'difficulteProjets', 'amendements'])->findOrFail($id);
+        $users = User::all();
 
-        return view('pages/details', compact('projet'));
+
+        $projet  = Projet::with(['equipe.users', 'fonctionnalites', 'technologies', 'difficulteProjets', 'amendements'])->findOrFail($id);
+
+        $membres = $projet->equipe->users()->withPivot('statut', 'role', 'actif', 'date_debut', 'date_fin')->get();
+
+        return view('pages/details', compact('projet', 'users', 'membres'));
     }
 
     /**
@@ -848,7 +853,6 @@ class PageController extends Controller
             ->where('equipe_id', $validated['equipe_id'])
             ->first();
 
-
         // Enregistrement dans la base de données si aucune correspondance n'a été trouvée
         $projet = Projet::create([
             'nom'                   => $validated['nom'],
@@ -882,84 +886,79 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    public function storeStructureporteuse(Request $request)
+    {
+        // Validation des données
+        $validated = $request->validate([
+            'nom'     => 'required|string|max:255',
+            'adresse' => 'required|string|max:255',
+            'date'    => 'required|date',
+        ]);
 
-     public function storeStructureporteuse(Request $request)
-     {
-         // Validation des données
-         $validated = $request->validate([
-             'nom' => 'required|string|max:255',
-             'adresse' => 'required|string|max:255',
-             'date' => 'required|date',
-         ]);
+        // Vérification de l'existence d'un enregistrement avec les mêmes données
+        $existingStructurePorteuse = StructurePorteuse::where('nom', $validated['nom'])
+            ->where('adresse', $validated['adresse'])
+            ->where('date', $validated['date'])
+            ->first();
 
-         // Vérification de l'existence d'un enregistrement avec les mêmes données
-         $existingStructurePorteuse = StructurePorteuse::where('nom', $validated['nom'])
-                                                       ->where('adresse', $validated['adresse'])
-                                                       ->where('date', $validated['date'])
-                                                       ->first();
+        if ($existingStructurePorteuse) {
+            return response()->json(['status' => 'error', 'message' => 'Cette structure porteuse existe déjà.'], 400);
+        }
 
-         if ($existingStructurePorteuse) {
-             return response()->json(['status' => 'error', 'message' => 'Cette structure porteuse existe déjà.'], 400);
-         }
+        // Enregistrement dans la base de données
+        $structurePorteuse = StructurePorteuse::create([
+            'nom'     => $validated['nom'],
+            'adresse' => $validated['adresse'],
+            'date'    => $validated['date'],
+        ]);
 
-         // Enregistrement dans la base de données
-         $structurePorteuse = StructurePorteuse::create([
-             'nom' => $validated['nom'],
-             'adresse' => $validated['adresse'],
-             'date' => $validated['date'],
-         ]);
-
-         // Retourner une réponse JSON
-         return response()->json([
-             'status' => 'success',
-             'message' => 'Structure porteuse ajoutée avec succès !',
-             'structure' => $structurePorteuse
-         ]);
-     }
-
-
+        // Retourner une réponse JSON
+        return response()->json([
+            'status'    => 'success',
+            'message'   => 'Structure porteuse ajoutée avec succès !',
+            'structure' => $structurePorteuse,
+        ]);
+    }
 
 //Equipe
 
-public function storeEquipe(Request $request)
-{
-    // Validation des données
-    $validated = $request->validate([
-        'nom'        => 'required|string|max:255',
-        'date_debut' => 'required|string|max:255',
-        'date_fin'   => 'required|date',
-    ]);
+    public function storeEquipe(Request $request)
+    {
+        // Validation des données
+        $validated = $request->validate([
+            'nom'        => 'required|string|max:255',
+            'date_debut' => 'required|string|max:255',
+            'date_fin'   => 'required|date',
+        ]);
 
-    // Vérification de l'existence d'un enregistrement avec les mêmes données
-    $existingEquipe = Equipe::where('nom', $validated['nom'])
-        ->where('date_debut', $validated['date_debut'])
-        ->where('date_fin', $validated['date_fin'])
-        ->first();
+        // Vérification de l'existence d'un enregistrement avec les mêmes données
+        $existingEquipe = Equipe::where('nom', $validated['nom'])
+            ->where('date_debut', $validated['date_debut'])
+            ->where('date_fin', $validated['date_fin'])
+            ->first();
 
-    if ($existingEquipe) {
-        return response()->json(['status' => 'error', 'message' => 'L\'équipe existe déjà.'], 400);
+        if ($existingEquipe) {
+            return response()->json(['status' => 'error', 'message' => 'L\'équipe existe déjà.'], 400);
+        }
+
+        // Enregistrement de l'équipe dans la base de données
+        $equipe = Equipe::create([
+            'nom'        => $validated['nom'],
+            'date_debut' => $validated['date_debut'],
+            'date_fin'   => $validated['date_fin'],
+        ]);
+
+        // Récupérer toutes les équipes après enregistrement
+        $equipes = Equipe::all();
+
+        // Retourner une réponse JSON avec les équipes mises à jour
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'L\'équipe a été enregistrée avec succès !',
+            'equipe'  => $equipe,  // Retourne l'équipe nouvellement créée
+            'equipes' => $equipes, // Retourne toutes les équipes mises à jour
+        ]);
     }
-
-    // Enregistrement de l'équipe dans la base de données
-    $equipe = Equipe::create([
-        'nom'        => $validated['nom'],
-        'date_debut' => $validated['date_debut'],
-        'date_fin'   => $validated['date_fin'],
-    ]);
-
-    // Récupérer toutes les équipes après enregistrement
-    $equipes = Equipe::all();
-
-    // Retourner une réponse JSON avec les équipes mises à jour
-    return response()->json([
-        'status' => 'success',
-        'message' => 'L\'équipe a été enregistrée avec succès !',
-        'equipe' => $equipe, // Retourne l'équipe nouvellement créée
-        'equipes' => $equipes // Retourne toutes les équipes mises à jour
-    ]);
-}
-
-
 
     public function showprojetsForm()
     {

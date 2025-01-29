@@ -244,6 +244,7 @@
                             <input id="pos-form-1" name="nom" type="text" class="form-control flex-1"
                                 placeholder="Nom de l'equipe" required>
                         </div>
+
                         <div class="col-span-12">
                             <label for="pos-form-2" class="form-label">Date de début</label>
                             <input id="pos-form-2" name="date_debut" type="date" class="form-control flex-1"
