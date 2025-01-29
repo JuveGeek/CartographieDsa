@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Projet extends Model
 {
-    protected $fillable = ['nom', 'description', 'date_debut', 'date_fin', 'statut', 'structure_porteuse_id','equipe_id' ];
+    protected $fillable = ['nom', 'description','date_debut','date_fin','statut','structure_porteuse_id','objectif_principal','public_cible','phase_actuelle'];
 
     public function fonctionnalites()
     {
@@ -45,4 +45,12 @@ class Projet extends Model
         return $this->belongsToMany(StructureBeneficiaire::class, 'projet_structure_beneficiaire')
                     ->withTimestamps();
     }
+
+    //Accessor pour générer le nom de l'équipe
+    /*public function getNomEquipeAttribute()
+    {
+        // Exemple simple : enlevant les espaces et ajoutant un suffixe
+        return 'Equipe-' . strtoupper(str_replace(' ', '_', $this->nom));
+    }*/
+
 }

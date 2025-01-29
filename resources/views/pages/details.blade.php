@@ -1,7 +1,7 @@
 @extends('../layout/' . $layout)
 
 @section('subhead')
-    <title>Détiails Data List - Midone - Tailwind HTML Admin Template</title>
+    <title>Détiails </title>
 @endsection
 
 @section('subcontent')
@@ -134,7 +134,7 @@
                         <div class="col-span-12">
                             <label for="pos-form-1" class="form-label">Nom de la fonctionnalité</label>
                             <input id="pos-form-1" name="nom" type="text" class="form-control flex-1"
-                                placeholder="Nom de l'equipe" required>
+                                placeholder="Nom de la fonctionnalité" required>
                         </div>
                         <div class="col-span-12">
                             <label for="pos-form-1" class="form-label">Description</label>
@@ -335,7 +335,7 @@
                         <div class="col-span-12">
                             <label for="pos-form-1" class="form-label">Nom de la technologie</label>
                             <input id="pos-form-1" name="nom" type="text" class="form-control flex-1"
-                                placeholder="Nom de l'equipe" required>
+                                placeholder="Nom de la technologie" required>
                         </div>
                         <div class="col-span-12">
                             <label for="pos-form-1" class="form-label">Description</label>

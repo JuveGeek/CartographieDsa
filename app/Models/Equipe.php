@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Equipe extends Model
 {
-    protected $fillable = ['nom', 'date_debut', 'date_fin'];
+    protected $fillable = ['nom','projet_id'];
 
     public function projets()
     {
