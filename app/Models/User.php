@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
 
-    protected $fillable = ['name', 'firstname', 'tel', 'email', 'password'];
+    protected $fillable = ['name', 'firstname', 'tel', 'email', 'password', 'structure'];
 
     public function structurePorteuse()
     {

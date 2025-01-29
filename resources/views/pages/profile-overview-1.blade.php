@@ -1,7 +1,7 @@
 @extends('../layout/' . $layout)
 
 @section('subhead')
-    <title>Profile - Midone - Tailwind HTML Admin Template</title>
+    <title>Profil</title>
 @endsection
 
 @section('subcontent')
@@ -56,6 +56,9 @@
                         {{ $user->firstname }}</div>
                     <div class="text-slate-500">
                         {{ $user->roles->isNotEmpty() ? $user->roles->pluck('name')->first() : '' }}</div>
+                        <div>
+                        ({{ $user->structure }})
+                        </div>
                 </div>
             </div>
             <div

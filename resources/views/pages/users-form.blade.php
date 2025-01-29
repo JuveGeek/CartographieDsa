@@ -27,8 +27,13 @@
                         </div>
 
                         <div class="input-form mt-3">
+                            <label for="structure" class="form-label">Structure</label>
+                            <input id="structure" type="text" name="structure" class="form-control" placeholder="ANPTIC" required>
+                        </div>
+
+                        <div class="input-form mt-3">
                             <label for="password" class="form-label">Mot de passe</label>
-                            <input id="password" type="password" name="password" class="form-control" placeholder="secret" required>
+                            <input id="password" type="password" name="password" class="form-control" placeholder="secret1234" required>
                         </div>
                     </div>
                 </div>

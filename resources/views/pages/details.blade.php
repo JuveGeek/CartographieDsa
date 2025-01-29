@@ -451,7 +451,7 @@
                         @forelse ($membres as $membre)
                             <tr class="intro-x">
                                 <td class="w-10">{{ $membre->id }}</td>
-                                <td class="w-10">{{ $membre->name }} {{ $membre->firstname }}</td>
+                                <td class="w-10">{{ $membre->name }} {{ $membre->firstname }} ({{ $membre->structure }}) </td>
 
                                 <td class="text-center">{{ $membre->pivot->statut }}</td>
                                 <td class="text-center">{{ $membre->pivot->role }}</td>
@@ -556,11 +556,13 @@
                                             <div class="mt-2">
                                                 <select id="users" name="users[]" data-placeholder="Sélectionner un membre" class="tom-select w-full" multiple required>
                                                     @foreach ($users as $user)
-                                                        <option value="{{ $user->id }}">{{ $user->name }} {{ $user->firstname }}</option>
+                                                        <option value="{{ $user->id }}">{{ $user->name }} {{ $user->firstname }} ( {{ $user->structure }} )</option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                         </div>
+
+                                        <input type="hidden" name="equipe_id" value="{{ $projet->equipe->id }}">
 
                                         <div class="input-form mt-3">
                                             <label for="role" class="form-label">Rôle</label>

@@ -26,7 +26,7 @@ class MembreEquipeController extends Controller
                 'actif' => (int) $request->actif, // Convertir en booléen
                 'date_debut' => $request->date_debut,
                 'date_fin' => $request->date_fin,
-                'equipe_id'  => 1
+                'equipe_id'  => $request->equipe_id
             ]);
         }
 

@@ -86,6 +86,7 @@ class UserController extends Controller
         // Mise à jour de l'utilisateur
         $user->update([
             'name'      => $request->name,
+            'structure'      => $request->structure,
             'firstname' => $request->firstname,
             'tel'       => $request->tel,
         ]);
@@ -112,6 +113,7 @@ class UserController extends Controller
         // Mise à jour de l'utilisateur
         $user->update([
             'name'      => $request->name,
+            'structure'      => $request->structure,
             'firstname' => $request->firstname,
             'tel'       => $request->tel,
             'email'     => $request->email,
