@@ -16,8 +16,6 @@ return new class extends Migration
         Schema::create('equipes', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->date('date_debut');
-            $table->date('date_fin');
             $table->timestamps();
         });
     }

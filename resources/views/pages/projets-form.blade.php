@@ -67,29 +67,43 @@
                                 </div>
                             </div>
 
-                            <!-- Equipe -->
+                            <!--  objectif principal -->
                             <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0">
                                 <div class="form-label xl:w-64 xl:!mr-10">
                                     <div class="text-left">
                                         <div class="flex items-center">
-                                            <div class="font-medium">Equipe</div>
-                                            <button class="btn btn-primary w-44" data-tw-toggle="modal"
-                                                data-tw-target="#new-order-modal-equipe">
-                                                <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Ajouter
-                                            </button>
+                                            <div class="font-medium"> Objectif principal</div>
+                                            <div
+                                                class="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">
+                                                Required</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
-                                    <select name="equipe_id" id="equipe" class="form-select">
-
-                                        @foreach ($equipes as $equipe)
-                                            <option value="{{ $equipe->id }}">{{ $equipe->nom }}</option>
-                                        @endforeach
-
-                                    </select>
+                                    <textarea name="objectif_principal" class="form-control" rows="4" required></textarea>
+                                    <div class="form-help text-right">Maximum character 0/200</div>
                                 </div>
                             </div>
+                          <!-- public cible -->
+                          <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0">
+                                <div class="form-label xl:w-64 xl:!mr-10">
+                                    <div class="text-left">
+                                        <div class="flex items-center">
+                                            <div class="font-medium">Public cible</div>
+                                            <div
+                                                class="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">
+                                                Required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-full mt-3 xl:mt-0 flex-1">
+                                    <textarea name="public_cible" class="form-control" rows="4" required></textarea>
+                                    <div class="form-help text-right">Maximum character 0/200</div>
+                                </div>
+                            </div>
+
+
+                            
 
                             <!-- status -->
                             <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0">
@@ -106,14 +120,14 @@
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
                                     <div class="flex flex-col sm:flex-row">
                                         <div class="form-check mr-4">
-                                            <input id="statut-en-cour" name="statut" class="form-check-input"
-                                                type="radio" value="en cours" required>
-                                            <label class="form-check-label" for="statut-en-cour">En cours</label>
+                                            <input id="statut" name="statut" class="form-check-input"
+                                                type="radio" value="en_exploitation" required>
+                                            <label class="form-check-label" for="statut-en-exploition">En exploitation</label>
                                         </div>
                                         <div class="form-check mr-4 mt-2 sm:mt-0">
-                                            <input id="statut-terminer" name="statut" class="form-check-input"
-                                                type="radio" value="termine">
-                                            <label class="form-check-label" for="statut-terminer">Terminé</label>
+                                            <input id="statut" name="statut" class="form-check-input"
+                                                type="radio" value="pas_en_exploitation">
+                                            <label class="form-check-label" for="statut-pas-en-exploitation">Pas en exploitation</label>
                                         </div>
                                     </div>
                                 </div>
@@ -150,7 +164,25 @@
                                         <input type="file" name="fichier" class="form-control">
                                     </div>
                                 </div> -->
-
+                            <!-- phase actuelle-->
+                              <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0">
+                                <div class="form-label xl:w-64 xl:!mr-10">
+                                    <div class="text-left">
+                                        <div class="flex items-center">
+                                            <div class="font-medium">Phase actuelle</div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-full mt-3 xl:mt-0 flex-1">
+                                    <select name="phase_actuelle" id="phase_actuelle" class="form-select">
+                                           <option value="analyse">Analyse</option>
+                                            <option value="developpement">Développement</option>
+                                            <option value="tests">Tests</option>
+                                            <option value="deploiement">Déploiement</option>
+                                    </select>
+                                </div>
+                            </div>
                             <!-- Date -->
                             <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0">
                                 <div class="form-label xl:w-64 xl:!mr-10">

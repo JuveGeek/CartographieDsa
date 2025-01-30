@@ -838,9 +838,12 @@ class PageController extends Controller
             'description'           => 'required|string|max:255',
             'date_debut'            => 'required|date',
             'date_fin'              => 'required|date',
-            'statut'                => 'required|string|max:255',
+            'statut'                => 'required|string|in:en_exploitation,pas_en_exploitation',
             'structure_porteuse_id' => 'required|exists:structure_porteuses,id', // Vérifie si l'ID existe
-            'equipe_id'             => 'required|exists:equipes,id',             // Vérifie si l'ID existe
+            'objectif_principal'    => 'required|string|max:255', 
+            'public_cible'          => 'required|string|max:255',
+            'phase_actuelle'        => 'required|string|max:255',  
+                      
         ]);
 
         // Vérification de l'existence d'un enregistrement avec les mêmes données
@@ -850,7 +853,9 @@ class PageController extends Controller
             ->where('date_fin', $validated['date_fin'])
             ->where('statut', $validated['statut'])
             ->where('structure_porteuse_id', $validated['structure_porteuse_id'])
-            ->where('equipe_id', $validated['equipe_id'])
+            ->where('objectif_principal', $validated['objectif_principal'])
+            ->where('public_cible', $validated['public_cible'])
+            ->where('phase_actuelle', $validated['phase_actuelle'])
             ->first();
 
         // Enregistrement dans la base de données si aucune correspondance n'a été trouvée
@@ -861,9 +866,21 @@ class PageController extends Controller
             'date_fin'              => $validated['date_fin'],
             'statut'                => $validated['statut'],
             'structure_porteuse_id' => $validated['structure_porteuse_id'],
-            'equipe_id'             => $validated['equipe_id'],
+            'objectif_principal'    => $validated['objectif_principal'],
+            'public_cible'          => $validated['public_cible'],
+            'phase_actuelle'        => $validated['phase_actuelle'],
         ]);
 
+  
+
+  // Génération du nom de l'équipe en fonction du nom du projet
+  $nomEquipe = 'Equipe-' . strtoupper(str_replace(' ', '_', $projet->nom));
+
+  // Création de l'équipe liée au projet
+  $equipe = Equipe::create([
+      'nom' => $nomEquipe,
+      'projet_id' => $projet->id
+  ]);
         return redirect('/projets-data-list-page')->with('success', 'projet ajouté avec succès!');
     }
 
