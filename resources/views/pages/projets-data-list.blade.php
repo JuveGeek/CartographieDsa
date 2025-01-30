@@ -14,7 +14,7 @@
                 Ajouter un projet
             </a>
         </div>
-                
+
             </div>
             <div class="hidden xl:block mx-auto text-slate-500">Showing 1 to 10 of 150 entries</div>
             <div class="w-full xl:w-auto flex items-center mt-3 xl:mt-0">
@@ -36,7 +36,7 @@
                         <th class="text-center whitespace-nowrap">Structure porteuse</th>
                         <th class="text-center whitespace-nowrap">Phase actuelle</th>
                         <th class="text-center whitespace-nowrap">Date de début</th>
-                        <th class="text-center whitespace-nowrap">Date de fin de la phase</th>
+                        <th class="text-center whitespace-nowrap">Date de fin</th>
                         <th class="text-center whitespace-nowrap">Nom de l'equipe</th>
                         <th class="text-center whitespace-nowrap">Statut</th>
                         <th class="text-center whitespace-nowrap">Actions</th>

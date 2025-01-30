@@ -1140,11 +1140,11 @@
                                 <div class="flex justify-center items-center">
                                     <!-- Action Modifier (si nécessaire) -->
                                     <a class="flex items-center" href="">
-                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Modifier
+                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
                                     </a>
 
                                     <button type="submit" class="flex items-center text-danger">
-                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Supprimer
+                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i>
                                     </button>
                                     </form>
                                 </div>
