@@ -569,7 +569,7 @@
                                             <select id="role" name="role" class="form-control" required>
                                                 <option value="Chef de projet">Chef de projet</option>
                                                 <option value="Développeur backend">Développeur backend</option>
-                                                <option value="developpeur_front">Développeur frontend</option>
+                                                <option value="Développeur frontend">Développeur frontend</option>
                                                 <option value="Testeur">Testeur</option>
                                                 <option value="Expert métier">Expert métier</option>
                                                 <option value="Partenaire externe">Partenaire externe</option>
@@ -579,8 +579,8 @@
                                         <div class="input-form mt-3">
                                             <label for="statut" class="form-label">Statut</label>
                                             <select id="statut" name="statut" class="form-control" required>
-                                                <option value="technique">Membre technique</option>
-                                                <option value="suivie">Membre de suivie</option>
+                                                <option value="Equipe technique">Membre technique</option>
+                                                <option value="Equipe de suivie">Membre de suivie</option>
                                             </select>
                                         </div>
                                     </div>
@@ -675,7 +675,7 @@
                         <th class="whitespace-nowrap">N°</th>
                         <th class="text-center whitespace-nowrap">Structures</th>
                         <th class="text-center whitespace-nowrap">Déployées</th>
-                        <th class="text-center whitespace-nowrap">STATUS</th>
+                        <th class="text-center whitespace-nowrap">Status</th>
                         <th class="text-center whitespace-nowrap">Année d'exploitation</th>
                         <th class="text-center whitespace-nowrap">Année de déploiement</th>
                         <th class="text-center whitespace-nowrap">Description</th>

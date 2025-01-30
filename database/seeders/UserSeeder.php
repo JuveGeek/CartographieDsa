@@ -35,6 +35,7 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => bcrypt('password'), // Assurer que le mot de passe est sécurisé
             'tel' => '123456789',
+            'structure' => 'ANPTIC',
             'remember_token' => Str::random(10),
         ]);
 
