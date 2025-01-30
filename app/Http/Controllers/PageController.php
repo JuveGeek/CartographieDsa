@@ -53,12 +53,13 @@ class PageController extends Controller
     public function details($id)
     {
         $users = User::all();
+        $unProjet = Projet::find($id);
 
         $projet = Projet::with(['equipe.users', 'fonctionnalites', 'technologies', 'difficulteProjets', 'amendements'])->findOrFail($id);
 
         $membres = $projet->equipe->users()->withPivot('statut', 'role', 'actif', 'date_debut', 'date_fin')->get();
 
-        return view('pages/details', compact('projet', 'users', 'membres'));
+        return view('pages/details', compact('projet', 'users', 'membres','unProjet'));
     }
 
     /**

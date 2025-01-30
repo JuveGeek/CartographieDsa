@@ -5,6 +5,88 @@
 @endsection
 
 @section('subcontent')
+    <!-- BEGIN: Informations détaillées du projet -->
+
+    <h2 class="intro-y text-lg font-medium mt-10">Informations détaillées du projet</h2>
+    <div class="grid grid-cols-12 gap-6 mt-5">
+        <!-- BEGIN: Data List -->
+        <div class="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
+            <table class="table table-report -mt-2">
+                <thead>
+                    <tr>
+                        <th class="whitespace-nowrap">Nom</th>
+                        <th class="text-center whitespace-nowrap">Objectif principal</th>
+                        <th class="text-center whitespace-nowrap">Public cible</th>
+                        <th class="text-center whitespace-nowrap">Description</th>
+                        <th class="text-center whitespace-nowrap">Structure porteuse</th>
+                        <th class="text-center whitespace-nowrap">Phase actuelle</th>
+                        <th class="text-center whitespace-nowrap">Date de début</th>
+                        <th class="text-center whitespace-nowrap">Date de fin</th>
+                        <th class="text-center whitespace-nowrap">Nom de l'equipe</th>
+                        <th class="text-center whitespace-nowrap">Statut</th>
+                        <th class="text-center whitespace-nowrap">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr class="intro-x">
+                        <td class="w-20">{{ $unProjet->nom }}</td>
+                        <td class="w-40">{{ $unProjet->objectif_principal }}</td>
+                        <td class="w-60">{{ $unProjet->public_cible }}</td>
+                        <td class="w-80">{{ $unProjet->description }}</td>
+                        <td class="w-20">
+                            {{ $unProjet->structurePorteuse ? $unProjet->structurePorteuse->nom : 'Aucune structure porteuse' }}
+                        </td>
+                        <td class="W-20">{{ $unProjet->phase_actuelle }}</td>
+                        <td class="w-20">{{ $unProjet->date_debut }}</td>
+                        <td class="w-20">{{ $unProjet->date_fin }}</td>
+                        <td class="w-2O">{{ $unProjet->equipe ? $unProjet->equipe->nom : 'Aucune équipe' }}</td>
+                        <td class="w-40">{{ $unProjet->statut }}</td>
+                        <td class="table-report__action w-56">
+                            <div class="flex justify-center items-center">
+
+                                <a class="flex items-center" href="javascript:;">
+                                    <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Modifier
+                                </a>
+                                <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal"
+                                    data-tw-target="#delete-confirmation-modal">
+                                    <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Supprimer
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <!-- END: Data List -->
+
+    </div>
+    <!-- BEGIN: Delete Confirmation Modal -->
+    <div id="delete-confirmation-modal" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <div class="p-5 text-center">
+                        <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i>
+                        <div class="text-3xl mt-5">Are you sure?</div>
+                        <div class="text-slate-500 mt-2">Do you really want to delete these records? <br>This process
+                            cannot be undone.</div>
+                    </div>
+                    <div class="px-5 pb-8 text-center">
+                        <button type="button" data-tw-dismiss="modal"
+                            class="btn btn-outline-secondary w-24 mr-1">Cancel</button>
+                        <button type="button" class="btn btn-danger w-24">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END: Delete Confirmation Modal -->
+    <!-- END: Informations détaillées du projet -->
+
+
+
     <!-- BEGIN: fonctionnalité -->
     <h2 class="intro-y text-lg font-medium mt-10">Fonctionnalités </h2>
     <div class="grid grid-cols-12 gap-6 mt-5">
@@ -432,53 +514,54 @@
         <!-- BEGIN: Data List -->
         <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
 
-                <table class="table table-report -mt-2">
-                    <thead>
-                        <tr>
-                            <th class="whitespace-nowrap">ID</th>
-                            <th class="whitespace-nowrap">Nom et prénom</th>
+            <table class="table table-report -mt-2">
+                <thead>
+                    <tr>
+                        <th class="whitespace-nowrap">ID</th>
+                        <th class="whitespace-nowrap">Nom et prénom</th>
 
-                            <th class="text-center whitespace-nowrap">Statut</th>
-                            <th class="text-center whitespace-nowrap">Rôle</th>
+                        <th class="text-center whitespace-nowrap">Statut</th>
+                        <th class="text-center whitespace-nowrap">Rôle</th>
 
-                            <th class="text-center whitespace-nowrap">Actif</th>
-                            <th class="text-center whitespace-nowrap">Date de début</th>
-                            <th class="text-center whitespace-nowrap">Date de fin</th>
-                            <th class="text-center whitespace-nowrap">Actions</th>
+                        <th class="text-center whitespace-nowrap">Actif</th>
+                        <th class="text-center whitespace-nowrap">Date de début</th>
+                        <th class="text-center whitespace-nowrap">Date de fin</th>
+                        <th class="text-center whitespace-nowrap">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($membres as $membre)
+                        <tr class="intro-x">
+                            <td class="w-10">{{ $membre->id }}</td>
+                            <td class="w-10">{{ $membre->name }} {{ $membre->firstname }} ({{ $membre->structure }})
+                            </td>
+
+                            <td class="text-center">{{ $membre->pivot->statut }}</td>
+                            <td class="text-center">{{ $membre->pivot->role }}</td>
+
+                            <td class="text-center">{{ $membre->pivot->actif ? 'Oui' : 'Non' }}</td>
+                            <td class="text-center">{{ $membre->pivot->date_debut }}</td>
+                            <td class="text-center">{{ $membre->pivot->date_fin }}</td>
+                            <td class="table-report__action w-56">
+                                <div class="flex justify-center items-center">
+                                    <!-- Action Modifier -->
+                                    <a class="flex items-center" href="">
+                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Modifier
+                                    </a>
+                                    <button type="submit" class="flex items-center text-danger" data-tw-toggle="modal"
+                                        data-tw-target="#delete-confirmation-modal-membre">
+                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Supprimer
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($membres as $membre)
-                            <tr class="intro-x">
-                                <td class="w-10">{{ $membre->id }}</td>
-                                <td class="w-10">{{ $membre->name }} {{ $membre->firstname }} ({{ $membre->structure }}) </td>
-
-                                <td class="text-center">{{ $membre->pivot->statut }}</td>
-                                <td class="text-center">{{ $membre->pivot->role }}</td>
-
-                                <td class="text-center">{{ $membre->pivot->actif ? 'Oui' : 'Non' }}</td>
-                                <td class="text-center">{{ $membre->pivot->date_debut }}</td>
-                                <td class="text-center">{{ $membre->pivot->date_fin }}</td>
-                                <td class="table-report__action w-56">
-                                    <div class="flex justify-center items-center">
-                                        <!-- Action Modifier -->
-                                        <a class="flex items-center" href="">
-                                            <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Modifier
-                                        </a>
-                                        <button type="submit" class="flex items-center text-danger" data-tw-toggle="modal"
-                                            data-tw-target="#delete-confirmation-modal-membre">
-                                            <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Supprimer
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="9" class="text-center text-gray-500">Aucun membre trouvé pour ce projet.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                    @empty
+                        <tr>
+                            <td colspan="9" class="text-center text-gray-500">Aucun membre trouvé pour ce projet.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
 
 
 
@@ -554,9 +637,12 @@
                                         <div class="input-form">
                                             <label>Sélectionner un membre</label>
                                             <div class="mt-2">
-                                                <select id="users" name="users[]" data-placeholder="Sélectionner un membre" class="tom-select w-full" multiple required>
+                                                <select id="users" name="users[]"
+                                                    data-placeholder="Sélectionner un membre" class="tom-select w-full"
+                                                    multiple required>
                                                     @foreach ($users as $user)
-                                                        <option value="{{ $user->id }}">{{ $user->name }} {{ $user->firstname }} ( {{ $user->structure }} )</option>
+                                                        <option value="{{ $user->id }}">{{ $user->name }}
+                                                            {{ $user->firstname }} ( {{ $user->structure }} )</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -600,7 +686,8 @@
 
                                         <div class="input-form mt-3">
                                             <label for="date_debut" class="form-label">Date de début</label>
-                                            <input id="date_debut" type="date" name="date_debut" class="form-control" required>
+                                            <input id="date_debut" type="date" name="date_debut" class="form-control"
+                                                required>
                                         </div>
 
                                         <div class="input-form mt-3">
@@ -614,7 +701,8 @@
                     </div>
 
                     <div class="modal-footer text-right">
-                        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Annuler</button>
+                        <button type="button" data-tw-dismiss="modal"
+                            class="btn btn-outline-secondary w-32 mr-1">Annuler</button>
                         <button type="submit" class="btn btn-primary w-32">Enregistrer</button>
                     </div>
                 </form>
@@ -1242,7 +1330,8 @@
 
                         <!-- File Upload -->
                         <div class="col-span-12">
-                            <label for="difficulte-file" style="color: red;" class="form-label">Joindre un fichier (PDF
+                            <label for="difficulte-file" style="color: red;" class="form-label">Joindre un fichier
+                                (PDF
                                 uniquement)</label>
                             <div class="flex items-center space-x-2">
                                 <input id="difficulte-file" name="file" type="file" class="hidden">

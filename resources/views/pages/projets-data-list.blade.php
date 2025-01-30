@@ -30,14 +30,12 @@
                 <thead>
                     <tr>
                     <th class="whitespace-nowrap">Nom</th>
-                        <th class="text-center whitespace-nowrap">Objectif principal</th>
-                        <th class="text-center whitespace-nowrap">Public cible</th>
-                        <th class="text-center whitespace-nowrap">Description</th>
+
                         <th class="text-center whitespace-nowrap">Structure porteuse</th>
                         <th class="text-center whitespace-nowrap">Phase actuelle</th>
                         <th class="text-center whitespace-nowrap">Date de début</th>
                         <th class="text-center whitespace-nowrap">Date de fin</th>
-                        <th class="text-center whitespace-nowrap">Nom de l'equipe</th>
+
                         <th class="text-center whitespace-nowrap">Statut</th>
                         <th class="text-center whitespace-nowrap">Actions</th>
                     </tr>
@@ -46,16 +44,16 @@
                 @foreach ($projets as $projet)
                         <tr class="intro-x">
                             <td class="w-20">{{ $projet->nom }}</td>
-                            <td class="w-40">{{ $projet->objectif_principal }}</td>
-                            <td class="w-60">{{ $projet->public_cible }}</td>
-                            <td class="w-80">{{ $projet->description }}</td>
+
+
+
                             <td class="w-20">
                                 {{ $projet->structurePorteuse ? $projet->structurePorteuse->nom : 'Aucune structure porteuse' }}
                             </td>
                             <td class="W-20">{{ $projet->phase_actuelle }}</td>
                             <td class="w-20">{{ $projet->date_debut }}</td>
                             <td class="w-20">{{ $projet->date_fin }}</td>
-                            <td class="w-2O">{{ $projet->equipe ? $projet->equipe->nom : 'Aucune équipe' }}</td>
+
                             <td class="w-40">{{ $projet->statut }}</td>
                             <td class="table-report__action w-56">
                                 <div class="flex justify-center items-center">
@@ -68,7 +66,7 @@
                                     </a>
                                     <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal"
                                        data-tw-target="#delete-confirmation-modal">
-                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
+                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Supprimer
                                     </a>
                                 </div>
                             </td>
