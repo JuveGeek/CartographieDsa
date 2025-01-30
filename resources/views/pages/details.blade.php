@@ -741,7 +741,7 @@
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
 
             <button class="btn btn-primary shadow-md mr-2" data-tw-toggle="modal"
-                data-tw-target="#new-order-modal-instance">Ajouter une instance</button>
+                data-tw-target="#new-order-modal-structure">Ajouter une structure bénéficiaire</button>
             <div class="dropdown">
 
 
@@ -762,7 +762,7 @@
                     <tr>
                         <th class="whitespace-nowrap">N°</th>
                         <th class="text-center whitespace-nowrap">Structures</th>
-                        <th class="text-center whitespace-nowrap">Déployées</th>
+                        <th class="text-center whitespace-nowrap">Etat</th>
                         <th class="text-center whitespace-nowrap">Status</th>
                         <th class="text-center whitespace-nowrap">Année d'exploitation</th>
                         <th class="text-center whitespace-nowrap">Année de déploiement</th>
@@ -850,31 +850,74 @@
         </div>
         <!-- END: Pagination -->
     </div>
-    <!-- BEGIN: New Order Modal -->
-    <div id="new-order-modal-instance" class="modal" tabindex="-1" aria-hidden="true">
+   <!-- BEGIN: New Order Modal -->
+   <div id="new-order-modal-structure" class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="font-medium text-base mr-auto"> instances</h2>
+                    <h2 class="font-medium text-base mr-auto"> Structure bénéficiaire</h2>
                 </div>
                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
                     <div class="col-span-12">
-                        <label for="pos-form-1" class="form-label">Name</label>
-                        <input id="pos-form-1" type="text" class="form-control flex-1" placeholder="Customer name">
+                        <label for="pos-form-1" class="form-label">Nom de la structure</label>
+                        <input id="pos-form-1" type="text" name="nom"  class="form-control flex-1" placeholder="nom de la structure">
+                    </div>
+                    <!-- status -->
+                    <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0">
+                                <div class="form-label xl:w-64 xl:!mr-10">
+                                    <div class="text-left">
+                                        <div class="flex items-center">
+                                            <div class="font-medium">Statut</div>
+                                            <div
+                                                class="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">
+                                                Required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-full mt-3 xl:mt-0 flex-1">
+                                    <div class="flex flex-col sm:flex-row">
+                                        <div class="form-check mr-4">
+                                            <input id="statut" name="statut" class="form-check-input"
+                                                type="radio" value="en_exploitation" required>
+                                            <label class="form-check-label" for="statut-en-exploition">En exploitation</label>
+                                        </div>
+                                        <div class="form-check mr-4 mt-2 sm:mt-0">
+                                            <input id="statut" name="statut" class="form-check-input"
+                                                type="radio" value="pas_en_exploitation">
+                                            <label class="form-check-label" for="statut-pas-en-exploitation">Pas en exploitation</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                              <!-- ETAT-->
+                        <div class="col-span-12">
+                            <label for="structure-beneficiare-etat" class="form-label">Etat</label>
+                            <select id="structure-beneficiare-etat" name="etat" class="form-control flex-1">
+                                <option value="deployer">Déployées</option>
+                                <option value="maintenance">En maintenance</option>
+                    
+                            </select>
+                        </div>
+                            <!-- Description -->
+                        <div class="col-span-12">
+                            <label for="structure-beneficiaire-commentaire" class="form-label">Commentaire</label>
+                            <textarea id="structure-beneficiaire-commentaire" name="commentaire" class="form-control flex-1 h-25"
+                                placeholder="Entrez un....."></textarea>
+                        </div>
+                    <div class="col-span-12">
+                        <label for="pos-form-2" class="form-label">Année d'exploitation</label>
+                        <input id="pos-form-2" type="date"  name="annee_exploition" class="form-control flex-1" placeholder="">
                     </div>
                     <div class="col-span-12">
-                        <label for="pos-form-2" class="form-label">Table</label>
-                        <input id="pos-form-2" type="text" class="form-control flex-1" placeholder="Customer table">
-                    </div>
-                    <div class="col-span-12">
-                        <label for="pos-form-3" class="form-label">Number of People</label>
-                        <input id="pos-form-3" type="text" class="form-control flex-1" placeholder="People">
+                        <label for="pos-form-3" class="form-label">Année de déploiement</label>
+                        <input id="pos-form-3" type="date" name="annee_deploiment" class="form-control flex-1" placeholder="">
                     </div>
                 </div>
                 <div class="modal-footer text-right">
                     <button type="button" data-tw-dismiss="modal"
-                        class="btn btn-outline-secondary w-32 mr-1">Cancel</button>
-                    <button type="button" class="btn btn-primary w-32">Create Ticket</button>
+                        class="btn btn-outline-secondary w-32 mr-1">Annuler</button>
+                    <button type="button" class="btn btn-primary w-32">Enregistrer</button>
                 </div>
             </div>
         </div>
