@@ -57,7 +57,13 @@ class PageController extends Controller
 
         $projet = Projet::with(['equipe.users', 'fonctionnalites', 'technologies', 'difficulteProjets', 'amendements'])->findOrFail($id);
 
-        $membres = $projet->equipe->users()->withPivot('statut', 'role', 'actif', 'date_debut', 'date_fin')->get();
+        if ($projet->equipe) {
+            $membres = $projet->equipe->users()->withPivot('statut', 'role', 'actif', 'date_debut', 'date_fin')->get();
+        } else {
+            $membres = collect(); // Retourne une collection vide si pas d'équipe
+        }
+
+       // $membres = $projet->equipe->users()->withPivot('statut', 'role', 'actif', 'date_debut', 'date_fin')->get();
 
         return view('pages/details', compact('projet', 'users', 'membres','unProjet'));
     }

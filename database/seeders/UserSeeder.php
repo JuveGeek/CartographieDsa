@@ -1,11 +1,11 @@
 <?php
-
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use App\Models\User;
-use Spatie\Permission\Models\Role; // Importer la classe Role
+use Spatie\Permission\Models\Role;
+// Importer la classe Role
 
 class UserSeeder extends Seeder
 {
@@ -30,13 +30,13 @@ class UserSeeder extends Seeder
         $admin = User::firstOrCreate([
             'email' => 'midone@left4code.com',
         ], [
-            'name' => 'Left4code',
-            'firstname' => 'Juve',
+            'name'              => 'Left4code',
+            'firstname'         => 'Juve',
             'email_verified_at' => now(),
-            'password' => bcrypt('password'), // Assurer que le mot de passe est sécurisé
-            'tel' => '123456789',
-            'structure' => 'ANPTIC',
-            'remember_token' => Str::random(10),
+            'password'          => bcrypt('password'), // Assurer que le mot de passe est sécurisé
+            'tel'               => '123456789',
+            'structure'         => 'ANPTIC',
+            'remember_token'    => Str::random(10),
         ]);
 
         // Assigner le rôle "admin" à Left4code
