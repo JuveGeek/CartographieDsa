@@ -7,7 +7,12 @@
 @section('subcontent')
     <!-- BEGIN: Informations détaillées du projet -->
 
-    <h2 class="intro-y text-lg font-medium mt-10">Informations détaillées du projet</h2>
+    <div class="flex items-center mt-10">
+        <h2 class="intro-y text-lg font-medium">Informations détaillées du projet</h2>
+        <button class="btn btn-success ml-auto shadow-md mr-2">Récapitulatif du projet</button>
+    </div>
+
+
     <div class="grid grid-cols-12 gap-6 mt-5">
         <!-- BEGIN: Data List -->
         <div class="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
