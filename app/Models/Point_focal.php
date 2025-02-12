@@ -9,7 +9,7 @@ class Point_focal extends Model
 {
     protected $fillable = ['date_debut', 'date_fin'];
 
-    public function personnel()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }

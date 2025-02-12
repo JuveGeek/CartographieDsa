@@ -1,7 +1,7 @@
 @extends('../layout/' . $layout)
 
 @section('subhead')
-    <title>Détiails </title>
+    <title>Détails </title>
 @endsection
 
 @section('subcontent')
@@ -9,7 +9,9 @@
 
     <div class="flex items-center mt-10">
         <h2 class="intro-y text-lg font-medium">Informations détaillées du projet</h2>
-        <button class="btn btn-success ml-auto shadow-md mr-2">Récapitulatif du projet</button>
+        <a href="{{ route('export.projet', $projet->id) }}" class="btn btn-success ml-auto shadow-md mr-2">
+            Récapitulatif du projet
+        </a>
     </div>
 
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DifficulteProjet extends Model
 {
-    protected $fillable = ['description', 'date'];
+    protected $fillable = ['id' ,'description', 'date', 'status'];
 
     public function projet()
     {

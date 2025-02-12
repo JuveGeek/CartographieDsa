@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -18,45 +19,50 @@ class UserController extends Controller
     }
 
     public function store(Request $request)
-    {
+{
+    // Validation des champs
+    $validatedData = $request->validate([
+        'name'      => 'required|string|min:2|max:255',
+        'firstname' => 'required|string|min:2|max:255',
+        'structure' => 'required|string|max:255',
+        'email'     => ['required', 'email', 'max:255', Rule::unique('users', 'email')],
+        'password'  => 'required|min:8|confirmed',
+        'tel'       => 'required|digits:8',
+        'role'      => ['required', Rule::exists('roles', 'name')],
+    ], [
+        'name.required'      => 'Le nom est obligatoire.',
+        'firstname.required' => 'Le prénom est obligatoire.',
+        'structure.required' => 'La structure est obligatoire.',
+        'email.required'     => "L'adresse email est obligatoire.",
+        'email.email'        => "L'adresse email doit être valide.",
+        'email.unique'       => "Cet email est déjà utilisé.",
+        'password.required'  => "Le mot de passe est obligatoire.",
+        'password.min'       => "Le mot de passe doit contenir au moins 8 caractères.",
+        'password.confirmed' => "Les mots de passe ne correspondent pas.",
+        'tel.required'       => "Le numéro de téléphone est obligatoire.",
+        'tel.digits'         => "Le numéro de téléphone doit contenir exactement 8 chiffres.",
+        'role.required'      => "Veuillez sélectionner un rôle.",
+        'role.exists'        => "Le rôle sélectionné est invalide.",
+    ]);
 
-        /*$request->validate([
-            'name'      => 'required|string|min:2|max:255',
-            'firstname' => 'required|string|min:2|max:255',
-            'email'     => ['required', 'email', 'max:255', Rule::unique('users')],
-            'password'  => 'required|min:6',
-            'tel'       => 'required|digits:8',
-            //'role' => 'required|exists:roles,name',
-        ]);*/
+    // Création de l'utilisateur
+    $user = User::create([
+        'name'      => $validatedData['name'],
+        'firstname' => $validatedData['firstname'],
+        'structure' => $validatedData['structure'],
+        'email'     => $validatedData['email'],
+        'password'  => Hash::make($validatedData['password']),
+        'tel'       => $validatedData['tel'],
+    ]);
 
-        $user = User::create([
-            'name'      => $request->name,
-            'firstname' => $request->firstname,
-            'email'     => $request->email,
-            'password'  => Hash::make($request->password),
-            'tel'       => $request->tel,
-        ]);
+    // Attribution du rôle
+    $user->assignRole($validatedData['role']);
 
-        //$user->save();
+    // Message flash de succès
+    session()->flash('success', 'Utilisateur ajouté avec succès !');
 
-        $user->assignRole($request->role);
-
-        // Message flash de succès
-        session()->flash('success', 'Utilisateur ajouté avec succès !');
-
-        // Redirection
-        return redirect()->route('users-layout-membre');
-
-        /*
-<div class="flex flex-col sm:flex-row mt-2">
-                                @foreach($roles as $role)
-                                    <div class="form-check mr-2">
-                                        <input id="role-{{ $role->id }}" class="form-check-input" type="radio" name="role" value="{{ $role->name }}">
-                                        <label class="form-check-label" for="role-{{ $role->id }}">{{ $role->name }}</label>
-                                    </div>
-                                @endforeach
-                            </div>
-    */
+    // Redirection
+    return redirect()->route('users-layout-membre');
     }
 
     public function show($id)

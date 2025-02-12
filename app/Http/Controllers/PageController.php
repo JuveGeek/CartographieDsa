@@ -9,8 +9,18 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 
+use App\Exports\ProjetMultiSheetExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class PageController extends Controller
 {
+
+    public function exportProjet($id)
+    {
+        $projet = Projet::findOrFail($id);
+        return Excel::download(new ProjetMultiSheetExport($id), 'projet_' . $projet->nom . '.xlsx');
+    }
+
     /**
      * Show specified view.
      *

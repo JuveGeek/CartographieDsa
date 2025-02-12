@@ -89,6 +89,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/membre-equipe', [MembreEquipeController::class, 'store'])->name('membre_equipe.store');
         Route::post('/point-focal', [PointFocalController::class, 'store'])->name('point_focal.store');
 
+        Route::get('/export-projet/{id}', [PageController::class, 'exportProjet'])->name('export.projet');
+
     });
 });
 
