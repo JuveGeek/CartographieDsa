@@ -1,13 +1,15 @@
 <?php
-
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use App\Models\Projet;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class TechnologieSheetExport implements FromCollection, WithHeadings, WithTitle
+class TechnologieSheetExport implements FromCollection, WithHeadings, WithTitle, WithStyles, WithColumnWidths
 {
     protected $projetId;
 
@@ -20,9 +22,8 @@ class TechnologieSheetExport implements FromCollection, WithHeadings, WithTitle
 
         return Projet::findOrFail($this->projetId)
             ->technologies()
-            ->select('technologies.id', 'technologies.nom', 'technologies.description', 'technologies.role',  'technologies.version', 'technologies.statut')
+            ->select('technologies.id', 'technologies.nom', 'technologies.description', 'technologies.role', 'technologies.version', 'technologies.statut')
             ->get();
-
 
     }
 
@@ -34,5 +35,25 @@ class TechnologieSheetExport implements FromCollection, WithHeadings, WithTitle
     public function title(): string
     {
         return 'Technologies'; // Nom fixe
+    }
+
+    // Active le retour à la ligne dans la colonne "Description"
+    public function styles(Worksheet $sheet)
+    {
+        return [
+            'C' => ['alignment' => ['wrapText' => true]],
+
+        ];
+    }
+
+    // Ajuste la largeur des colonnes
+    public function columnWidths(): array
+    {
+        return [
+
+            'C' => 50, // Description (large pour le texte long)
+            'D' => 25,
+
+        ];
     }
 }

@@ -26,9 +26,6 @@ class ProjetSheetExport implements FromCollection, WithHeadings, WithTitle, With
     }
     public function collection()
     {
-        /*return Projet::with(['equipe.users', 'structurePorteuse.pointsFocaux', 'fonctionnalites', 'technologies',
-        'difficulteProjets', 'amendements', 'structuresBeneficiaires'])->get();*/
-
 
         return Projet::where('id', $this->projetId)
             ->select('id', 'nom', 'description', 'date_debut', 'date_fin', 'statut', 'created_at', 'updated_at',

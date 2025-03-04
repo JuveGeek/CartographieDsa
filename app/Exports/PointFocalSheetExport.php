@@ -5,8 +5,11 @@ use App\Models\Projet;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class PointFocalSheetExport implements FromCollection, WithHeadings, WithTitle
+class PointFocalSheetExport implements FromCollection, WithHeadings, WithTitle, WithStyles, WithColumnWidths
 {
     protected $projetId;
 
@@ -37,6 +40,29 @@ class PointFocalSheetExport implements FromCollection, WithHeadings, WithTitle
     public function headings(): array
     {
         return ['ID', 'Nom', 'Prénom', 'Email', 'Date de début', 'Date de fin', 'Structure porteuse'];
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        return [
+            'G' => ['alignment' => ['wrapText' => true]],
+
+        ];
+    }
+
+    // Ajuste la largeur des colonnes
+    public function columnWidths(): array
+    {
+        return [
+            'A' => 10,  // ID
+            'B' => 20,  // Nom
+            'C' => 30,  // Prenom
+            'D' => 30,  // Description (large pour le texte long)
+            'E' => 15,
+            'F' => 15,
+            'G' => 30,
+
+        ];
     }
 
     public function title(): string

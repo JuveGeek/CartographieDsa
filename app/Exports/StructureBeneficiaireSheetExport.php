@@ -2,12 +2,15 @@
 
 namespace App\Exports;
 
+use App\Models\Projet;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use App\Models\Projet;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class StructureBeneficiaireSheetExport implements FromCollection, WithHeadings, WithTitle
+class StructureBeneficiaireSheetExport implements FromCollection, WithHeadings, WithTitle, WithStyles, WithColumnWidths
 {
     protected $projetId;
 
@@ -39,6 +42,29 @@ class StructureBeneficiaireSheetExport implements FromCollection, WithHeadings, 
     public function headings(): array
     {
         return ['ID', 'Nom', 'Statut', 'Etat', 'Année déploiement', 'Année exploitation', 'Commentaires'];
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        return [
+            'B' => ['alignment' => ['wrapText' => true]],
+            'G' => ['alignment' => ['wrapText' => true]],
+        ];
+    }
+
+    // Ajuste la largeur des colonnes
+    public function columnWidths(): array
+    {
+        return [
+            'A' => 10,  // ID
+            'B' => 30,  // Nom
+            'C' => 20,
+            'D' => 15,
+            'E' => 15,
+            'F' => 15,
+            'G' => 40,
+
+        ];
     }
 
     public function title(): string

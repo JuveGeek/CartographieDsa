@@ -31,7 +31,12 @@ class UserController extends Controller
         'role'      => ['required', Rule::exists('roles', 'name')],
     ], [
         'name.required'      => 'Le nom est obligatoire.',
+        'name.required' => 'Le nom est obligatoire.',
+        'name.min' => 'Le nom doit contenir au moins 2 caractères.',
+        'name.max' => 'Le nom ne doit pas dépasser 255 caractères.',
         'firstname.required' => 'Le prénom est obligatoire.',
+        'firstname.min' => 'Le nom doit contenir au moins 2 caractères.',
+        'firstname.max' => 'Le nom ne doit pas dépasser 255 caractères.',
         'structure.required' => 'La structure est obligatoire.',
         'email.required'     => "L'adresse email est obligatoire.",
         'email.email'        => "L'adresse email doit être valide.",
@@ -56,7 +61,12 @@ class UserController extends Controller
     ]);
 
     // Attribution du rôle
-    $user->assignRole($validatedData['role']);
+
+    if ($request->has('role')) {
+        $user->assignRole($request->role);
+    }
+
+    //$user->assignRole($validatedData['role']);
 
     // Message flash de succès
     session()->flash('success', 'Utilisateur ajouté avec succès !');
@@ -85,6 +95,7 @@ class UserController extends Controller
         $request->validate([
             'name'      => 'required|string|max:255',
             'firstname' => 'nullable|string|max:255',
+            'structure' => 'string|max:255',
             'tel'       => 'nullable|string|max:20',
             'role'      => 'required|exists:roles,name', // Validation du rôle
         ]);

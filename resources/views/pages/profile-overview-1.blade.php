@@ -28,7 +28,7 @@
 
                 <a class="flex items-center whitespace-nowrap mr-3 tooltip" data-tw-toggle="modal"
                     data-id="{{ $user->id }}" data-name="{{ $user->name }}" data-firstname="{{ $user->firstname }}"
-                    data-tel="{{ $user->tel }}" data-email="{{ $user->email }}"
+                    data-tel="{{ $user->tel }}" data-email="{{ $user->email }}" data-structure="{{ $user->structure }}"
                     data-role="{{ $user->roles->isNotEmpty() ? $user->roles->pluck('name')->first() : '' }}"
                     data-tw-target="#update-user-modal" href="javascript:;" title="Modifier">
                     <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
@@ -123,6 +123,12 @@
                             <label class="form-label">Email</label>
                             <input id="user-email" type="text" class="form-control" name="email">
                         </div>
+
+                        <div class="col-span-12 sm:col-span-6">
+                            <label class="form-label">Structure</label>
+                            <input id="user-structure" type="text" class="form-control" name="structure">
+                        </div>
+
                         <div class="col-span-12 sm:col-span-6">
                             <label class="form-label">Rôle</label>
                             <select id="user-role" class="form-select" name="role">
@@ -239,6 +245,7 @@
             const userFirstnameInput = document.getElementById("user-firstname");
             const userTelInput = document.getElementById("user-tel");
             const userEmailInput = document.getElementById("user-email");
+            const userStructureInput = document.getElementById("user-structure");
             const userRoleSelect = document.getElementById("user-role");
 
             // Ouvrir le modal et pré-remplir les champs
@@ -250,6 +257,7 @@
                     userFirstnameInput.value = this.getAttribute("data-firstname");
                     userTelInput.value = this.getAttribute("data-tel");
                     userEmailInput.value = this.getAttribute("data-email");
+                    userStructureInput.value = this.getAttribute("data-structure");
 
                     // Réinitialiser la sélection du rôle
                     userRoleSelect.selectedIndex = 0;

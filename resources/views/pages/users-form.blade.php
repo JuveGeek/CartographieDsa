@@ -19,7 +19,8 @@
 
                         <div class="input-form">
                             <label for="name" class="form-label">Nom</label>
-                            <input id="name" type="text" name="name" class="form-control" placeholder="John"
+                            <input id="name" type="text" name="name" class="form-control"
+                            value="{{ old('name') }}" placeholder="John"
                                 required>
                             @if ($errors->has('name'))
                                 <div class="text-danger mt-2">{{ $errors->first('name') }}</div>
@@ -28,7 +29,8 @@
 
                         <div class="input-form mt-3">
                             <label for="firstname" class="form-label">Prénom</label>
-                            <input id="firstname" type="text" name="firstname" class="form-control" placeholder="Doe"
+                            <input id="firstname" type="text" name="firstname" class="form-control"
+                            value="{{ old('firstname') }}" placeholder="Doe"
                                 required>
                             @if ($errors->has('firstname'))
                                 <div class="text-danger mt-2">{{ $errors->first('firstname') }}</div>
@@ -68,7 +70,8 @@
 
                         <div class="input-form">
                             <label for="structure" class="form-label">Structure</label>
-                            <input id="structure" type="text" name="structure" class="form-control" placeholder="ANPTIC"
+                            <input id="structure" type="text" name="structure" class="form-control"
+                            value="{{ old('structure') }}" placeholder="ANPTIC"
                                 required>
                             @if ($errors->has('structure'))
                                 <div class="text-danger mt-2">{{ $errors->first('structure') }}</div>
@@ -78,7 +81,7 @@
                         <div class="input-form mt-3">
                             <label for="email" class="form-label">Email</label>
                             <input id="email" type="email" name="email" class="form-control"
-                                placeholder="example@gmail.com" required>
+                                placeholder="example@gmail.com" value="{{ old('email') }}" required>
                             @if ($errors->has('email'))
                                 <div class="text-danger mt-2">{{ $errors->first('email') }}</div>
                             @endif
@@ -87,7 +90,8 @@
 
                         <div class="input-form mt-3">
                             <label for="tel" class="form-label">Téléphone</label>
-                            <input id="tel" type="number" name="tel" class="form-control" placeholder="62745337"
+                            <input id="tel" type="number" name="tel" class="form-control"
+                            value="{{ old('tel') }}" placeholder="62745337"
                                 required>
                             @if ($errors->has('tel'))
                                 <div class="text-danger mt-2">{{ $errors->first('tel') }}</div>
@@ -108,7 +112,8 @@
                                 <div class="text-danger mt-2">{{ $errors->first('role') }}</div>
                             @endif
                         </div>
-                        
+
+
                     </div>
                 </div>
             </div>
