@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Point_focal;
 
 class PointFocalController extends Controller
 {
@@ -27,6 +28,15 @@ class PointFocalController extends Controller
 
         // Retour avec un message de succès
         return redirect()->back()->with('success', 'Point focal ajouté avec succès.');
+    }
+
+    public function destroy(Request $request)
+    {
+        $focalId = $request->input('focal_id'); // Récupérer l'ID envoyé dans l'AJAX
+        $focal   = Point_focal::findOrFail($focalId);
+        $focal->delete();
+
+        return response()->json(['message' => 'Point focal supprimé avec succès']);
     }
 
 }

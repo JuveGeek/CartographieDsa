@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Point_focal extends Model
 {
-    protected $fillable = ['date_debut', 'date_fin'];
+    protected $table = 'point_focal';  // Spécifie le nom exact de la table
+
+    protected $fillable = ['id', 'date_debut', 'date_fin'];
 
     public function user()
     {

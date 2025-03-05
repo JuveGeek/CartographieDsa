@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class StructurePorteuse extends Model
 {
+    protected $table = 'structure_porteuses';
     protected $fillable = ['nom', 'adresse', 'date'];
 
     public function projets()
@@ -21,6 +22,9 @@ class StructurePorteuse extends Model
 
     public function pointsFocaux()
     {
-        return $this->belongsToMany(User::class, 'point_focal', 'structure_porteuse_id', 'user_id')->withPivot('date_debut', 'date_fin');
+        return $this->belongsToMany(User::class,
+        'point_focal', 'structure_porteuse_id', 'user_id')
+        ->withPivot('id', 'date_debut', 'date_fin')->as('pivot');
     }
+
 }

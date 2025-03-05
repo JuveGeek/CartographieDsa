@@ -12,6 +12,9 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+
+    protected $table = 'users';
+
     use HasFactory, Notifiable, SoftDeletes;
     use HasApiTokens;
     use HasRoles;
@@ -37,7 +40,10 @@ class User extends Authenticatable
 
     public function pointsFocaux()
     {
-        return $this->belongsToMany(User::class, 'point_focal', 'structure_porteuse_id', 'user_id')->withPivot('date_debut', 'date_fin');
+        return $this->belongsToMany(User::class,
+        'point_focal', 'structure_porteuse_id', 'user_id')
+        ->withPivot('id', 'date_debut', 'date_fin')
+        ->as('pivot');
     }
 
     /**

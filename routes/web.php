@@ -83,11 +83,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/proposition-solution', [DifficulteProjetController::class, 'storeProposition'])->name('difficultes.storeProposition');
 
         Route::post('/amendements', [AmendementController::class, 'store'])->name('amendements.store');
+        Route::delete('/amendement/delete', [AmendementController::class, 'destroy'])->name('amendements.delete');
         Route::get('/amendements/{id}/difficulte-amendements', [AmendementController::class, 'show'])->name('amendements.show');
         Route::post('/difficulte-amendement', [AmendementController::class, 'storeDifficulteAmendement'])->name('amendements.storeDifficulteAmendement');
 
         Route::post('/membre-equipe', [MembreEquipeController::class, 'store'])->name('membre_equipe.store');
         Route::post('/point-focal', [PointFocalController::class, 'store'])->name('point_focal.store');
+        Route::delete('/focal/delete', [PointFocalController::class, 'destroy'])->name('focals.delete');
 
         Route::get('/export-projet/{id}', [PageController::class, 'exportProjet'])->name('export.projet');
 
