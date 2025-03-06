@@ -79,6 +79,10 @@ Route::middleware('auth')->group(function () {
 
         Route::post('/projets/{projet}/technologies', [TechnologieController::class, 'store'])->name('technologies.store');
         Route::post('/difficultes', [DifficulteProjetController::class, 'store'])->name('difficultes.store');
+
+        Route::delete('/difficulte/delete', [DifficulteProjetController::class, 'destroy'])->name('difficultes.delete');
+        Route::delete('/proposition/delete', [DifficulteProjetController::class, 'destroyProposition'])->name('propositions.delete');
+
         Route::get('/difficultes/{id}/proposition-solutions', [DifficulteProjetController::class, 'show'])->name('difficultes.show');
         Route::post('/proposition-solution', [DifficulteProjetController::class, 'storeProposition'])->name('difficultes.storeProposition');
 
@@ -87,7 +91,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/amendements/{id}/difficulte-amendements', [AmendementController::class, 'show'])->name('amendements.show');
         Route::post('/difficulte-amendement', [AmendementController::class, 'storeDifficulteAmendement'])->name('amendements.storeDifficulteAmendement');
 
+        Route::delete('/difficulteAmendement/delete', [AmendementController::class, 'destroyAmendement'])->name('difficulteAmendements.delete');
+
         Route::post('/membre-equipe', [MembreEquipeController::class, 'store'])->name('membre_equipe.store');
+        Route::delete('/membre/delete', [MembreEquipeController::class, 'destroy'])->name('membres.delete');
+
+
         Route::post('/point-focal', [PointFocalController::class, 'store'])->name('point_focal.store');
         Route::delete('/focal/delete', [PointFocalController::class, 'destroy'])->name('focals.delete');
 

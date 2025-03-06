@@ -35,7 +35,7 @@ class User extends Authenticatable
     public function equipes()
     {
         return $this->belongsToMany(Equipe::class, 'membre_equipe')
-                    ->withPivot('role', 'statut', 'actif', 'date_debut', 'date_fin');
+                    ->withPivot( 'role', 'statut', 'actif', 'date_debut', 'date_fin');
     }
 
     public function pointsFocaux()

@@ -72,4 +72,23 @@ class DifficulteProjetController extends Controller
 
     }
 
+    public function destroy(Request $request)
+    {
+        $difficulteId = $request->input('difficulte_projet_id'); // Récupérer l'ID envoyé dans l'AJAX
+        $difficulte   = DifficulteProjet::findOrFail($difficulteId);
+        $difficulte->delete();
+
+        return response()->json(['message' => 'Difficulté supprimé avec succès']);
+    }
+
+    public function destroyProposition(Request $request)
+    {
+        $propositionId = $request->input('proposition_id'); // Récupérer l'ID envoyé dans l'AJAX
+        $proposition   = PropositionSolution::findOrFail($propositionId);
+        $proposition->delete();
+
+        return response()->json(['message' => 'Proposition de solution supprimée avec succès']);
+    }
+
+
 }

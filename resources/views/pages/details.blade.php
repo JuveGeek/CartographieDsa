@@ -518,13 +518,13 @@
 
             </div>
             <!--
-                    <div class="hidden md:block mx-auto text-slate-500">Showing 1 to 10 of 150 entries</div>
-                    <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
-                        <div class="w-56 relative text-slate-500">
-                            <input type="text" class="form-control w-56 box pr-10" placeholder="Search...">
-                            <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
-                        </div>
-                    </div>  -->
+                            <div class="hidden md:block mx-auto text-slate-500">Showing 1 to 10 of 150 entries</div>
+                            <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
+                                <div class="w-56 relative text-slate-500">
+                                    <input type="text" class="form-control w-56 box pr-10" placeholder="Search...">
+                                    <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
+                                </div>
+                            </div>  -->
         </div>
         <!-- BEGIN: Data List -->
         <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
@@ -563,11 +563,12 @@
                                     <a class="flex items-center" href="">
                                         <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
                                     </a>
-                                    <a type="submit" class="flex items-center delete-focal-btn text-danger" href="javascript:;"
-                                        data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal-focal"
+                                    <a type="submit" class="flex items-center delete-focal-btn text-danger"
+                                        href="javascript:;" data-tw-toggle="modal"
+                                        data-tw-target="#delete-confirmation-modal-focal"
                                         data-focal-id="{{ $focal->pivot->id }}">
                                         <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i>
-                                </a>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -674,7 +675,7 @@
                     <div class="p-5 text-center">
                         <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i>
                         <div class="text-3xl mt-5">ÊTES-VOUS SÛR ?</div>
-                        <div class="text-slate-500 mt-2">Voulez-vous vraiment supprimer cet utilisateur?<br>Ce processus
+                        <div class="text-slate-500 mt-2">Voulez-vous vraiment supprimer le point focal?<br>Ce processus
                             est irréversible.</div>
                     </div>
                     <div class="px-5 pb-8 text-center">
@@ -750,11 +751,13 @@
                                     <a class="flex items-center" href="">
                                         <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Modifier
                                     </a>
-                                    <button type="submit" class="flex items-center text-danger" data-tw-toggle="modal"
-                                        data-tw-target="#delete-confirmation-modal-membre">
+                                    <button type="submit" class="flex items-center text-danger delete-membre-btn"
+                                        data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal-membre"
+                                        data-membre-id="{{ $membre->pivot->id }}">
                                         <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Supprimer
                                     </button>
                                 </div>
+
                             </td>
                         </tr>
                     @empty
@@ -921,14 +924,16 @@
                 <div class="modal-body p-0">
                     <div class="p-5 text-center">
                         <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i>
-                        <div class="text-3xl mt-5">Are you sure?</div>
-                        <div class="text-slate-500 mt-2">Do you really want to delete these records? <br>This process
-                            cannot be undone.</div>
+                        <div class="text-3xl mt-5">ÊTES-VOUS SÛR ?</div>
+                        <div class="text-slate-500 mt-2">Voulez-vous vraiment supprimer cet membre de l'équipe ?<br>Ce
+                            processus
+                            est irréversible.</div>
                     </div>
                     <div class="px-5 pb-8 text-center">
                         <button type="button" data-tw-dismiss="modal"
-                            class="btn btn-outline-secondary w-24 mr-1">Cancel</button>
-                        <button type="button" class="btn btn-danger w-24">Delete</button>
+                            class="btn btn-outline-secondary w-24 mr-1">Annuler</button>
+                        <button type="button" class="btn btn-danger w-24" id="confirm-delete-membre"
+                            data-tw-dismiss="modal">Supprimer</button>
                     </div>
                 </div>
             </div>
@@ -1253,11 +1258,9 @@
                                         </a>
 
                                         <button type="submit" class="flex items-center text-danger delete-amendement-btn"
-                                            data-tw-toggle="modal"
-                                            data-tw-target="#delete-confirmation-modal-amendement"
+                                            data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal-amendement"
                                             data-amendement-id="{{ $amendement->id }}">
-                                            <i data-lucide="trash-2" class="w-4 h-4 mr-1"
-                                            ></i> Supprimer
+                                            <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Supprimer
                                         </button>
                                         </form>
                                     </div>
@@ -1327,7 +1330,7 @@
             <!-- END: Pagination -->
         </div>
         <!-- BEGIN: New Order Modal
-                                            -->
+                                                    -->
         <div id="new-order-modal-amendement" class="modal" tabindex="-1" aria-hidden="true">
 
             <div class="modal-dialog modal-xl">
@@ -1468,15 +1471,15 @@
                         <div class="p-5 text-center">
                             <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i>
                             <div class="text-3xl mt-5">ÊTES-VOUS SÛR ?</div>
-                            <div class="text-slate-500 mt-2">Voulez-vous vraiment supprimer cet utilisateur?<br>Ce processus
+                            <div class="text-slate-500 mt-2">Voulez-vous vraiment supprimer cet utilisateur?<br>Ce
+                                processus
                                 est irréversible.</div>
                         </div>
                         <div class="px-5 pb-8 text-center">
                             <button type="button" data-tw-dismiss="modal"
                                 class="btn btn-outline-secondary w-24 mr-1">Annuler</button>
-                            <button type="button" class="btn btn-danger w-24"
-                            data-tw-dismiss="modal"
-                            id="confirm-delete-amendement">Supprimer</button>
+                            <button type="button" class="btn btn-danger w-24" data-tw-dismiss="modal"
+                                id="confirm-delete-amendement">Supprimer</button>
                         </div>
                     </div>
                 </div>
@@ -1566,7 +1569,10 @@
                                             <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
                                         </a>
 
-                                        <button type="submit" class="flex items-center text-danger">
+                                        <button class="flex items-center text-danger delete-difficultepro-btn"
+                                            data-tw-toggle="modal"
+                                            data-tw-target="#delete-confirmation-modal-difficultepro"
+                                            data-difficultepro-id="{{ $difficulte->id }}">
                                             <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i>
                                         </button>
                                         </form>
@@ -1703,20 +1709,22 @@
 
         <!-- END: New Order Modal -->
         <!-- BEGIN: Delete Confirmation Modal -->
-        <div id="delete-confirmation-modal-difficulte" class="modal" tabindex="-1" aria-hidden="true">
+        <div id="delete-confirmation-modal-difficultepro" class="modal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body p-0">
                         <div class="p-5 text-center">
                             <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i>
-                            <div class="text-3xl mt-5">Are you sure?</div>
-                            <div class="text-slate-500 mt-2">Do you really want to delete these records? <br>This process
-                                cannot be undone.</div>
+                            <div class="text-3xl mt-5">ÊTES-VOUS SÛR ?</div>
+                            <div class="text-slate-500 mt-2">Voulez-vous vraiment supprimer cette difficulté ?<br>Ce
+                                processus
+                                est irréversible.</div>
                         </div>
                         <div class="px-5 pb-8 text-center">
                             <button type="button" data-tw-dismiss="modal"
-                                class="btn btn-outline-secondary w-24 mr-1">Cancel</button>
-                            <button type="button" class="btn btn-danger w-24">Delete</button>
+                                class="btn btn-outline-secondary w-24 mr-1">Annuler</button>
+                            <button type="button" class="btn btn-danger w-24" id="confirm-delete-difficultepro"
+                                data-tw-dismiss="modal">Supprimer</button>
                         </div>
                     </div>
                 </div>
@@ -1800,7 +1808,7 @@
                 jQuery(document).on("click", ".delete-focal-btn", function() {
 
                     focalId = jQuery(this).data("focal-id");
-                    console.log("ID focal sélectionné :", focalId);
+
                 });
 
                 // Quand on clique sur le bouton de confirmation de suppression dans le modal
@@ -1852,8 +1860,70 @@
         </script>
         <!-- end: supprimer focal script-->
 
-         <!-- start: supprimer amendement script-->
-         <script>
+        <!-- start: supprimer membre script-->
+        <script>
+            jQuery(document).ready(function() {
+
+                let membreId;
+
+                // Quand on clique sur le bouton de suppression
+                jQuery(document).on("click", ".delete-membre-btn", function() {
+
+                    membreId = jQuery(this).data("membre-id");
+
+                });
+
+                // Quand on clique sur le bouton de confirmation de suppression dans le modal
+                jQuery(document).on("click", "#confirm-delete-membre", function() {
+
+                    if (!membreId) {
+                        console.error("ID membre non défini !");
+                        return;
+                    }
+
+                    // Faire une requête AJAX pour supprimer membre
+                    jQuery.ajax({
+                        url: "/membre/delete", // Changer l'URL pour correspondre à ta route
+                        type: "POST", // Utiliser POST pour simuler DELETE
+                        data: {
+                            _method: "DELETE", // Simule DELETE
+                            _token: jQuery('meta[name="csrf-token"]').attr(
+                                "content"), // Ajout du token CSRF
+                            membre_id: membreId
+                        },
+                        success: function(response) {
+
+                            // Afficher une notification avec SweetAlert
+                            Swal.fire({
+                                title: "Supprimé !",
+                                text: "Le membre a été supprimé avec succès.",
+                                icon: "success",
+                                confirmButtonText: "OK",
+                                customClass: {
+                                    confirmButton: 'btn-black' // Classe CSS personnalisée
+                                }
+                            }).then(() => {
+                                location.reload(); // Recharger la page après la suppression
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Erreur AJAX :", xhr.responseText);
+                            Swal.fire({
+                                title: "Erreur !",
+                                text: "Une erreur s'est produite, veuillez réessayer.",
+                                icon: "error",
+                                confirmButtonText: "OK"
+                            });
+                        }
+                    });
+
+                });
+            });
+        </script>
+        <!-- end: supprimer membre script-->
+
+        <!-- start: supprimer amendement script-->
+        <script>
             jQuery(document).ready(function() {
 
                 let amendementId;
@@ -1862,7 +1932,6 @@
                 jQuery(document).on("click", ".delete-amendement-btn", function() {
 
                     amendementId = jQuery(this).data("amendement-id");
-                    console.log("ID focal sélectionné :", amendementId);
 
                 });
 
@@ -1913,5 +1982,67 @@
                 });
             });
         </script>
-        <!-- end: supprimer focal script-->
+        <!-- end: supprimer amendement script-->
+
+        <!-- start: supprimer difficultepro script-->
+        <script>
+            jQuery(document).ready(function() {
+
+                let difficulteproId;
+
+                // Quand on clique sur le bouton de suppression
+                jQuery(document).on("click", ".delete-difficultepro-btn", function() {
+
+                    difficulteproId = jQuery(this).data("difficultepro-id");
+
+                });
+
+                // Quand on clique sur le bouton de confirmation de suppression dans le modal
+                jQuery(document).on("click", "#confirm-delete-difficultepro", function() {
+
+                    if (!difficulteproId) {
+                        console.error("ID difficultepro non défini !");
+                        return;
+                    }
+
+                    // Faire une requête AJAX pour supprimer focal
+                    jQuery.ajax({
+                        url: "/difficulte/delete", // Changer l'URL pour correspondre à ta route
+                        type: "POST", // Utiliser POST pour simuler DELETE
+                        data: {
+                            _method: "DELETE", // Simule DELETE
+                            _token: jQuery('meta[name="csrf-token"]').attr(
+                                "content"), // Ajout du token CSRF
+                            difficulte_projet_id: difficulteproId
+                        },
+                        success: function(response) {
+
+                            // Afficher une notification avec SweetAlert
+                            Swal.fire({
+                                title: "Supprimé !",
+                                text: "La difficulté du projet a été supprimé avec succès.",
+                                icon: "success",
+                                confirmButtonText: "OK",
+                                customClass: {
+                                    confirmButton: 'btn-black' // Classe CSS personnalisée
+                                }
+                            }).then(() => {
+                                location.reload(); // Recharger la page après la suppression
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Erreur AJAX :", xhr.responseText);
+                            Swal.fire({
+                                title: "Erreur !",
+                                text: "Une erreur s'est produite, veuillez réessayer.",
+                                icon: "error",
+                                confirmButtonText: "OK"
+                            });
+                        }
+                    });
+
+                });
+            });
+        </script>
+        <!-- end: supprimer difficultepro script-->
     @endsection

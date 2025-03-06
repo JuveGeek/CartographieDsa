@@ -32,4 +32,13 @@ class MembreEquipeController extends Controller
 
         return redirect()->back()->with('successMembre', 'Membre(s) ajouté(s) avec succès.');
     }
+
+    public function destroy(Request $request)
+    {
+        $membreId = $request->input('membre_id'); // Récupérer l'ID envoyé dans l'AJAX
+        $membre   = Membre_equipe::findOrFail($membreId);
+        $membre->delete();
+
+        return response()->json(['message' => 'Membre supprimé avec succès']);
+    }
 }

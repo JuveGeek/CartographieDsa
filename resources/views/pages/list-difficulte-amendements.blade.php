@@ -5,7 +5,7 @@
 @endsection
 
 @section('subcontent')
-    <h2 class="intro-y text-lg font-bold font-medium mt-10">Liste des difficultés liées à l'amendement  </h2>
+    <h2 class="intro-y text-lg font-bold font-medium mt-10">Liste des difficultés liées à l'amendement </h2>
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
 
@@ -66,7 +66,9 @@
                                     <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Modifier
                                 </a>
 
-                                <button type="submit" class="flex items-center text-danger">
+                                <button type="submit" class="flex items-center text-danger delete-difficulte-btn"
+                                    data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal-difficulte"
+                                    data-difficulte-id="{{ $difficulte->id }}">
                                     <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Supprimer
                                 </button>
                                 </form>
@@ -114,7 +116,8 @@
 
                         <!-- File Upload -->
                         <div class="col-span-12">
-                            <label for="amendement-file" style="color: red;" class="form-label">Joindre un fichier (PDF uniquement)</label>
+                            <label for="amendement-file" style="color: red;" class="form-label">Joindre un fichier (PDF
+                                uniquement)</label>
                             <div class="flex items-center space-x-2">
                                 <input id="amendement-file" name="file" type="file" class="hidden">
                                 <button type="button" class="btn btn-outline-primary"
@@ -198,20 +201,22 @@
     <!-- END: Pagination -->
     </div>
     <!-- BEGIN: Delete Confirmation Modal -->
-    <div id="delete-confirmation-modal" class="modal" tabindex="-1" aria-hidden="true">
+    <div id="delete-confirmation-modal-difficulte" class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body p-0">
                     <div class="p-5 text-center">
                         <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i>
-                        <div class="text-3xl mt-5">Are you sure?</div>
-                        <div class="text-slate-500 mt-2">Do you really want to delete these records? <br>This process cannot
-                            be undone.</div>
+                        <div class="text-3xl mt-5">ÊTES-VOUS SÛR ?</div>
+                        <div class="text-slate-500 mt-2">Voulez-vous vraiment supprimer cette difficulté ?<br>Ce
+                            processus
+                            est irréversible.</div>
                     </div>
                     <div class="px-5 pb-8 text-center">
                         <button type="button" data-tw-dismiss="modal"
-                            class="btn btn-outline-secondary w-24 mr-1">Cancel</button>
-                        <button type="button" class="btn btn-danger w-24">Delete</button>
+                            class="btn btn-outline-secondary w-24 mr-1">Annuler</button>
+                        <button type="button" class="btn btn-danger w-24" id="confirm-delete-difficulte"
+                            data-tw-dismiss="modal">Supprimer</button>
                     </div>
                 </div>
             </div>
@@ -240,4 +245,69 @@
             });
         </script>
     @endif
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- start: supprimer difficulte script-->
+    <script>
+        jQuery(document).ready(function() {
+
+            let difficulteId;
+
+            // Quand on clique sur le bouton de suppression
+            jQuery(document).on("click", ".delete-difficulte-btn", function() {
+
+                difficulteId = jQuery(this).data("difficulte-id");
+
+            });
+
+            // Quand on clique sur le bouton de confirmation de suppression dans le modal
+            jQuery(document).on("click", "#confirm-delete-difficulte", function() {
+
+                if (!difficulteId) {
+                    console.error("ID difficulte non défini !");
+                    return;
+                }
+
+                // Faire une requête AJAX pour supprimer focal
+                jQuery.ajax({
+                    url: "/difficulteAmendement/delete", // Changer l'URL pour correspondre à ta route
+                    type: "POST", // Utiliser POST pour simuler DELETE
+                    data: {
+                        _method: "DELETE", // Simule DELETE
+                        _token: jQuery('meta[name="csrf-token"]').attr(
+                            "content"), // Ajout du token CSRF
+                        difficulte_id: difficulteId
+                    },
+                    success: function(response) {
+
+                        // Afficher une notification avec SweetAlert
+                        Swal.fire({
+                            title: "Supprimé !",
+                            text: "La difficulté de l'amendement a été supprimé avec succès.",
+                            icon: "success",
+                            confirmButtonText: "OK",
+                            customClass: {
+                                confirmButton: 'btn-black' // Classe CSS personnalisée
+                            }
+                        }).then(() => {
+                            location.reload(); // Recharger la page après la suppression
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Erreur AJAX :", xhr.responseText);
+                        Swal.fire({
+                            title: "Erreur !",
+                            text: "Une erreur s'est produite, veuillez réessayer.",
+                            icon: "error",
+                            confirmButtonText: "OK"
+                        });
+                    }
+                });
+
+            });
+        });
+    </script>
+    <!-- end: supprimer difficulte script-->
 @endsection

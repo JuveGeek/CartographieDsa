@@ -78,10 +78,19 @@ class AmendementController extends Controller
     public function destroy(Request $request)
     {
         $amendementId = $request->input('amendement_id'); // Récupérer l'ID envoyé dans l'AJAX
-        $user   = Amendement::findOrFail($amendementId);
-        $user->delete();
+        $amendement   = Amendement::findOrFail($amendementId);
+        $amendement->delete();
 
         return response()->json(['message' => 'Amendement supprimé avec succès']);
+    }
+
+    public function destroyAmendement(Request $request)
+    {
+        $difficulteId = $request->input('difficulte_id'); // Récupérer l'ID envoyé dans l'AJAX
+        $difficulte   = DifficulteAmendement::findOrFail($difficulteId);
+        $difficulte->delete();
+
+        return response()->json(['message' => "La difficulté de l'amendement supprimé avec succès"]);
     }
 
 }
