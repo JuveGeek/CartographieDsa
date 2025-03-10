@@ -517,14 +517,7 @@
             <div class="dropdown">
 
             </div>
-            <!--
-                            <div class="hidden md:block mx-auto text-slate-500">Showing 1 to 10 of 150 entries</div>
-                            <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
-                                <div class="w-56 relative text-slate-500">
-                                    <input type="text" class="form-control w-56 box pr-10" placeholder="Search...">
-                                    <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
-                                </div>
-                            </div>  -->
+
         </div>
         <!-- BEGIN: Data List -->
         <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
@@ -560,7 +553,14 @@
                             <td class="table-report__action w-56">
                                 <div class="flex justify-center items-center">
                                     <!-- Action Modifier -->
-                                    <a class="flex items-center" href="">
+                                    <a class="flex items-center" data-tw-toggle="modal"
+                                        data-focal_id="{{ $focal->pivot->id }}" data-focal_user_id="{{ $focal->id }}"
+                                        data-focal_name="{{ $focal->name }}"
+                                        data-focal_firstname="{{ $focal->firstname }}"
+                                        data-focal_structure="{{ $focal->structure }}"
+                                        data-focal_date_debut="{{ $focal->pivot->date_debut }}"
+                                        data-focal_date_fin="{{ $focal->pivot->date_fin }}"
+                                        data-tw-target="#update-focal-modal" href="javascript:;">
                                         <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
                                     </a>
                                     <a type="submit" class="flex items-center delete-focal-btn text-danger"
@@ -667,6 +667,89 @@
         </div>
     </div>
     <!-- END: New Order Modal -->
+
+    <!-- BEGIN: modifier Modal pour pivot -->
+    <div id="update-focal-modal" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <form action="{{ route('point_focal.update') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" id="focal_id" name="id">
+
+                    <div class="modal-header">
+                        <h2 class="font-medium text-base mr-auto">Modifier un point focal</h2>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="grid grid-cols-12 gap-6">
+                            <div class="intro-y col-span-12 lg:col-span-6">
+                                <div class="intro-y box">
+                                    <div class="p-1">
+                                        <div class="input-form">
+                                            <label for="focal_structure_porteuse" class="form-label">Structure
+                                                porteuse</label>
+                                            <input id="focal_structure_porteuse" type="text" name="structure_porteuse"
+                                                class="form-control" value="{{ $unProjet->structurePorteuse->nom }}"
+                                                disabled>
+                                        </div>
+                                        <input type="hidden" name="structure_porteuse_id"
+                                            value="{{ $unProjet->structurePorteuse->id }}">
+                                        <div class="input-form mt-3">
+                                            <label>Sélectionner le point focal</label>
+                                            <div class="mt-2">
+                                                <select id="focal_user" name="user_id"
+                                                    data-placeholder="Sélectionner le point focal"
+                                                    class="tom-select w-full" required>
+                                                    @foreach ($users as $user)
+                                                        <option value="{{ $user->id }}"
+                                                            {{ isset($pointFocal) && $pointFocal->user_id == $user->id ? 'selected' : '' }}>
+                                                            {{ $user->name }} {{ $user->firstname }}
+                                                            ({{ $user->structure }})
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            @error('user_id')
+                                                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="intro-y col-span-12 lg:col-span-6">
+                                <div class="intro-y box">
+                                    <div class="p-1">
+                                        <div class="input-form">
+                                            <label for="focal_date_debut" class="form-label">Date de début</label>
+                                            <input id="focal_date_debut" type="date" name="date_debut"
+                                                class="form-control" value="{{ $pointFocal->date_debut ?? '' }}"
+                                                required>
+                                        </div>
+
+                                        <div class="input-form mt-3">
+                                            <label for="focal_date_fin" class="form-label">Date de fin</label>
+                                            <input id="focal_date_fin" type="date" name="date_fin"
+                                                class="form-control" value="{{ $pointFocal->date_fin ?? '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer text-right">
+                        <button type="button" data-tw-dismiss="modal"
+                            class="btn btn-outline-secondary w-32 mr-1">Annuler</button>
+                        <button type="submit" class="btn btn-primary w-32">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- END: Modifier focal Modal -->
+
     <!-- BEGIN: Delete Confirmation Modal -->
     <div id="delete-confirmation-modal-focal" class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -1257,8 +1340,10 @@
                                             <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Modifier
                                         </a>
 
-                                        <button type="submit" class="flex items-center text-danger delete-amendement-btn"
-                                            data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal-amendement"
+                                        <button type="submit"
+                                            class="flex items-center text-danger delete-amendement-btn"
+                                            data-tw-toggle="modal"
+                                            data-tw-target="#delete-confirmation-modal-amendement"
                                             data-amendement-id="{{ $amendement->id }}">
                                             <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Supprimer
                                         </button>
@@ -1330,7 +1415,7 @@
             <!-- END: Pagination -->
         </div>
         <!-- BEGIN: New Order Modal
-                                                    -->
+                                                            -->
         <div id="new-order-modal-amendement" class="modal" tabindex="-1" aria-hidden="true">
 
             <div class="modal-dialog modal-xl">
@@ -2045,4 +2130,59 @@
             });
         </script>
         <!-- end: supprimer difficultepro script-->
+
+
+        <!-- begin: modifier script-->
+        <!-- begin: modifier focal-->
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+
+                document.querySelectorAll("[data-tw-target='#update-focal-modal']").forEach(button => {
+                    button.addEventListener("click", function() {
+                        // Récupération des données depuis les attributs `data-*`
+                        let focalId = this.getAttribute("data-focal_id");
+                        let userId = this.getAttribute("data-focal_user_id");
+                        let name = this.getAttribute("data-focal_name");
+                        let firstname = this.getAttribute("data-focal_firstname");
+                        let structure = this.getAttribute("data-focal_structure");
+                        let dateDebut = this.getAttribute("data-focal_date_debut");
+                        let dateFin = this.getAttribute("data-focal_date_fin");
+
+                        // Sélection des champs
+                        let selectElement = document.querySelector("#focal_user");
+                        let idInput = document.querySelector("#focal_id");
+                        let nameInput = document.querySelector("#focal_name");
+                        let firstnameInput = document.querySelector("#focal_firstname");
+                        let structureInput = document.querySelector("#focal_structure");
+                        let dateDebutInput = document.querySelector("#focal_date_debut");
+                        let dateFinInput = document.querySelector("#focal_date_fin");
+
+                        if (idInput) idInput.value = focalId;
+
+                        // Vérification et mise à jour du champ <select>
+
+                        if (selectElement) {
+                            let tomSelectInstance = selectElement.tomselect;
+
+                            if (tomSelectInstance) {
+                                tomSelectInstance.setValue(userId, true);
+                            } else {
+                                selectElement.value = userId;
+                            }
+                        }
+
+                        // Mise à jour des dates
+                        if (dateDebutInput) dateDebutInput.value = dateDebut;
+                        if (dateFinInput) dateFinInput.value = dateFin;
+
+                    });
+                });
+            });
+        </script>
+
+
+
+
+        <!-- end: modifier focal-->
+        <!-- end: modifier script-->
     @endsection

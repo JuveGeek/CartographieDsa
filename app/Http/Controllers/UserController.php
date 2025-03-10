@@ -118,15 +118,6 @@ class UserController extends Controller
     {
         $user = User::findOrFail($request->id);
 
-        // Validation des données
-        /*$request->validate([
-            'name'      => 'required|string|max:255',
-            'firstname' => 'nullable|string|max:255',
-            'tel'       => 'nullable|string|max:20',
-            'email'     => 'required|string|max:20',
-            'role' => 'nullable|string|exists:roles,name', //  le rôle existe
-        ]);
-*/
         // Mise à jour de l'utilisateur
         $user->update([
             'name'      => $request->name,

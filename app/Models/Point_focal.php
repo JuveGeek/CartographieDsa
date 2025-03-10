@@ -9,7 +9,7 @@ class Point_focal extends Model
 {
     protected $table = 'point_focal';  // Spécifie le nom exact de la table
 
-    protected $fillable = ['id', 'date_debut', 'date_fin'];
+    protected $fillable = ['id', 'date_debut', 'date_fin', 'structure_porteuse_id', 'user_id'];
 
     public function user()
     {

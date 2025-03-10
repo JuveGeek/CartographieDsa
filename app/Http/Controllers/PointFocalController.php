@@ -1,9 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Point_focal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Point_focal;
 
 class PointFocalController extends Controller
 {
@@ -28,6 +28,24 @@ class PointFocalController extends Controller
 
         // Retour avec un message de succès
         return redirect()->back()->with('success', 'Point focal ajouté avec succès.');
+    }
+
+    public function update(Request $request)
+    {
+
+        // Récupérer le point focal par ID
+        $focal = Point_focal::findOrFail($request->id);
+
+        // Mise à jour
+        $focal->update([
+            'structure_porteuse_id' => $request->structure_porteuse_id,
+            'user_id'               => $request->user_id,
+            'date_debut'            => $request->date_debut,
+            'date_fin'              => $request->date_fin,
+        ]);
+
+        // Rediriger avec un message de succès
+        return back()->with('success', 'Point focal mis à jour avec succès.');
     }
 
     public function destroy(Request $request)

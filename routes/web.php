@@ -98,6 +98,7 @@ Route::middleware('auth')->group(function () {
 
 
         Route::post('/point-focal', [PointFocalController::class, 'store'])->name('point_focal.store');
+        Route::put('/point-focal/update', [PointFocalController::class, 'update'])->name('point_focal.update');
         Route::delete('/focal/delete', [PointFocalController::class, 'destroy'])->name('focals.delete');
 
         Route::get('/export-projet/{id}', [PageController::class, 'exportProjet'])->name('export.projet');
