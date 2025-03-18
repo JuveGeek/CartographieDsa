@@ -1415,7 +1415,7 @@
             <!-- END: Pagination -->
         </div>
         <!-- BEGIN: New Order Modal
-                                                            -->
+                                                                    -->
         <div id="new-order-modal-amendement" class="modal" tabindex="-1" aria-hidden="true">
 
             <div class="modal-dialog modal-xl">
@@ -1607,6 +1607,7 @@
                             <th class="text-center whitespace-nowrap">Description</th>
                             <th class="text-center whitespace-nowrap">Fichier</th>
                             <th class="text-center whitespace-nowrap">Date</th>
+                            <th class="text-center whitespace-nowrap">Status</th>
                             <th class="text-center whitespace-nowrap">Propositions de solution</th>
                             <th class="text-center whitespace-nowrap">Actions</th>
                         </tr>
@@ -1638,6 +1639,12 @@
                                         {{ $difficulte->date }}
                                     </div>
                                 </td>
+
+                                <td class="text-center">
+                                    <div class="w-40">
+                                        {{ $difficulte->status }}
+                                    </div>
+                                </td>
                                 <td class="text-center">
                                     <!-- Affichage des propositions de solution -->
                                     <a class="flex items-center justify-center text-primary tooltip"
@@ -1650,7 +1657,11 @@
                                 <td class="table-report__action w-56">
                                     <div class="flex justify-center items-center">
                                         <!-- Action Modifier (si nécessaire) -->
-                                        <a class="flex items-center" href="">
+                                        <a class="flex items-center" data-tw-toggle="modal"
+                                            data-difficulte_id="{{ $difficulte->id }}"
+                                            data-difficulte_description="{{ $difficulte->description }}"
+                                            data-difficulte_date="{{ $difficulte->date }}"
+                                            data-tw-target="#update-difficulte-modal">
                                             <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
                                         </a>
 
@@ -1758,6 +1769,75 @@
 
                             <!-- File Upload -->
                             <div class="col-span-12">
+                                <label for="difficulte-file-store" style="color: red;" class="form-label">Joindre un fichier
+                                    (PDF
+                                    uniquement)</label>
+                                <div class="flex items-center space-x-2">
+                                    <input id="difficulte-file-store" name="difficulte-file-store" type="file" class="hidden">
+                                    <button type="button" class="btn btn-outline-primary"
+                                        onclick="document.getElementById('difficulte-file-store').click()">Choisir un
+                                        fichier</button>
+                                    <span id="file-name-difficulte" class="text-gray-500">Aucun fichier sélectionné</span>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="modal-footer text-right">
+                            <button type="button" data-tw-dismiss="modal"
+                                class="btn btn-outline-secondary w-32 mr-1">Annuler</button>
+                            <button type="submit" class="btn btn-primary w-32">Enregistrer</button>
+                        </div>
+                </form>
+            </div>
+
+        </div>
+        <script>
+            // Script pour afficher le nom du fichier sélectionné
+            document.getElementById('difficulte-file-store').addEventListener('change', function() {
+                document.getElementById('file-name-difficulte').textContent = this.files.length ? this.files[0].name :
+                    'Aucun fichier sélectionné';
+            });
+
+        </script>
+        </div>
+        <!-- END: New Order Modal -->
+
+        <!-- BEGIN: modifier difficulte Modal -->
+        <div id="update-difficulte-modal" class="modal" tabindex="-1" aria-hidden="true">
+
+            <div class="modal-dialog">
+                <form id="difficulte-form-update" method="POST" action="{{ route('difficultes.update') }}"
+                    enctype="multipart/form-data">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="font-medium text-base mr-auto">Modifier une difficulté</h2>
+                        </div>
+
+
+                        <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                            @method('PUT')
+                            @csrf
+                            <input type="hidden" id="update-difficulte-id" name="id">
+                            <input type="hidden" name="projet_id" value="{{ $projet->id }}">
+                            <!-- Description -->
+                            <div class="col-span-12">
+                                <label for="update-difficulte-description" class="form-label">Description</label>
+                                <textarea id="update-difficulte-description" name="description" class="form-control flex-1 h-28"
+                                    placeholder="Entrez une description"></textarea>
+                            </div>
+
+                            <!-- Date -->
+                            <div class="col-span-12">
+                                <label for="update-difficulte-date" class="form-label">Date</label>
+                                <input id="update-difficulte-date" name="date" type="date"
+                                    class="form-control flex-1">
+                            </div>
+
+                            <!-- File Upload -->
+                            <div class="col-span-12">
                                 <label for="difficulte-file" style="color: red;" class="form-label">Joindre un fichier
                                     (PDF
                                     uniquement)</label>
@@ -1792,7 +1872,9 @@
         </div>
 
 
-        <!-- END: New Order Modal -->
+        <!-- END: modifier difficulte Modal -->
+
+
         <!-- BEGIN: Delete Confirmation Modal -->
         <div id="delete-confirmation-modal-difficultepro" class="modal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
@@ -1821,7 +1903,7 @@
         <!-- start: Difficultes script-->
         <script>
             document.getElementById('difficulte-form').addEventListener('submit', function(event) {
-                const fileInput = document.getElementById('difficulte-file');
+                const fileInput = document.getElementById('difficulte-file-store');
                 const file = fileInput.files[0];
 
                 if (file && file.type !== 'application/pdf') {
@@ -2174,6 +2256,84 @@
                         // Mise à jour des dates
                         if (dateDebutInput) dateDebutInput.value = dateDebut;
                         if (dateFinInput) dateFinInput.value = dateFin;
+
+                    });
+                });
+            });
+        </script>
+
+        <!-- end: modifier focal-->
+
+        <!-- begin: modifier focal-->
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+
+                document.querySelectorAll("[data-tw-target='#update-focal-modal']").forEach(button => {
+                    button.addEventListener("click", function() {
+                        // Récupération des données depuis les attributs `data-*`
+                        let focalId = this.getAttribute("data-focal_id");
+                        let userId = this.getAttribute("data-focal_user_id");
+                        let name = this.getAttribute("data-focal_name");
+                        let firstname = this.getAttribute("data-focal_firstname");
+                        let structure = this.getAttribute("data-focal_structure");
+                        let dateDebut = this.getAttribute("data-focal_date_debut");
+                        let dateFin = this.getAttribute("data-focal_date_fin");
+
+                        // Sélection des champs
+                        let selectElement = document.querySelector("#focal_user");
+                        let idInput = document.querySelector("#focal_id");
+                        let nameInput = document.querySelector("#focal_name");
+                        let firstnameInput = document.querySelector("#focal_firstname");
+                        let structureInput = document.querySelector("#focal_structure");
+                        let dateDebutInput = document.querySelector("#focal_date_debut");
+                        let dateFinInput = document.querySelector("#focal_date_fin");
+
+                        if (idInput) idInput.value = focalId;
+
+                        // Vérification et mise à jour du champ <select>
+
+                        if (selectElement) {
+                            let tomSelectInstance = selectElement.tomselect;
+
+                            if (tomSelectInstance) {
+                                tomSelectInstance.setValue(userId, true);
+                            } else {
+                                selectElement.value = userId;
+                            }
+                        }
+
+                        // Mise à jour des dates
+                        if (dateDebutInput) dateDebutInput.value = dateDebut;
+                        if (dateFinInput) dateFinInput.value = dateFin;
+
+                    });
+                });
+            });
+        </script>
+
+
+
+
+        <!-- end: modifier focal--><!-- begin: modifier focal-->
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+
+                document.querySelectorAll("[data-tw-target='#update-difficulte-modal']").forEach(button => {
+                    button.addEventListener("click", function() {
+                        // Récupération des données depuis les attributs `data-*`
+                        let id = this.getAttribute("data-difficulte_id");
+                        let date = this.getAttribute("data-difficulte_date");
+                        let description = this.getAttribute("data-difficulte_description");
+
+                        // Sélection des champs
+                        let idInput = document.querySelector("#update-difficulte-id");
+                        let dateInput = document.querySelector("#update-difficulte-date");
+                        let descriptionInput = document.querySelector("#update-difficulte-description");
+
+                        // Mise à jour
+                        if (idInput) idInput.value = id;
+                        if (dateInput) dateInput.value = date;
+                        if (descriptionInput) descriptionInput.value = description;
 
                     });
                 });

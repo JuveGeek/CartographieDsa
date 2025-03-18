@@ -81,6 +81,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/difficultes', [DifficulteProjetController::class, 'store'])->name('difficultes.store');
 
         Route::delete('/difficulte/delete', [DifficulteProjetController::class, 'destroy'])->name('difficultes.delete');
+        Route::put('/difficulte/update', [DifficulteProjetController::class, 'update'])->name('difficultes.update');
         Route::delete('/proposition/delete', [DifficulteProjetController::class, 'destroyProposition'])->name('propositions.delete');
 
         Route::get('/difficultes/{id}/proposition-solutions', [DifficulteProjetController::class, 'show'])->name('difficultes.show');

@@ -23,9 +23,9 @@ class DifficulteProjetController extends Controller
         $difficulte->projet_id   = $request->input('projet_id');
 
         // Si un fichier est téléchargé
-        if ($request->hasFile('file')) {
+        if ($request->hasFile('difficulte-file-store')) {
             // Enregistrer le fichier dans le répertoire public "difficulties"
-            $filePath              = $request->file('file')->store('difficulties', 'public');
+            $filePath              = $request->file('difficulte-file-store')->store('difficulties', 'public');
             $difficulte->file_path = $filePath;
         }
 
@@ -34,6 +34,32 @@ class DifficulteProjetController extends Controller
         return back()->with('successDiffProj', 'Difficulté ajoutée avec succès');
 
     }
+
+    public function update(Request $request)
+    {
+
+        // Récupérer le point focal par ID
+        $difficulte = DifficulteProjet::findOrFail($request->id);
+
+        // Si un fichier est téléchargé
+        if ($request->hasFile('file')) {
+            // Enregistrer le fichier dans le répertoire public "difficulties"
+            $filePath              = $request->file('file')->store('difficulties', 'public');
+            $difficulte->file_path = $filePath;
+        }
+
+        // Mise à jour
+        $difficulte->update([
+            'projet_id' => $request->projet_id,
+
+            'date'            => $request->date,
+            'description'     => $request->description,
+        ]);
+
+        // Rediriger avec un message de succès
+        return back()->with('success', 'Difficulté mis à jour avec succès.');
+    }
+
 
     public function show($id)
     {
