@@ -89,12 +89,14 @@ Route::middleware('auth')->group(function () {
 
         Route::post('/amendements', [AmendementController::class, 'store'])->name('amendements.store');
         Route::delete('/amendement/delete', [AmendementController::class, 'destroy'])->name('amendements.delete');
+        Route::put('/amendement/update', [AmendementController::class, 'update'])->name('amendements.update');
         Route::get('/amendements/{id}/difficulte-amendements', [AmendementController::class, 'show'])->name('amendements.show');
         Route::post('/difficulte-amendement', [AmendementController::class, 'storeDifficulteAmendement'])->name('amendements.storeDifficulteAmendement');
 
         Route::delete('/difficulteAmendement/delete', [AmendementController::class, 'destroyAmendement'])->name('difficulteAmendements.delete');
 
         Route::post('/membre-equipe', [MembreEquipeController::class, 'store'])->name('membre_equipe.store');
+        Route::put('/membre/update', [MembreEquipeController::class, 'update'])->name('membres.update');
         Route::delete('/membre/delete', [MembreEquipeController::class, 'destroy'])->name('membres.delete');
 
 

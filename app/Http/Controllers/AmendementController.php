@@ -35,7 +35,7 @@ class AmendementController extends Controller
 
         // Si un fichier est téléchargé
         if ($request->hasFile('file')) {
-            // Enregistrer le fichier dans le répertoire public "difficulties"
+            // Enregistrer le fichier dans le répertoire public "amendements"
             $filePath              = $request->file('file')->store('amendements', 'public');
             $amendement->file_path = $filePath;
         }
@@ -44,6 +44,37 @@ class AmendementController extends Controller
 
         return back()->with('successAmendement', 'Amendement ajouté avec succès');
 
+    }
+
+    public function update(Request $request){
+
+         $amendement = Amendement::findOrFail($request->id);
+
+        // Si un fichier est téléchargé
+        if ($request->hasFile('file')) {
+            // Enregistrer le fichier dans le répertoire public "amendements"
+            $filePath              = $request->file('file')->store('amendements', 'public');
+            $amendement->file_path = $filePath;
+        }
+
+        // Mise à jour
+        $amendement->update([
+
+            'projet_id' => $request->projet_id,
+            'statut'        => $request->statut,
+            'date'            => $request->date,
+            'description'     => $request->description,
+            'source'      => $request->source,
+            'mise_production' => $request->mise_production,
+            'priorite'        => $request->priorite,
+            'categorie'       => $request->categorie,
+            'responsable'     => $request->responsable,
+
+        ]);
+
+         $amendement->save();
+
+         return back()->with('successAmendementModif', 'Amendement modifiée avec succès');
     }
 
     public function storeDifficulteAmendement(Request $request)

@@ -581,9 +581,6 @@
                 </tbody>
             </table>
 
-
-
-
         </div>
         <!-- END: Data List -->
         <!-- BEGIN: Pagination -->
@@ -668,7 +665,7 @@
     </div>
     <!-- END: New Order Modal -->
 
-    <!-- BEGIN: modifier Modal pour pivot -->
+    <!-- BEGIN: modifier Modal pour focal -->
     <div id="update-focal-modal" class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
@@ -831,13 +828,24 @@
                             <td class="table-report__action w-56">
                                 <div class="flex justify-center items-center">
                                     <!-- Action Modifier -->
-                                    <a class="flex items-center" href="">
-                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Modifier
-                                    </a>
+
+                                    <button class="flex items-center" data-tw-toggle="modal"
+                                        data-membre_id="{{ $membre->pivot->id }}" data-membre_name="{{ $membre->name }}"
+                                        data-membre_firstname="{{ $membre->firstname }}"
+                                        data-membre_statut="{{ $membre->pivot->statut }}"
+                                        data-membre_role="{{ $membre->pivot->role }}"
+                                        data-membre_structure="{{ $membre->structure }}"
+                                        data-membre_actif="{{ $membre->pivot->actif }}"
+                                        data-membre_date_debut="{{ $membre->pivot->date_debut }}"
+                                        data-membre_date_fin="{{ $membre->pivot->date_fin }}"
+                                        data-membre_user_id="{{ $membre->id }}"
+                                        data-tw-target="#update-membre-modal">
+                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
+                                    </button>
                                     <button type="submit" class="flex items-center text-danger delete-membre-btn"
                                         data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal-membre"
                                         data-membre-id="{{ $membre->pivot->id }}">
-                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Supprimer
+                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i>
                                     </button>
                                 </div>
 
@@ -850,9 +858,6 @@
                     @endforelse
                 </tbody>
             </table>
-
-
-
 
         </div>
         <!-- END: Data List -->
@@ -1000,6 +1005,113 @@
         </div>
     </div>
     <!-- END: New Order Modal -->
+
+    <!-- BEGIN: modifier Modal pour membre -->
+    <div id="update-membre-modal" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <form action="{{ route('membres.update') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" id="membre_id" name="id" value="{{ $membre->pivot->id }}">
+
+                    <div class="modal-header">
+                        <h2 class="font-medium text-base mr-auto">Modifier un membre</h2>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="grid grid-cols-12 gap-6">
+                            <div class="intro-y col-span-12 lg:col-span-6">
+                                <div class="intro-y box">
+                                    <div class="p-1">
+
+                                        <div class="input-form">
+                                            <label>Sélectionner un membre</label>
+                                            <div class="mt-2">
+                                                <select id="update_membre_users" name="user_id"
+                                                    data-placeholder="Sélectionner un membre" class="tom-select w-full"
+                                                     required>
+                                                    @foreach ($users as $user)
+                                                        <option value="{{ $user->id }}"
+                                                            {{ isset($membre) && $membre->user_id == $user->id ? 'selected' : '' }}>
+                                                            {{ $user->name }}
+                                                            {{ $user->firstname }} ( {{ $user->structure }} )
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <input type="hidden" name="equipe_id" value="{{ $projet->equipe->id }}">
+
+                                        <div class="input-form mt-3">
+                                            <label for="update_membre_role" class="form-label">Rôle</label>
+                                            <select id="update_membre_role" name="role" class="form-control" required>
+                                                <option value="Chef de projet">Chef de projet</option>
+                                                <option value="Développeur backend">Développeur backend</option>
+                                                <option value="Développeur frontend">Développeur frontend</option>
+                                                <option value="Testeur">Testeur</option>
+                                                <option value="Expert métier">Expert métier</option>
+                                                <option value="Partenaire externe">Partenaire externe</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="input-form mt-3">
+                                            <label for="update_membre_statut" class="form-label">Statut</label>
+                                            <select id="update_membre_statut" name="statut" class="form-control"
+                                                required>
+                                                <option value="Equipe technique">Membre technique</option>
+                                                <option value="Equipe de suivie">Membre de suivie</option>
+                                            </select>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        <div class="intro-y col-span-12 lg:col-span-6">
+                            <div class="intro-y box">
+                                <div class="p-1">
+
+                                    <div class="input-form">
+                                        <label for="update_membre_actif" class="form-label">Sélectionner
+                                            l'activité</label>
+                                        <select id="update_membre_actif" name="actif" class="form-control" required>
+                                            <option value="1">Actif</option>
+                                            <option value="0">Inactif</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="input-form mt-3">
+                                        <label for="update_membre_date_debut" class="form-label">Date de début</label>
+                                        <input id="update_membre_date_debut" type="date" name="date_debut"
+                                            class="form-control" value="{{ $membre->date_debut ?? '' }}" required>
+                                    </div>
+
+                                    <div class="input-form mt-3">
+                                        <label for="update_membre_date_fin" class="form-label">Date de fin</label>
+                                        <input id="update_membre_date_fin" type="date" name="date_fin"
+                                            class="form-control" value="{{ $membre->date_fin ?? '' }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="modal-footer text-right">
+                <button type="button" data-tw-dismiss="modal"
+                    class="btn btn-outline-secondary w-32 mr-1">Annuler</button>
+                <button type="submit" class="btn btn-primary w-32">Enregistrer</button>
+            </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <!-- END: Modifier membre Modal -->
+
     <!-- BEGIN: Delete Confirmation Modal -->
     <div id="delete-confirmation-modal-membre" class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -1285,12 +1397,16 @@
                 </div>
             </div>
             <!-- BEGIN: Data List -->
-            <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
+            <div class="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
                 <table class="table table-report -mt-2">
                     <thead>
                         <tr>
                             <th class="whitespace-nowrap">ID</th>
-                            <th class="whitespace-nowrap">Source</th>
+                            <th class="text-center whitespace-nowrap">Source</th>
+                            <th class="text-center whitespace-nowrap">Responsable</th>
+                            <th class="text-center whitespace-nowrap">Catégorie</th>
+                            <th class="text-center whitespace-nowrap">Priorité</th>
+                            <th class="text-center whitespace-nowrap">Mise en production</th>
                             <th class="text-center whitespace-nowrap">Description</th>
                             <th class="text-center whitespace-nowrap">Fichier</th>
                             <th class="text-center whitespace-nowrap">Date</th>
@@ -1304,6 +1420,11 @@
                             <tr class="intro-x">
                                 <td class="w-10">{{ $amendement->id }}</td>
                                 <td class="w-10">{{ $amendement->source }}</td>
+                                <td class="w-10">{{ $amendement->responsable }}</td>
+                                <td class="w-10">{{ $amendement->categorie }}</td>
+                                <td class="w-10">{{ $amendement->priorite }}</td>
+                                <td class="w-10">{{ $amendement->mise_production }}</td>
+
                                 <td class="text-center">
 
                                     <div class="w-40">
@@ -1336,16 +1457,28 @@
                                 <td class="table-report__action w-56">
                                     <div class="flex justify-center items-center">
                                         <!-- Action Modifier (si nécessaire) -->
-                                        <a class="flex items-center" href="">
-                                            <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Modifier
-                                        </a>
+
+                                        <button class="flex items-center" data-tw-toggle="modal"
+                                            data-amendement_id="{{ $amendement->id }}"
+                                            data-amendement_source="{{ $amendement->source }}"
+                                            data-amendement_description="{{ $amendement->description }}"
+                                            data-amendement_categorie="{{ $amendement->categorie }}"
+                                            data-amendement_date="{{ $amendement->date }}"
+                                            data-amendement_statut="{{ $amendement->statut }}"
+                                            data-amendement_priorite="{{ $amendement->priorite }}"
+                                            data-amendement_mise_production="{{ $amendement->mise_production }}"
+                                            data-amendement_responsable="{{ $amendement->responsable }}"
+                                            data-amendement_projet_id="{{ $amendement->projet_id }}"
+                                            data-tw-target="#update-amendement-modal">
+                                            <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
+                                        </button>
 
                                         <button type="submit"
                                             class="flex items-center text-danger delete-amendement-btn"
                                             data-tw-toggle="modal"
                                             data-tw-target="#delete-confirmation-modal-amendement"
                                             data-amendement-id="{{ $amendement->id }}">
-                                            <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Supprimer
+                                            <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i>
                                         </button>
                                         </form>
                                     </div>
@@ -1414,8 +1547,7 @@
             </div>
             <!-- END: Pagination -->
         </div>
-        <!-- BEGIN: New Order Modal
-                                                                    -->
+        <!-- BEGIN: New Order Modal -->
         <div id="new-order-modal-amendement" class="modal" tabindex="-1" aria-hidden="true">
 
             <div class="modal-dialog modal-xl">
@@ -1449,8 +1581,6 @@
                                             <option value="Non débuté">Non débuté</option>
                                         </select>
                                     </div>
-
-
 
                                     <!-- Date -->
                                     <div class="col-span-12 mt-3">
@@ -1546,8 +1676,152 @@
         </script>
         </div>
 
-
         <!-- END: New Order Modal -->
+
+
+        <!-- BEGIN: Modifier amendement Modal -->
+        <div id="update-amendement-modal" class="modal" tabindex="-1" aria-hidden="true">
+
+            <div class="modal-dialog modal-xl">
+                <form id="amendement-form-update" method="POST" action="{{ route('amendements.update') }}"
+                    enctype="multipart/form-data">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="font-medium text-base mr-auto">Modifier un amendement</h2>
+                        </div>
+
+
+                        <div class="modal-body">
+                            @method('PUT')
+                            @csrf
+                            <input type="hidden" name="projet_id" value="{{ $projet->id }}">
+                            <input type="hidden" id="update-amendement-id" name="id">
+
+                            <div class="grid grid-cols-12 gap-6">
+                                <div class="intro-y col-span-12 lg:col-span-6">
+                                    <div class="col-span-12">
+                                        <label for="update-amendement-source" class="form-label">Source ( Auteur de
+                                            l'amendement ) </label>
+                                        <input id="update-amendement-source" name="source" type="text"
+                                            class="form-control flex-1" placeholder="Entrez la source de l'amendement">
+                                    </div>
+
+                                    <!-- Statut -->
+                                    <div class="col-span-12 mt-3">
+                                        <label for="update-amendement-statut" class="form-label">Statut ( Etat )</label>
+                                        <select id="update-amendement-statut" name="statut"
+                                            class="form-control flex-1">
+                                            <option value="Réalisé">Réalisé</option>
+                                            <option value="En cours">En cours</option>
+                                            <option value="Non débuté">Non débuté</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Date -->
+                                    <div class="col-span-12 mt-3">
+                                        <label for="update-amendement-date" class="form-label">Date ( Echéance )
+                                        </label>
+                                        <input id="update-amendement-date" name="date" type="date"
+                                            class="form-control flex-1">
+                                    </div>
+
+                                    <!-- File Upload -->
+                                    <div class="col-span-12 mt-3">
+                                        <label for="update-amendement-file" style="color: red;"
+                                            class="form-label">Joindre un
+                                            fichier (PDF
+                                            uniquement)</label>
+                                        <div class="flex items-center space-x-2">
+                                            <input id="update-amendement-file" name="file" type="file"
+                                                class="hidden">
+                                            <button type="button" class="btn btn-outline-primary"
+                                                onclick="document.getElementById('update-amendement-file').click()">Choisir
+                                                un
+                                                fichier</button>
+                                            <span id="file-name-update-amendement" class="text-gray-500">Aucun fichier
+                                                sélectionné</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="intro-y col-span-12 lg:col-span-6">
+
+                                    <div class="col-span-12">
+                                        <label for="update-categorie" class="form-label">Catégorie</label>
+                                        <select id="update-categorie" name="categorie" class="form-control flex-1">
+                                            <option value="experience_utilisateur">Expérience utilisateur</option>
+                                            <option value="revue_fonctionnelle">Révue fonctionnelle</option>
+                                            <option value="support">Support</option>
+                                            <option value="autre">Autre</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-span-12 mt-3">
+                                        <label for="update-priorite" class="form-label">Priorité</label>
+                                        <select id="update-priorite" name="priorite" class="form-control flex-1">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-span-12 mt-3">
+                                        <label for="update-responsable" class="form-label">Responsable </label>
+                                        <input id="update-responsable" name="responsable" type="text"
+                                            class="form-control flex-1"
+                                            placeholder="Entrez le responsable de la prise de l'amendement">
+                                    </div>
+
+                                    <div class="col-span-12 mt-3">
+                                        <label for="update-mise_production" class="form-label">Mise en
+                                            production</label>
+                                        <select id="update-mise_production" name="mise_production"
+                                            class="form-control flex-1">
+                                            <option value="nom">Non</option>
+                                            <option value="oui">Oui</option>
+
+                                        </select>
+                                    </div>
+
+                                    <!-- Description -->
+                                    <div class="col-span-12 mt-3">
+                                        <label for="update-amendement-description" class="form-label">Description (
+                                            Commentaire
+                                            ) </label>
+                                        <textarea id="update-amendement-description" name="description" class="form-control flex-1 h-25"
+                                            placeholder="Entrez une description"></textarea>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="modal-footer text-right">
+                            <button type="button" data-tw-dismiss="modal"
+                                class="btn btn-outline-secondary w-32 mr-1">Annuler</button>
+                            <button type="submit" class="btn btn-primary w-32">Enregistrer</button>
+                        </div>
+                </form>
+            </div>
+
+        </div>
+        <script>
+            // Script pour afficher le nom du fichier sélectionné
+            document.getElementById('update-amendement-file').addEventListener('change', function() {
+                document.getElementById('file-name-update-amendement').textContent = this.files.length ? this.files[0]
+                    .name :
+                    'Aucun fichier sélectionné';
+            });
+        </script>
+        </div>
+
+
+        <!-- END: modifier difficulte Modal -->
+
+
         <!-- BEGIN: Delete Confirmation Modal -->
         <div id="delete-confirmation-modal-amendement" class="modal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
@@ -1657,13 +1931,13 @@
                                 <td class="table-report__action w-56">
                                     <div class="flex justify-center items-center">
                                         <!-- Action Modifier (si nécessaire) -->
-                                        <a class="flex items-center" data-tw-toggle="modal"
+                                        <button class="flex items-center" data-tw-toggle="modal"
                                             data-difficulte_id="{{ $difficulte->id }}"
                                             data-difficulte_description="{{ $difficulte->description }}"
                                             data-difficulte_date="{{ $difficulte->date }}"
                                             data-tw-target="#update-difficulte-modal">
                                             <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
-                                        </a>
+                                        </button>
 
                                         <button class="flex items-center text-danger delete-difficultepro-btn"
                                             data-tw-toggle="modal"
@@ -1767,17 +2041,30 @@
                                     class="form-control flex-1">
                             </div>
 
+                            <!-- Statut -->
+                            <div class="col-span-12">
+                                <label for="difficulte-status" class="form-label">Status ( Etat )</label>
+                                <select id="difficulte-status" name="status" class="form-control flex-1">
+                                    <option value="Réalisé">Réalisé</option>
+                                    <option value="En cours">En cours</option>
+                                    <option value="Non débuté">Non débuté</option>
+                                </select>
+                            </div>
+
                             <!-- File Upload -->
                             <div class="col-span-12">
-                                <label for="difficulte-file-store" style="color: red;" class="form-label">Joindre un fichier
+                                <label for="difficulte-file-store" style="color: red;" class="form-label">Joindre un
+                                    fichier
                                     (PDF
                                     uniquement)</label>
                                 <div class="flex items-center space-x-2">
-                                    <input id="difficulte-file-store" name="difficulte-file-store" type="file" class="hidden">
+                                    <input id="difficulte-file-store" name="difficulte-file-store" type="file"
+                                        class="hidden">
                                     <button type="button" class="btn btn-outline-primary"
                                         onclick="document.getElementById('difficulte-file-store').click()">Choisir un
                                         fichier</button>
-                                    <span id="file-name-difficulte" class="text-gray-500">Aucun fichier sélectionné</span>
+                                    <span id="file-name-difficulte" class="text-gray-500">Aucun fichier
+                                        sélectionné</span>
                                 </div>
                             </div>
 
@@ -1800,7 +2087,6 @@
                 document.getElementById('file-name-difficulte').textContent = this.files.length ? this.files[0].name :
                     'Aucun fichier sélectionné';
             });
-
         </script>
         </div>
         <!-- END: New Order Modal -->
@@ -1834,6 +2120,16 @@
                                 <label for="update-difficulte-date" class="form-label">Date</label>
                                 <input id="update-difficulte-date" name="date" type="date"
                                     class="form-control flex-1">
+                            </div>
+
+                            <!-- Statut -->
+                            <div class="col-span-12">
+                                <label for="update-difficulte-status" class="form-label">Status ( Etat )</label>
+                                <select id="update-difficulte-status" name="status" class="form-control flex-1">
+                                    <option value="Réalisé">Réalisé</option>
+                                    <option value="En cours">En cours</option>
+                                    <option value="Non débuté">Non débuté</option>
+                                </select>
                             </div>
 
                             <!-- File Upload -->
@@ -2264,31 +2560,51 @@
 
         <!-- end: modifier focal-->
 
-        <!-- begin: modifier focal-->
+        <!-- begin: modifier membre-->
         <script>
             document.addEventListener("DOMContentLoaded", function() {
 
-                document.querySelectorAll("[data-tw-target='#update-focal-modal']").forEach(button => {
+                document.querySelectorAll("[data-tw-target='#update-membre-modal']").forEach(button => {
                     button.addEventListener("click", function() {
                         // Récupération des données depuis les attributs `data-*`
-                        let focalId = this.getAttribute("data-focal_id");
-                        let userId = this.getAttribute("data-focal_user_id");
-                        let name = this.getAttribute("data-focal_name");
-                        let firstname = this.getAttribute("data-focal_firstname");
-                        let structure = this.getAttribute("data-focal_structure");
-                        let dateDebut = this.getAttribute("data-focal_date_debut");
-                        let dateFin = this.getAttribute("data-focal_date_fin");
+                        let membreId = this.getAttribute("data-membre_id");
+                        let userId = this.getAttribute("data-membre_user_id");
+                        let name = this.getAttribute("data-membre_name");
+                        let firstname = this.getAttribute("data-membre_firstname");
+                        let structure = this.getAttribute("data-membre_structure");
+
+                        let role = this.getAttribute("data-membre_role");
+                        let statut = this.getAttribute("data-membre_statut");
+                        let actif = this.getAttribute("data-membre_actif");
+
+                        let dateDebut = this.getAttribute("data-membre_date_debut");
+                        let dateFin = this.getAttribute("data-membre_date_fin");
+
 
                         // Sélection des champs
-                        let selectElement = document.querySelector("#focal_user");
-                        let idInput = document.querySelector("#focal_id");
-                        let nameInput = document.querySelector("#focal_name");
-                        let firstnameInput = document.querySelector("#focal_firstname");
-                        let structureInput = document.querySelector("#focal_structure");
-                        let dateDebutInput = document.querySelector("#focal_date_debut");
-                        let dateFinInput = document.querySelector("#focal_date_fin");
+                        let selectElement = document.querySelector("#update_membre_users");
+                        let idInput = document.querySelector("#update_membre_id");
+                        let nameInput = document.querySelector("#update_membre_name");
+                        let firstnameInput = document.querySelector("#update_membre_firstname");
+                        let structureInput = document.querySelector("#update_membre_structure");
 
-                        if (idInput) idInput.value = focalId;
+                        let roleInput = document.querySelector("#update_membre_role");
+                        let statutInput = document.querySelector("#update_membre_statut");
+                        let actifInput = document.querySelector("#update_membre_actif");
+
+                        let dateDebutInput = document.querySelector("#update_membre_date_debut");
+                        let dateFinInput = document.querySelector("#update_membre_date_fin");
+
+                        if (idInput) idInput.value = membreId;
+                        if (nameInput) nameInput.value = name;
+                        if (firstnameInput) firstnameInput.value = firstname;
+                        if (structureInput) structureInput.value = structure;
+                        if (roleInput) roleInput.value = role;
+                        if (statutInput) statutInput.value = statut;
+                        if (actifInput) actifInput.value = actif;
+                        if (dateDebutInput) dateDebutInput.value = dateDebut;
+                        if (dateFinInput) dateFinInput.value = dateFin;
+
 
                         // Vérification et mise à jour du champ <select>
 
@@ -2297,24 +2613,68 @@
 
                             if (tomSelectInstance) {
                                 tomSelectInstance.setValue(userId, true);
+                                console.log(userId)
                             } else {
                                 selectElement.value = userId;
                             }
                         }
 
-                        // Mise à jour des dates
-                        if (dateDebutInput) dateDebutInput.value = dateDebut;
-                        if (dateFinInput) dateFinInput.value = dateFin;
+                    });
+                });
+            });
+        </script>
+        <!-- end: modifier membre-->
+
+        <!-- begin: modifier amendement -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+
+                document.querySelectorAll("[data-tw-target='#update-amendement-modal']").forEach(button => {
+                    button.addEventListener("click", function() {
+                        // Récupération des données depuis les attributs `data-*`
+                        let id = this.getAttribute("data-amendement_id");
+                        let projet_id = this.getAttribute("data-amendement_projet_id");
+                        let date = this.getAttribute("data-amendement_date");
+                        let description = this.getAttribute("data-amendement_description");
+                        let statut = this.getAttribute("data-amendement_statut");
+                        let source = this.getAttribute("data-amendement_source");
+                        let mise_production = this.getAttribute("data-amendement_mise_production");
+                        let priorite = this.getAttribute("data-amendement_priorite");
+                        let categorie = this.getAttribute("data-amendement_categorie");
+                        let responsable = this.getAttribute("data-amendement_responsable");
+
+                        // Sélection des champs
+                        let idInput = document.querySelector("#update-amendement-id");
+                        let projet_idInput = document.querySelector("#update-amendement-projet_id");
+                        let dateInput = document.querySelector("#update-amendement-date");
+                        let descriptionInput = document.querySelector("#update-amendement-description");
+                        let statutInput = document.querySelector("#update-amendement-statut");
+                        let sourceInput = document.querySelector("#update-amendement-source");
+                        let mise_productionInput = document.querySelector("#update-mise_production");
+                        let prioriteInput = document.querySelector("#update-priorite");
+                        let categorieInput = document.querySelector("#update-categorie");
+                        let responsableInput = document.querySelector("#update-responsable");
+
+                        // Mise à jour
+                        if (idInput) idInput.value = id;
+                        if (projet_idInput) idInput.value = projet_id;
+                        if (dateInput) dateInput.value = date;
+                        if (descriptionInput) descriptionInput.value = description;
+                        if (statutInput) statutInput.value = statut;
+                        if (sourceInput) sourceInput.value = source;
+                        if (mise_productionInput) mise_productionInput.value = mise_production;
+                        if (prioriteInput) prioriteInput.value = priorite;
+                        if (categorieInput) categorieInput.value = categorie;
+                        if (responsableInput) responsableInput.value = responsable;
+
 
                     });
                 });
             });
         </script>
+        <!-- end: modifier amendement -->
 
-
-
-
-        <!-- end: modifier focal--><!-- begin: modifier focal-->
+        <!-- begin: modifier difficulte-->
         <script>
             document.addEventListener("DOMContentLoaded", function() {
 
@@ -2339,10 +2699,6 @@
                 });
             });
         </script>
-
-
-
-
-        <!-- end: modifier focal-->
+        <!-- end: modifier difficulte-->
         <!-- end: modifier script-->
     @endsection

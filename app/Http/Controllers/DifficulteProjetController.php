@@ -12,6 +12,7 @@ class DifficulteProjetController extends Controller
         $request->validate([
             'description' => 'required|string|max:255',
             'date'        => 'required|date',
+            'status'        => 'required',
             'file'        => 'nullable|file|mimes:pdf|max:2048', // Restriction sur les fichiers PDF
             'projet_id'   => 'required|exists:projets,id',       // Vérifie que l'ID du projet existe
         ]);
@@ -20,6 +21,7 @@ class DifficulteProjetController extends Controller
         $difficulte              = new DifficulteProjet;
         $difficulte->description = $request->input('description');
         $difficulte->date        = $request->input('date');
+        $difficulte->status        = $request->input('status');
         $difficulte->projet_id   = $request->input('projet_id');
 
         // Si un fichier est téléchargé
@@ -51,7 +53,7 @@ class DifficulteProjetController extends Controller
         // Mise à jour
         $difficulte->update([
             'projet_id' => $request->projet_id,
-
+            'status'        => $request->status,
             'date'            => $request->date,
             'description'     => $request->description,
         ]);
