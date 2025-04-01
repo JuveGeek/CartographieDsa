@@ -972,11 +972,11 @@
 
                             <div class="flex justify-center items-center">
                                 <a class="flex items-center " href="javascript:;">
-                                    <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit
+                                    <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> 
                                 </a>
                                 <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal"
                                     data-tw-target="#delete-confirmation-modal-instance">
-                                    <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
+                                    <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> 
                                 </a>
                             </div>
                         </td>
