@@ -838,8 +838,7 @@
                                         data-membre_actif="{{ $membre->pivot->actif }}"
                                         data-membre_date_debut="{{ $membre->pivot->date_debut }}"
                                         data-membre_date_fin="{{ $membre->pivot->date_fin }}"
-                                        data-membre_user_id="{{ $membre->id }}"
-                                        data-tw-target="#update-membre-modal">
+                                        data-membre_user_id="{{ $membre->id }}" data-tw-target="#update-membre-modal">
                                         <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
                                     </button>
                                     <button type="submit" class="flex items-center text-danger delete-membre-btn"
@@ -1030,7 +1029,7 @@
                                             <div class="mt-2">
                                                 <select id="update_membre_users" name="user_id"
                                                     data-placeholder="Sélectionner un membre" class="tom-select w-full"
-                                                     required>
+                                                    required>
                                                     @foreach ($users as $user)
                                                         <option value="{{ $user->id }}"
                                                             {{ isset($membre) && $membre->user_id == $user->id ? 'selected' : '' }}>
@@ -1071,44 +1070,45 @@
                             </div>
 
 
-                        <div class="intro-y col-span-12 lg:col-span-6">
-                            <div class="intro-y box">
-                                <div class="p-1">
+                            <div class="intro-y col-span-12 lg:col-span-6">
+                                <div class="intro-y box">
+                                    <div class="p-1">
 
-                                    <div class="input-form">
-                                        <label for="update_membre_actif" class="form-label">Sélectionner
-                                            l'activité</label>
-                                        <select id="update_membre_actif" name="actif" class="form-control" required>
-                                            <option value="1">Actif</option>
-                                            <option value="0">Inactif</option>
-                                        </select>
-                                    </div>
+                                        <div class="input-form">
+                                            <label for="update_membre_actif" class="form-label">Sélectionner
+                                                l'activité</label>
+                                            <select id="update_membre_actif" name="actif" class="form-control"
+                                                required>
+                                                <option value="1">Actif</option>
+                                                <option value="0">Inactif</option>
+                                            </select>
+                                        </div>
 
-                                    <div class="input-form mt-3">
-                                        <label for="update_membre_date_debut" class="form-label">Date de début</label>
-                                        <input id="update_membre_date_debut" type="date" name="date_debut"
-                                            class="form-control" value="{{ $membre->date_debut ?? '' }}" required>
-                                    </div>
+                                        <div class="input-form mt-3">
+                                            <label for="update_membre_date_debut" class="form-label">Date de début</label>
+                                            <input id="update_membre_date_debut" type="date" name="date_debut"
+                                                class="form-control" value="{{ $membre->date_debut ?? '' }}" required>
+                                        </div>
 
-                                    <div class="input-form mt-3">
-                                        <label for="update_membre_date_fin" class="form-label">Date de fin</label>
-                                        <input id="update_membre_date_fin" type="date" name="date_fin"
-                                            class="form-control" value="{{ $membre->date_fin ?? '' }}">
+                                        <div class="input-form mt-3">
+                                            <label for="update_membre_date_fin" class="form-label">Date de fin</label>
+                                            <input id="update_membre_date_fin" type="date" name="date_fin"
+                                                class="form-control" value="{{ $membre->date_fin ?? '' }}">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-            </div>
 
-            <div class="modal-footer text-right">
-                <button type="button" data-tw-dismiss="modal"
-                    class="btn btn-outline-secondary w-32 mr-1">Annuler</button>
-                <button type="submit" class="btn btn-primary w-32">Enregistrer</button>
+                    <div class="modal-footer text-right">
+                        <button type="button" data-tw-dismiss="modal"
+                            class="btn btn-outline-secondary w-32 mr-1">Annuler</button>
+                        <button type="submit" class="btn btn-primary w-32">Enregistrer</button>
+                    </div>
+                </form>
             </div>
-            </form>
         </div>
-    </div>
     </div>
     <!-- END: Modifier membre Modal -->
 
@@ -1406,7 +1406,7 @@
                             <th class="text-center whitespace-nowrap">Responsable</th>
                             <th class="text-center whitespace-nowrap">Catégorie</th>
                             <th class="text-center whitespace-nowrap">Priorité</th>
-                            <th class="text-center whitespace-nowrap">Mise en production</th>
+                            <th class="text-center whitespace-nowrap w-5">Mise en production</th>
                             <th class="text-center whitespace-nowrap">Description</th>
                             <th class="text-center whitespace-nowrap">Fichier</th>
                             <th class="text-center whitespace-nowrap">Date</th>
@@ -1422,15 +1422,17 @@
                                 <td class="w-10">{{ $amendement->source }}</td>
                                 <td class="w-10">{{ $amendement->responsable }}</td>
                                 <td class="w-10">{{ $amendement->categorie }}</td>
-                                <td class="w-10">{{ $amendement->priorite }}</td>
-                                <td class="w-10">{{ $amendement->mise_production }}</td>
+                                <td class="text-center">{{ $amendement->priorite }}</td>
+                                <td class="text-center">{{ $amendement->mise_production }}</td>
 
                                 <td class="text-center">
 
-                                    <div class="w-40">
-                                        {{ $amendement->description }}
+                                    <button data-tw-toggle="modal" data-tw-target="#amendement-description-modal"
+                                        class="amendement-description-btn"
+                                        data-description="{{ $amendement->description }}">
+                                        <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                                    </button>
 
-                                    </div>
                                 </td>
                                 <td class="text-center">
                                     <!-- Affichage du lien vers le fichier PDF si disponible -->
@@ -1547,6 +1549,25 @@
             </div>
             <!-- END: Pagination -->
         </div>
+
+        <!-- BEGIN: Description amendement Modal -->
+        <div id="amendement-description-modal" class="modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Description de l'amendement</h5>
+                        <button type="button" class="btn-close" data-tw-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Le texte de la description sera inséré ici -->
+                        <p id="amendement-description-text">Aucune description disponible.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END: Description amendement Modal -->
+
         <!-- BEGIN: New Order Modal -->
         <div id="new-order-modal-amendement" class="modal" tabindex="-1" aria-hidden="true">
 
@@ -1639,7 +1660,7 @@
                                         <label for="mise_production" class="form-label">Mise en production</label>
                                         <select id="mise_production" name="mise_production"
                                             class="form-control flex-1">
-                                            <option value="nom">Non</option>
+                                            <option value="non">Non</option>
                                             <option value="oui">Oui</option>
 
                                         </select>
@@ -1892,8 +1913,12 @@
                                 <td class="w-10">{{ $difficulte->id }}</td>
                                 <td class="">
 
-                                    <div class="w-140">
-                                        {{ $difficulte->description }}
+                                    <div class="text-center">
+                                        <button data-tw-toggle="modal" data-tw-target="#difficultepro-description-modal"
+                                            class="difficulte-description-btn"
+                                            data-description="{{ $difficulte->description }}">
+                                            <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                                        </button>
 
                                     </div>
                                 </td>
@@ -2012,6 +2037,24 @@
             </div>
             <!-- END: Pagination -->
         </div>
+        <!-- Modal pour afficher la description -->
+        <div id="difficultepro-description-modal" class="modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Description de la difficulté</h5>
+                        <button type="button" class="btn-close" data-tw-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Le texte de la description sera inséré ici -->
+                        <p id="difficulte-description-text">Aucune description disponible.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- END: Description difficulte Modal -->
         <!-- BEGIN: New Order Modal -->
         <div id="new-order-modal-difficulte" class="modal" tabindex="-1" aria-hidden="true">
 
@@ -2193,6 +2236,47 @@
                 </div>
             </div>
         </div>
+
+        <!-- START: Description difficulte -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Sélectionne tous les boutons de description
+                const descriptionButtons = document.querySelectorAll('.difficulte-description-btn');
+
+                descriptionButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        // Récupère la description depuis l'attribut data-description
+                        const description = this.getAttribute('data-description');
+
+                        // Met à jour le contenu du modal avec la description
+                        document.getElementById('difficulte-description-text').textContent =
+                        description;
+                    });
+                });
+            });
+        </script>
+        <!-- END: Description difficulte -->
+
+        <!-- START: Description amendement -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Sélectionne tous les boutons de description
+                const descriptionButtons = document.querySelectorAll('.amendement-description-btn');
+
+                descriptionButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        // Récupère la description depuis l'attribut data-description
+                        const description = this.getAttribute('data-description');
+
+                        // Met à jour le contenu du modal avec la description
+                        document.getElementById('amendement-description-text').textContent =
+                        description;
+                    });
+                });
+            });
+        </script>
+        <!-- END: Description amendement -->
+
         <!-- END: Delete Confirmation Modal -->
         <!-- END: Difficultes-->
 
