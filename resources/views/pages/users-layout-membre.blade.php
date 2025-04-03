@@ -30,8 +30,7 @@
             <!-- BEGIN: Search -->
             <div class="intro-x relative mr-3 sm:mr-0">
                 <div class="search hidden sm:block">
-                    <input type="text" class="search__input form-control border-transparent" placeholder="Rechercher..."
-                    >
+                    <input type="text" class="search__input form-control border-transparent" placeholder="Rechercher...">
                     <i data-lucide="search" class="search__icon dark:text-slate-500"></i>
                 </div>
 
@@ -47,7 +46,7 @@
                         class="flex flex-col lg:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
                         <div class="w-24 h-24 lg:w-12 lg:h-12 image-fit lg:mr-1">
                             <img alt="User Profile" class="rounded-full"
-                                src="https://www.gravatar.com/avatar/{{ md5(strtolower("")) }}?d=mp&s=200">
+                                src="https://www.gravatar.com/avatar/{{ md5(strtolower('')) }}?d=mp&s=200">
                         </div>
                         <div class="lg:ml-2 lg:mr-auto text-center lg:text-left mt-3 lg:mt-0">
                             <a href="" class="font-medium">{{ $user->name }} {{ $user->firstname }}</a>
@@ -66,14 +65,16 @@
                                     href="{{ route('users.show', $user->id) }}" title="Voir les détails">
                                     <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
                                 </a>
-                                <a class="flex items-center whitespace-nowrap mr-3 tooltip" data-tw-toggle="modal"
-                                    data-id="{{ $user->id }}" data-name="{{ $user->name }}"
-                                    data-firstname="{{ $user->firstname }}" data-tel="{{ $user->tel }}"
-                                    data-email="{{ $user->email }}" data-structure="{{ $user->structure }}"
-                                    data-role="{{ $user->roles->isNotEmpty() ? $user->roles->pluck('name')->first() : '' }}"
-                                    data-tw-target="#update-user-modal" href="javascript:;" title="Modifier">
-                                    <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
-                                </a>
+                                @if (auth()->user()->hasRole('admin'))
+                                    <a class="flex items-center whitespace-nowrap mr-3 tooltip" data-tw-toggle="modal"
+                                        data-id="{{ $user->id }}" data-name="{{ $user->name }}"
+                                        data-firstname="{{ $user->firstname }}" data-tel="{{ $user->tel }}"
+                                        data-email="{{ $user->email }}" data-structure="{{ $user->structure }}"
+                                        data-role="{{ $user->roles->isNotEmpty() ? $user->roles->pluck('name')->first() : '' }}"
+                                        data-tw-target="#update-user-modal" href="javascript:;" title="Modifier">
+                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
+                                    </a>
+                                @endif
                                 <a class="flex items-center text-danger delete-user-btn tooltip" href="javascript:;"
                                     data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal"
                                     data-user-id="{{ $user->id }}" title="Supprimer">
@@ -278,19 +279,15 @@
         });
     </script>
 
-<script>
-    jQuery(document).ready(function () {
-        jQuery(".search__input").on("input", function () {
-            let searchTerm = jQuery(this).val().toLowerCase().trim();
-            jQuery(".intro-y.col-span-12.md\\:col-span-6").each(function () {
-                let userName = jQuery(this).find(".font-medium").text().toLowerCase();
-                jQuery(this).toggle(userName.includes(searchTerm));
+    <script>
+        jQuery(document).ready(function() {
+            jQuery(".search__input").on("input", function() {
+                let searchTerm = jQuery(this).val().toLowerCase().trim();
+                jQuery(".intro-y.col-span-12.md\\:col-span-6").each(function() {
+                    let userName = jQuery(this).find(".font-medium").text().toLowerCase();
+                    jQuery(this).toggle(userName.includes(searchTerm));
+                });
             });
         });
-    });
-</script>
-
-
-
-
+    </script>
 @endsection

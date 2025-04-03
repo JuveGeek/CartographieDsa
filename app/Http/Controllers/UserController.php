@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -137,6 +138,12 @@ class UserController extends Controller
 
     public function destroy(Request $request)
     {
+
+        // Vérifier si l'utilisateur a la permission
+    if (!auth()->user()->can('delete user')) {
+        abort(403, 'Unauthorized action.');
+    }
+
         $userId = $request->input('user_id'); // Récupérer l'ID envoyé dans l'AJAX
         $user   = User::findOrFail($userId);
         $user->delete();
