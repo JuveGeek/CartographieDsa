@@ -297,6 +297,42 @@ class PageController extends Controller
         return redirect('/projets-data-list-page')->with('success', 'projet ajouté avec succès!');
     }
 
+    public function editProjet($id)
+    {
+        $projet = Projet::findOrFail($id);
+        $structures =StructurePorteuse::all(); // Si vous avez un modèle Structure
+        return view('pages.projets-edit', compact('projet', 'structures'));
+    }
+    
+
+     
+    public function updateProjet(Request $request, $id)
+{
+    // Validation des données
+    $validated = $request->validate([
+        'nom'                   => 'required|string|max:255',
+        'description'           => 'required|string|max:255',
+        'date_debut'            => 'required|date',
+        'date_fin'              => 'required|date',
+        'statut'                => 'required|string|in:en_exploitation,pas_en_exploitation',
+        'structure_porteuse_id' => 'required|exists:structure_porteuses,id',
+        'objectif_principal'    => 'required|string|max:255',
+        'public_cible'          => 'required|string|max:255',
+        'phase_actuelle'        => 'required|string|max:255',
+    ]);
+
+    // Récupérer le projet existant
+    $projet = Projet::findOrFail($id);
+
+    // Mettre à jour les informations du projet
+    $projet->update($validated);
+
+    return redirect('/projets-data-list-page')->with('success', 'Projet mis à jour avec succès!');
+}
+
+    
+
+
     public function showprojetsDataList()
     {
         // Récupérer toutes les projets depuis la base de données

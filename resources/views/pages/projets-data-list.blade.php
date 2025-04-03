@@ -61,7 +61,8 @@
                                        href="{{ route('details', $projet->id) }}">
                                         <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
                                     </a>
-                                    <a class="flex items-center whitespace-nowrap mr-3" href="javascript:;">
+                                    <a  href="{{ route('projets.edit', $projet->id) }}" class="flex items-center whitespace-nowrap mr-3" href="javascript:;">
+                                    
                                         <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
                                     </a>
                                     <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal"
