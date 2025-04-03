@@ -1154,6 +1154,122 @@
                     <div class="w-56 relative text-slate-500">
                         <input type="text" class="form-control w-56 box pr-10" placeholder="Search...">
                         <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
+            </div>
+        </div>
+        <!-- BEGIN: Data List -->
+        <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
+            <table class="table table-report -mt-2">
+                <thead>
+                    <tr>
+
+                        <th class="text-center whitespace-nowrap">Structures</th>
+                        <th class="text-center whitespace-nowrap">Etat</th>
+                        <th class="text-center whitespace-nowrap">Status</th>
+                        <th class="text-center whitespace-nowrap">Année d'exploitation</th>
+                        <th class="text-center whitespace-nowrap">Année de déploiement</th>
+                        <th class="text-center whitespace-nowrap">Commentntaire</th>
+                        <th class="text-center whitespace-nowrap">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @forelse($projet->structuresBeneficiaires as $structureBeneficiaire)
+                    <tr class="intro-x">
+                        <td class="w-40">{{ $structureBeneficiaire->nom }}</td>
+                        <td class="text-center">{{ $structureBeneficiaire->statut }}</td>
+                        <td class="w-40">{{ $structureBeneficiaire->etat}}</td>
+                        <td class="w-40">{{ $structureBeneficiaire->annee_exploitation }}</td>
+                        <td class="w-40">{{ $structureBeneficiaire->annee_deploiement }}</td>
+                        <td class="w-40">{{ $structureBeneficiaire->commentaire}}</td>
+
+                        <td class="table-report__action w-56">
+
+                            <div class="flex justify-center items-center">
+                                <a class="flex items-center " href="javascript:;">
+                                    <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
+                                </a>
+                                <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal"
+                                    data-tw-target="#delete-confirmation-modal-instance">
+                                    <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                        <tr>
+                            <td colspan="9" class="text-center text-gray-500">Aucun structure bénéficiaire trouvé pour ce projet.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        <!-- END: Data List -->
+        <!-- BEGIN: Pagination -->
+        <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
+            <nav class="w-full sm:w-auto sm:mr-auto">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#">
+                            <i class="w-4 h-4" data-lucide="chevrons-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">
+                            <i class="w-4 h-4" data-lucide="chevron-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">...</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">...</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">
+                            <i class="w-4 h-4" data-lucide="chevron-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">
+                            <i class="w-4 h-4" data-lucide="chevrons-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <select class="w-20 form-select box mt-3 sm:mt-0">
+                <option>10</option>
+                <option>25</option>
+                <option>35</option>
+                <option>50</option>
+            </select>
+        </div>
+        <!-- END: Pagination -->
+    </div>
+   <!-- BEGIN: New Order Modal -->
+   <div id="new-order-modal-structure" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div id="new-order-modal-structure" class="modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="structure-form" action="{{ route('structure-beneficiaire.store',$projet->id) }}" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h2 class="font-medium text-base mr-auto">Structure bénéficiaire</h2>
+                </div>
+                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+
+                    <div class="col-span-12">
+                        <label for="pos-form-1" class="form-label">Nom de la structure</label>
+                        <input id="pos-form-1" type="text" name="nom" class="form-control flex-1" placeholder="nom de la structure">
                     </div>
                 </div>
             </div>
