@@ -311,15 +311,15 @@ class PageController extends Controller
 {
     // Validation des données
     $validated = $request->validate([
-        'nom'                   => 'required|string|max:255',
-        'description'           => 'required|string|max:255',
-        'date_debut'            => 'required|date',
-        'date_fin'              => 'required|date',
-        'statut'                => 'required|string|in:en_exploitation,pas_en_exploitation',
-        'structure_porteuse_id' => 'required|exists:structure_porteuses,id',
-        'objectif_principal'    => 'required|string|max:255',
-        'public_cible'          => 'required|string|max:255',
-        'phase_actuelle'        => 'required|string|max:255',
+            'nom' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'date_debut' => 'nullable|date',
+            'date_fin' => 'nullable|date',
+            'statut' => 'required|string|in:en_exploitation,pas_en_exploitation',
+            'structure_porteuse_id' => 'required|exists:structure_porteuses,id',
+            'objectif_principal' => 'required|string|max:255',
+            'public_cible' => 'required|string|max:255',
+            'phase_actuelle' => 'nullable|string|max:255',
     ]);
 
     // Récupérer le projet existant

@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', 'dashboardOverview1')->name('dashboard-overview-1');
         Route::get('projets-form-page', 'projetsForm')->name('projets-form');
         Route::get('projets-edit/edit/{id}','editProjet')->name('projets.edit');
-        Route::post('/projets/update/{id}','updateProjet')->name('projets.update');
+        Route::put('/projets/update/{id}','updateProjet')->name('projets.update');
 
         Route::get('projets-data-list-page', 'projetsDataList')->name('projets-data-list');
         Route::get('dashboard-overview-2-page', 'dashboardOverview2')->name('dashboard-overview-2');
