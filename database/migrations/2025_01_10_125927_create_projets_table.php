@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('nom');
             $table->text('description')->nullable();
-            $table->date('date_debut');
-            $table->date('date_fin');
+            $table->date('date_debut')->nullable();
+            $table->date('date_fin')->nullable();
             $table->string('statut');
             //$table->foreignId('structure_porteuse_id')->nullable()->constrained()->onDelete('cascade');
             //$table->foreignId('equipe_id')->nullable()->constrained()->onDelete('cascade');

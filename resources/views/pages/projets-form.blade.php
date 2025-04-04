@@ -300,6 +300,47 @@
     <!-- END: New Order Modal -->
     <!-- END: Equipe-->
 @endsection
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Récupérer les éléments nécessaires
+        const statutRadios = document.getElementsByName("statut");
+        const phaseActuelle = document.getElementById("phase_actuelle");
+        const dateDebut = document.querySelector('input[name="date_debut"]');
+        const dateFin = document.querySelector('input[name="date_fin"]');
+
+        // Fonction pour griser ou réactiver les champs en fonction du statut
+        function toggleFields() {
+            // Vérifier si le statut "en exploitation" est sélectionné
+            const statutEnExploitation = Array.from(statutRadios).some(radio => radio.checked && radio.value === "en_exploitation");
+
+            // Si le statut est "en exploitation", griser les champs
+            if (statutEnExploitation) {
+                phaseActuelle.disabled = true;  // Désactiver le champ phase actuelle
+                dateDebut.disabled = true;     // Désactiver le champ date de début
+                dateFin.disabled = true;       // Désactiver le champ date de fin
+                phaseActuelle.classList.add('bg-slate-200', 'text-slate-400'); // Appliquer un fond gris et un texte grisé
+                dateDebut.classList.add('bg-slate-200', 'text-slate-400');    // Appliquer un fond gris et un texte grisé
+                dateFin.classList.add('bg-slate-200', 'text-slate-400');      // Appliquer un fond gris et un texte grisé
+            } else {
+                phaseActuelle.disabled = false; // Réactiver le champ phase actuelle
+                dateDebut.disabled = false;    // Réactiver le champ date de début
+                dateFin.disabled = false;      // Réactiver le champ date de fin
+                phaseActuelle.classList.remove('bg-slate-200', 'text-slate-400'); // Enlever le style gris
+                dateDebut.classList.remove('bg-slate-200', 'text-slate-400');    // Enlever le style gris
+                dateFin.classList.remove('bg-slate-200', 'text-slate-400');      // Enlever le style gris
+            }
+        }
+
+        // Écouter les changements de statut
+        statutRadios.forEach(radio => {
+            radio.addEventListener("change", toggleFields);
+        });
+
+        // Initialiser l'affichage en fonction de la sélection actuelle
+        toggleFields();
+    });
+</script>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>

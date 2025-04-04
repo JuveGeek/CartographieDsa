@@ -14,7 +14,7 @@
 
       <div class="intro-y col-span-11 2xl:col-span-9">
 
-      <div class="intro-y box p-5 mt-5">
+             <div class="intro-y box p-5 mt-5">
     <form action="{{ route('projets.update', $projet->id) }}" method="POST">
         @csrf
         @method('PUT') <!-- Pour indiquer que c'est une mise à jour -->
@@ -132,7 +132,7 @@
                 </div>
 
                 <!-- Phase actuelle -->
-                <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5">
+                <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5"id="phase-actuelle-container">
                     <div class="form-label xl:w-64 xl:!mr-10">
                         <div class="text-left">
                             <div class="flex items-center">
@@ -151,26 +151,27 @@
                 </div>
 
                 <!-- Dates -->
-                <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5">
-                    <div class="form-label xl:w-64 xl:!mr-10">
-                        <div class="text-left">
-                            <div class="font-medium">Date de début</div>
+                <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0" id="date-debut-container">
+                                <div class="form-label xl:w-64 xl:!mr-10">
+                                    <div class="text-left">
+                                        <div class="font-medium"> Date de debut</div>
+                                    </div>
+                                </div>
+                                <div class="w-full mt-3 xl:mt-0 flex-1">
+                                    <input type="date" name="date_debut"  value="{{ $projet->date_debut }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0" id="date-fin-container">
+                                <div class="form-label xl:w-64 xl:!mr-10">
+                                    <div class="text-left">
+                                        <div class="font-medium">Date de fin</div>
+                                    </div>
+                                </div>
+                                <div class="w-full mt-3 xl:mt-0 flex-1">
+                                    <input type="date" name="date_fin" value="{{ $projet->date_fin }}" class="form-control">
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="w-full mt-3 xl:mt-0 flex-1">
-                        <input type="date" name="date_debut" class="form-control" value="{{ $projet->date_debut }}">
-                    </div>
-                </div>
-                <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5">
-                    <div class="form-label xl:w-64 xl:!mr-10">
-                        <div class="text-left">
-                            <div class="font-medium">Date de fin</div>
-                        </div>
-                    </div>
-                    <div class="w-full mt-3 xl:mt-0 flex-1">
-                        <input type="date" name="date_fin" class="form-control" value="{{ $projet->date_fin }}">
-                    </div>
-                </div>
             </div>
 
             <!-- Boutons -->
@@ -180,10 +181,37 @@
         </div>
     </form>
 </div>
+ </div>
+ </div>
+ <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const statutRadios = document.querySelectorAll('input[name="statut"]');
+        const phaseActuelle = document.getElementById('phase-actuelle-container');
+        const dateDebut = document.getElementById('date-debut-container');
+        const dateFin = document.getElementById('date-fin-container');
 
+        // Fonction pour activer/désactiver les éléments
+        function toggleFormElements() {
+            const statutSelectionne = document.querySelector('input[name="statut"]:checked').value;
 
-      </div>
-    </div>
+            if (statutSelectionne === 'en_exploitation') {
+                phaseActuelle.style.display = 'none';
+                dateDebut.style.display = 'none';
+                dateFin.style.display = 'none';
+            } else {
+                phaseActuelle.style.display = 'block';
+                dateDebut.style.display = 'block';
+                dateFin.style.display = 'block';
+            }
+        }
+
+        toggleFormElements();  // Applique au chargement initial
+
+        statutRadios.forEach(radio => {
+            radio.addEventListener('change', toggleFormElements);
+        });
+    });
+</script>
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
