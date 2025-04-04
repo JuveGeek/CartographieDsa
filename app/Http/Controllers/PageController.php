@@ -250,41 +250,41 @@ class PageController extends Controller
         
         // Validation des données
         $validated = $request->validate([
-            'nom'                   => 'required|string|max:255',
-            'description'           => 'required|string|max:255',
-            'date_debut'            => 'nullable|date',
-            'date_fin'              => 'nullable|date',
-            'statut'                => 'required|string|in:en_exploitation,pas_en_exploitation',
-            'structure_porteuse_id' => 'required|exists:structure_porteuses,id', // Vérifie si l'ID existe
-            'objectif_principal'    => 'required|string|max:255',
-            'public_cible'          => 'required|string|max:255',
-            'phase_actuelle'        => 'nullable|string|max:255',
-
+            'nom' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'date_debut' => 'nullable|date',
+            'date_fin' => 'nullable|date',
+            'statut' => 'required|string|in:en_exploitation,pas_en_exploitation',
+            'structure_porteuse_id' => 'required|exists:structure_porteuses,id',
+            'objectif_principal' => 'required|string|max:255',
+            'public_cible' => 'required|string|max:255',
+            'phase_actuelle' => 'nullable|string|max:255',
         ]);
+        
 
         // Vérification de l'existence d'un enregistrement avec les mêmes données
         $existingProjet = Projet::where('nom', $validated['nom'])
             ->where('description', $validated['description'])
-            ->where('date_debut', $validated['date_debut'] )
-            ->where('date_fin', $validated['date_fin'] )
+            ->where('date_debut', $validated['date_debut'] ?? null)
+            ->where('date_fin', $validated['date_fin'] ?? null)
             ->where('statut', $validated['statut'])
             ->where('structure_porteuse_id', $validated['structure_porteuse_id'])
             ->where('objectif_principal', $validated['objectif_principal'])
             ->where('public_cible', $validated['public_cible'])
-            ->where('phase_actuelle', $validated['phase_actuelle'] )
+            ->where('phase_actuelle', $validated['phase_actuelle']?? null)
             ->first();
 
         // Enregistrement dans la base de données si aucune correspondance n'a été trouvée
         $projet = Projet::create([
             'nom'                   => $validated['nom'],
             'description'           => $validated['description'],
-            'date_debut'            => $validated['date_debut'],
-            'date_fin'              => $validated['date_fin'],
+            'date_debut'            => $validated['date_debut']?? null,
+            'date_fin'              => $validated['date_fin']?? null,
             'statut'                => $validated['statut'],
             'structure_porteuse_id' => $validated['structure_porteuse_id'],
             'objectif_principal'    => $validated['objectif_principal'],
             'public_cible'          => $validated['public_cible'],
-            'phase_actuelle'        => $validated['phase_actuelle'],
+            'phase_actuelle'        => $validated['phase_actuelle']?? null,
         ]);
 
         // Génération du nom de l'équipe en fonction du nom du projet
