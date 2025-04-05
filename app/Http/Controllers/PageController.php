@@ -331,7 +331,18 @@ class PageController extends Controller
     return redirect('/projets-data-list-page')->with('success', 'Projet mis à jour avec succès!');
 }
 
+
+public function destroyProjet(Request $request)
+{
+    $projetId = $request->input('projet_id'); // Récupérer l'ID envoyé dans l'AJAX
+    $projet   = Projet::findOrFail($projetId);
+    $projet->delete();
+
+    return response()->json(['message' => 'Utilisateur supprimé avec succès']);
+}
+
     
+
 
 
     public function showprojetsDataList()

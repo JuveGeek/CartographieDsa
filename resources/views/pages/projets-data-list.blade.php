@@ -65,10 +65,13 @@
                                     
                                         <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
                                     </a>
-                                    <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal"
-                                       data-tw-target="#delete-confirmation-modal">
-                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i>
-                                    </a>
+<a class="flex items-center text-danger delete-user-btn tooltip" href="javascript:;"
+    data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal"
+    data-projet-id="{{ $projet->id }}" title="Supprimer">
+    <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i>
+</a>
+
+
                                 </div>
                             </td>
                         </tr>
@@ -127,23 +130,94 @@
         </div>
         <!-- END: Pagination -->
     </div>
-    <!-- BEGIN: Delete Confirmation Modal -->
+    <!-- BEGIN: Modal Content (Suppression) -->
     <div id="delete-confirmation-modal" class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body p-0">
                     <div class="p-5 text-center">
                         <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i>
-                        <div class="text-3xl mt-5">Are you sure?</div>
-                        <div class="text-slate-500 mt-2">Do you really want to delete these records? <br>This process cannot be undone.</div>
+                        <div class="text-3xl mt-5">ÊTES-VOUS SÛR ?</div>
+                        <div class="text-slate-500 mt-2">Voulez-vous vraiment supprimer cet projet?<br>Ce processus
+                            est irréversible.</div>
                     </div>
                     <div class="px-5 pb-8 text-center">
-                        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-24 mr-1">Cancel</button>
-                        <button type="button" class="btn btn-danger w-24">Delete</button>
+                        <button type="button" data-tw-dismiss="modal"
+                            class="btn btn-outline-secondary w-24 mr-1">Annuler</button>
+                        <button type="button" class="btn btn-danger w-24" id="confirm-delete"
+                            data-tw-dismiss="modal">Supprimer</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- END: Modal Content (Suppression) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+jQuery(document).ready(function() {
+
+    projetId = jQuery(this).data("projet-id")
+
+// Quand on clique sur le bouton de suppression
+jQuery(document).on("click", ".delete-user-btn", function() {
+    projetId = jQuery(this).data("projet-id"); // Récupérer l'ID de l'utilisateur
+
+});
+
+// Quand on clique sur le bouton de confirmation de suppression dans le modal
+jQuery(document).on("click", "#confirm-delete", function() {
+
+    if (!projetId) {
+        console.error("ID utilisateur non défini !");
+        return;
+    }
+
+    // Faire une requête AJAX pour supprimer l'utilisateur
+    jQuery.ajax({
+        url: '/projets/delete', // Changer l'URL pour correspondre à ta route
+        type: "POST", // Utiliser POST pour simuler DELETE
+        data: {
+            _method: "DELETE", // Simule DELETE
+            _token: jQuery('meta[name="csrf-token"]').attr(
+                "content"), // Ajout du token CSRF
+            projet_id: projetId // ID de l'utilisateur à supprimer
+        },
+        success: function(response) {
+
+            // Afficher une notification avec SweetAlert
+            Swal.fire({
+                title: "Supprimé !",
+                text: "Le projet a été supprimé avec succès.",
+                icon: "success",
+                confirmButtonText: "OK",
+                customClass: {
+                    confirmButton: 'btn-black' // Classe CSS personnalisée
+                }
+            }).then(() => {
+                location.reload(); // Recharger la page après la suppression
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error("Erreur AJAX :", xhr.responseText);
+            Swal.fire({
+                title: "Erreur !",
+                text: "Une erreur s'est produite, veuillez réessayer.",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+        }
+    });
+
+});
+});
+
+</script>
     <!-- END: Delete Confirmation Modal -->
 @endsection
+
+

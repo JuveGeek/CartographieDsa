@@ -37,6 +37,8 @@ Route::middleware('auth')->group(function () {
         Route::get('projets-form-page', 'projetsForm')->name('projets-form');
         Route::get('projets-edit/edit/{id}','editProjet')->name('projets.edit');
         Route::put('/projets/update/{id}','updateProjet')->name('projets.update');
+        Route::delete('/projets/{id}','destroyProjet')->name('projets.destroy');
+
 
         Route::get('projets-data-list-page', 'projetsDataList')->name('projets-data-list');
         Route::get('dashboard-overview-2-page', 'dashboardOverview2')->name('dashboard-overview-2');
