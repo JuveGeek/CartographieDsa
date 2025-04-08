@@ -124,6 +124,19 @@ Route::middleware('auth')->group(function () {
 
 
 
+        Route::put('/fonctionnalites/update/{id}', [FonctionnaliteController::class, 'update'])->name('fonctionnalites.update');
+        Route::delete('/fonctionnalites/delete/{id}', [FonctionnaliteController::class, 'destroy'])->name('fonctionnalites.destroy');
+
+        
+        Route::put('/technologies/{id}/update', [TechnologieController::class, 'update'])->name('technologies.update');
+        Route::delete('/technologies/{id}/delete', [TechnologieController::class, 'destroy'])->name('technologies.destroy');
+
+        Route::put('/structure-beneficiaire/{id}', [StructureBeneficiaireController::class, 'update'])->name('structure-beneficiaire.update');
+        Route::delete('/structure-beneficiaire/{id}', [StructureBeneficiaireController::class, 'destroy'])->name('structure-beneficiaire.destroy');
+
+
+
+
     });
 });
 
