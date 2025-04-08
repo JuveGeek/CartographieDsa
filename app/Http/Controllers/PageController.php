@@ -345,15 +345,18 @@ public function destroyProjet(Request $request)
 
 
 
-    public function showprojetsDataList()
-    {
-        // Récupérer toutes les projets depuis la base de données
-        $projets = Projet::all();
+public function showprojetsDataList(Request $request)
+{
+    // Récupérer le nombre d'éléments par page depuis la requête, avec 10 par défaut
+    $perPage = $request->get('per_page', 10);
 
-        // Passer les données à la vue
-        return view('pages/projets-data-list', compact('projets'));
+    // Récupérer les projets paginés avec le nombre d'éléments par page
+    $projets = Projet::paginate($perPage);
 
-    }
+    // Passer les données à la vue
+    return view('pages.projets-data-list', compact('projets'));
+}
+
 
     // Méthode pour enregistrer un Structre porteuse
 
