@@ -21,7 +21,7 @@ class StructureBeneficiaire extends Model
 
     protected $casts = [
         'date_deploiement' => 'date',
-        'annee_exploitation' => 'integer',
+        'date_exploitation' => 'date',
     ];
 
     public function projets()

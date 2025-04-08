@@ -31,14 +31,21 @@
 
                     <tr class="intro-x">
                         <td class="w-20">{{ $unProjet->nom }}</td>
-                        <td class="w-40">{{ $unProjet->objectif_principal }}</td>
-                        <td class="w-60">{{ $unProjet->public_cible }}</td>
-                        <td class="">
-
-                            <div class="w-240">
-                                {{ $unProjet->description }}
-
-                            </div>
+                        <td class="w-40">
+                            <a class="flex items-center  tooltip" href="javascript:;"
+                                title="{{ $unProjet->objectif_principal }}">
+                                <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                            </a>
+                        </td>
+                        <td class="w-60">
+                            <a class="flex items-center  tooltip" href="javascript:;" title="{{ $unProjet->public_cible }}">
+                                <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                            </a>
+                        </td>
+                        <td class="w-60">
+                            <a class="flex items-center  tooltip" href="javascript:;" title="{{ $unProjet->description }}">
+                                <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                            </a>
                         </td>
                         <td class="w-20">
                             {{ $unProjet->structurePorteuse ? $unProjet->structurePorteuse->nom : 'Aucune structure porteuse' }}
@@ -138,12 +145,19 @@
                             <td class="table-report__action w-56">
 
                                 <div class="flex justify-center items-center">
-                                    <a class="flex items-center " href="javascript:;">
+                                    <a class="flex items-center edit-fonctionnalite" href="javascript:;"
+                                        data-tw-toggle="modal" data-tw-target="#edit-modal-fonctionnalite"
+                                        data-id="{{ $fonctionnalite->id }}" data-nom="{{ $fonctionnalite->nom }}"
+                                        data-description="{{ $fonctionnalite->description }}"
+                                        data-date-debut="{{ $fonctionnalite->date_debut }}"
+                                        data-date-fin="{{ $fonctionnalite->date_fin }}"
+                                        data-statut="{{ $fonctionnalite->statut }}">
                                         <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit
                                     </a>
-                                    <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal"
-                                        data-tw-target="#delete-confirmation-modal-fonctionnalite">
-                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
+
+                                    <a class="flex items-center text-danger delete-fonctionnalite" href="javascript:;"
+                                        data-id="{{ $fonctionnalite->id }}">
+                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Supprimer
                                     </a>
                                 </div>
                             </td>
@@ -159,6 +173,71 @@
             </table>
         </div>
         <!-- END: Data List -->
+
+        <!-- BEGIN: Edit Modal -->
+        <div id="edit-modal-fonctionnalite" class="modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="font-medium text-base mr-auto">Modifier la Fonctionnalité</h2>
+                    </div>
+                    <form id="edit_fonctionnalite_form" action="" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                            <input type="hidden" id="edit_fonctionnalite_id" name="fonctionnalite_id">
+
+                            <div class="col-span-12">
+                                <label class="form-label">Nom de la fonctionnalité</label>
+                                <input id="edit_nom" name="nom" type="text" class="form-control flex-1"
+                                    required>
+                            </div>
+
+                            <div class="col-span-12">
+                                <label class="form-label">Description</label>
+                                <textarea id="edit_description" name="description" class="form-control" rows="3" required></textarea>
+                            </div>
+
+                            <div class="col-span-12">
+                                <label class="form-label">Date de début</label>
+                                <input id="edit_date_debut" name="date_debut" type="date" class="form-control flex-1"
+                                    required>
+                            </div>
+
+                            <div class="col-span-12">
+                                <label class="form-label">Date de fin</label>
+                                <input id="edit_date_fin" name="date_fin" type="date" class="form-control flex-1"
+                                    required>
+                            </div>
+
+                            <div class="col-span-12">
+                                <label class="form-label">Statut</label>
+                                <div class="flex">
+                                    <div class="form-check mr-4">
+                                        <input id="edit_statut_en_cour" name="statut" class="form-check-input"
+                                            type="radio" value="en cour" required>
+                                        <label class="form-check-label" for="edit_statut_en_cour">En cours</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input id="edit_statut_terminer" name="statut" class="form-check-input"
+                                            type="radio" value="Terminer">
+                                        <label class="form-check-label" for="edit_statut_terminer">Terminé</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer text-right">
+                            <button type="button" data-tw-dismiss="modal"
+                                class="btn btn-outline-secondary w-32 mr-1">Annuler</button>
+                            <button type="submit" class="btn btn-primary w-32">Modifier</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- END: Edit Modal -->
+
         <!-- BEGIN: Pagination -->
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
             <nav class="w-full sm:w-auto sm:mr-auto">
@@ -275,27 +354,7 @@
         </div>
     </div>
     <!-- END: New Order Modal -->
-    <!-- BEGIN: Delete Confirmation Modal -->
-    <div id="delete-confirmation-modal-fonctionnalite" class="modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body p-0">
-                    <div class="p-5 text-center">
-                        <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i>
-                        <div class="text-3xl mt-5">Are you sure?</div>
-                        <div class="text-slate-500 mt-2">Do you really want to delete these records? <br>This process
-                            cannot be undone.</div>
-                    </div>
-                    <div class="px-5 pb-8 text-center">
-                        <button type="button" data-tw-dismiss="modal"
-                            class="btn btn-outline-secondary w-24 mr-1">Cancel</button>
-                        <button type="button" class="btn btn-danger w-24">Delete</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END: Delete Confirmation Modal -->
+
     <!-- END: fonctionnalité -->
 
     <!-- BEGIN: technologie -->
@@ -339,13 +398,21 @@
                             <td class="table-report__action w-56">
 
                                 <div class="flex justify-center items-center">
-                                    <a class="flex items-center " href="javascript:;">
+                                    <a class="flex items-center edit-technologie" href="javascript:;"
+                                        data-tw-toggle="modal" data-tw-target="#edit-modal-technologie"
+                                        data-id="{{ $technologie->id }}" data-nom="{{ $technologie->nom }}"
+                                        data-description="{{ $technologie->description }}"
+                                        data-role="{{ $technologie->role }}" data-version="{{ $technologie->version }}"
+                                        data-statut="{{ $technologie->statut }}">
                                         <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit
                                     </a>
-                                    <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal"
-                                        data-tw-target="#delete-confirmation-modal-technologie">
+
+
+                                    <a class="flex items-center text-danger delete-technologie" href="javascript:;"
+                                        data-id="{{ $technologie->id }}">
                                         <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
                                     </a>
+
                                 </div>
                             </td>
                         </tr>
@@ -360,6 +427,70 @@
             </table>
         </div>
         <!-- END: Data List -->
+        <div id="edit-modal-technologie" class="modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="font-medium text-base mr-auto">Modifier Technologie</h2>
+                    </div>
+                    <form id="edit_form" action="" method="POST">
+                        @csrf
+                        @method('PUT') <!-- Important pour la mise à jour -->
+
+                        <input type="hidden" id="edit-id" name="id"> <!-- Champ caché pour stocker l'ID -->
+
+                        <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                            <div class="col-span-12">
+                                <label class="form-label">Nom de la technologie</label>
+                                <input id="edit-nom" name="nom" type="text" class="form-control flex-1"
+                                    required>
+                            </div>
+                            <div class="col-span-12">
+                                <label class="form-label">Description</label>
+                                <textarea id="edit-description" name="description" class="form-control" rows="3" required></textarea>
+                            </div>
+                            <div class="col-span-12">
+                                <label class="form-label">Role</label>
+                                <input id="edit-role" name="role" type="text" class="form-control flex-1"
+                                    required>
+                            </div>
+                            <div class="col-span-12">
+                                <label class="form-label">Version</label>
+                                <input id="edit-version" name="version" type="text" class="form-control flex-1"
+                                    required>
+                            </div>
+                            <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5">
+                                <div class="form-label xl:w-64 xl:!mr-10">
+                                    <div class="font-medium">Statut</div>
+                                </div>
+                                <div class="w-full mt-3 xl:mt-0 flex-1">
+                                    <div class="flex flex-col sm:flex-row">
+                                        <div class="form-check mr-4">
+                                            <input id="edit-statut-actif" name="statut" class="form-check-input"
+                                                type="radio" value="actif" required>
+                                            <label class="form-check-label" for="edit-statut-actif">Actif</label>
+                                        </div>
+                                        <div class="form-check mr-4 mt-2 sm:mt-0">
+                                            <input id="edit-statut-inactif" name="statut" class="form-check-input"
+                                                type="radio" value="inactif">
+                                            <label class="form-check-label" for="edit-statut-inactif">Inactif</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer text-right">
+                            <button type="button" data-tw-dismiss="modal"
+                                class="btn btn-outline-secondary w-32 mr-1">Annuler</button>
+                            <button type="submit" class="btn btn-primary w-32">Modifier</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
         <!-- BEGIN: Pagination -->
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
             <nav class="w-full sm:w-auto sm:mr-auto">
@@ -474,27 +605,7 @@
         </div>
     </div>
     <!-- END: New Order Modal -->
-    <!-- BEGIN: Delete Confirmation Modal -->
-    <div id="delete-confirmation-modal-technologie" class="modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body p-0">
-                    <div class="p-5 text-center">
-                        <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i>
-                        <div class="text-3xl mt-5">Are you sure?</div>
-                        <div class="text-slate-500 mt-2">Do you really want to delete these records? <br>This process
-                            cannot be undone.</div>
-                    </div>
-                    <div class="px-5 pb-8 text-center">
-                        <button type="button" data-tw-dismiss="modal"
-                            class="btn btn-outline-secondary w-24 mr-1">Cancel</button>
-                        <button type="button" class="btn btn-danger w-24">Delete</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END: Delete Confirmation Modal -->
+
     <!-- END: technologie -->
 
 
@@ -505,19 +616,19 @@
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
 
-            <button class="btn btn-primary shadow-md mr-2" data-tw-toggle="modal"
-                data-tw-target="#modal-pivot">Ajouter un point focal</button>
+            <button class="btn btn-primary shadow-md mr-2" data-tw-toggle="modal" data-tw-target="#modal-pivot">Ajouter
+                un point focal</button>
             <div class="dropdown">
 
             </div>
             <!--
-            <div class="hidden md:block mx-auto text-slate-500">Showing 1 to 10 of 150 entries</div>
-            <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
-                <div class="w-56 relative text-slate-500">
-                    <input type="text" class="form-control w-56 box pr-10" placeholder="Search...">
-                    <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
-                </div>
-            </div>  -->
+                <div class="hidden md:block mx-auto text-slate-500">Showing 1 to 10 of 150 entries</div>
+                <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
+                    <div class="w-56 relative text-slate-500">
+                        <input type="text" class="form-control w-56 box pr-10" placeholder="Search...">
+                        <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
+                    </div>
+                </div>  -->
         </div>
         <!-- BEGIN: Data List -->
         <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
@@ -565,7 +676,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="text-center text-gray-500">Aucun point focal trouvé pour la structure porteuse de ce projet.</td>
+                            <td colspan="9" class="text-center text-gray-500">Aucun point focal trouvé pour la
+                                structure porteuse de ce projet.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -598,17 +710,21 @@
                                     <div class="p-1">
                                         <div class="input-form">
                                             <label for="structure_porteuse" class="form-label">Structure porteuse</label>
-                                            <input id="structure_porteuse" type="text" name="structure_porteuse" class="form-control"
-                                             value="{{ $unProjet->structurePorteuse->nom }}" disabled>
+                                            <input id="structure_porteuse" type="text" name="structure_porteuse"
+                                                class="form-control" value="{{ $unProjet->structurePorteuse->nom }}"
+                                                disabled>
                                         </div>
-                                        <input type="hidden" name="structure_porteuse_id" value="{{ $unProjet->structurePorteuse->id }}">
+                                        <input type="hidden" name="structure_porteuse_id"
+                                            value="{{ $unProjet->structurePorteuse->id }}">
                                         <div class="input-form mt-3">
                                             <label>Sélectionner le point focal</label>
                                             <div class="mt-2">
-                                                <select id="user" name="user_id" data-placeholder="Sélectionner le point focal"
+                                                <select id="user" name="user_id"
+                                                    data-placeholder="Sélectionner le point focal"
                                                     class="tom-select w-full" required>
                                                     @foreach ($users as $user)
-                                                        <option value="{{ $user->id }}">{{ $user->name }} {{ $user->firstname }} ({{ $user->structure }})</option>
+                                                        <option value="{{ $user->id }}">{{ $user->name }}
+                                                            {{ $user->firstname }} ({{ $user->structure }})</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -923,7 +1039,7 @@
     <!-- END: Delete Confirmation Modal -->
     <!-- END: membres -->
 
-    <  <!-- BEGIN:  instances -->
+    <!-- BEGIN:  Stucture bénéficiaire -->
     <h2 class="intro-y text-lg font-medium mt-10">Stucture bénéficiaire</h2>
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
@@ -959,31 +1075,56 @@
                     </tr>
                 </thead>
                 <tbody>
-                @forelse($projet->structuresBeneficiaires as $structureBeneficiaire)
-                    <tr class="intro-x">
-                        <td class="w-40">{{ $structureBeneficiaire->nom }}</td>
-                        <td class="text-center">{{ $structureBeneficiaire->statut }}</td>
-                        <td class="w-40">{{ $structureBeneficiaire->etat}}</td>
-                        <td class="w-40">{{ $structureBeneficiaire->annee_exploitation }}</td>
-                        <td class="w-40">{{ $structureBeneficiaire->annee_deploiement }}</td>
-                        <td class="w-40">{{ $structureBeneficiaire->commentaire}}</td>
-
-                        <td class="table-report__action w-56">
-
-                            <div class="flex justify-center items-center">
-                                <a class="flex items-center " href="javascript:;">
-                                    <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> 
+                    @forelse($projet->structuresBeneficiaires as $structureBeneficiaire)
+                        <tr class="intro-x">
+                            <td class="w-40">{{ $structureBeneficiaire->nom }}</td>
+                            <td class="text-center">{{ $structureBeneficiaire->statut }}</td>
+                            <td class="w-40">{{ $structureBeneficiaire->etat }}</td>
+                            <td class="w-40">{{ $structureBeneficiaire->annee_exploitation }}</td>
+                            <td class="w-40">{{ $structureBeneficiaire->annee_deploiement }}</td>
+                            <td class="w-40">
+                                <a class="flex items-center  tooltip" href="javascript:;"
+                                    title="{{ $structureBeneficiaire->commentaire }}">
+                                    <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
                                 </a>
-                                <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal"
-                                    data-tw-target="#delete-confirmation-modal-instance">
-                                    <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> 
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+
+                            <td class="table-report__action w-56">
+
+                                <div class="flex justify-center items-center">
+                                    <a class="flex items-center " href="javascript:;">
+                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i>
+                                        </a>
+                                        <a class="flex items-center text-danger" href="javascript:;"
+                                            data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal-instance">
+                                            <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i>
+                                        </a>
+                                        =======
+                                        <a class="flex items-center text-primary edit-structure" href="javascript:;"
+                                            data-tw-toggle="modal" data-tw-target="#edit-structure-modal"
+                                            data-id="{{ $structureBeneficiaire->id }}"
+                                            data-nom="{{ $structureBeneficiaire->nom }}"
+                                            data-statut="{{ $structureBeneficiaire->statut }}"
+                                            data-etat="{{ $structureBeneficiaire->etat }}"
+                                            data-annee_exploitation="{{ $structureBeneficiaire->annee_exploitation }}"
+                                            data-annee_deploiement="{{ $structureBeneficiaire->annee_deploiement }}"
+                                            data-commentaire="{{ $structureBeneficiaire->commentaire }}">
+                                            <i data-lucide="edit" class="w-4 h-4 mr-1"></i> Modifier
+                                        </a>
+
+                                        <a href="javascript:;" class="flex items-center text-danger delete-structure"
+                                            data-id="{{ $structureBeneficiaire->id }}">
+                                            <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Supprimer
+                                        </a>
+
+
+                                </div>
+                            </td>
+                        </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="text-center text-gray-500">Aucun structure bénéficiaire trouvé pour ce projet.</td>
+                            <td colspan="9" class="text-center text-gray-500">Aucun structure bénéficiaire trouvé pour
+                                ce projet.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -1040,86 +1181,166 @@
         </div>
         <!-- END: Pagination -->
     </div>
-   <!-- BEGIN: New Order Modal -->
-   <div id="new-order-modal-structure" class="modal" tabindex="-1" aria-hidden="true">
+    <!-- BEGIN: New Order Modal -->
+    <div id="new-order-modal-structure" class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-            <div id="new-order-modal-structure" class="modal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="structure-form" action="{{ route('structure-beneficiaire.store',$projet->id) }}" method="POST">
-                @csrf
-                <div class="modal-header">
-                    <h2 class="font-medium text-base mr-auto">Structure bénéficiaire</h2>
-                </div>
-                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                <div id="new-order-modal-structure" class="modal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form id="structure-form" action="{{ route('structure-beneficiaire.store', $projet->id) }}"
+                                method="POST">
+                                @csrf
+                                <div class="modal-header">
+                                    <h2 class="font-medium text-base mr-auto">Structure bénéficiaire</h2>
+                                </div>
+                                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
 
-                    <div class="col-span-12">
-                        <label for="pos-form-1" class="form-label">Nom de la structure</label>
-                        <input id="pos-form-1" type="text" name="nom" class="form-control flex-1" placeholder="nom de la structure">
-                    </div>
+                                    <div class="col-span-12">
+                                        <label for="pos-form-1" class="form-label">Nom de la structure</label>
+                                        <input id="pos-form-1" type="text" name="nom" class="form-control flex-1"
+                                            placeholder="nom de la structure">
+                                    </div>
 
-                    <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0">
-                        <div class="form-label xl:w-64 xl:!mr-10">
-                            <div class="text-left">
-                                <div class="flex items-center">
-                                    <div class="font-medium">Statut</div>
-                                    <div class="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">
-                                        Required
+                                    <div
+                                        class="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0">
+                                        <div class="form-label xl:w-64 xl:!mr-10">
+                                            <div class="text-left">
+                                                <div class="flex items-center">
+                                                    <div class="font-medium">Statut</div>
+                                                    <div
+                                                        class="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">
+                                                        Required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="w-full mt-3 xl:mt-0 flex-1">
+                                            <div class="flex flex-col sm:flex-row">
+                                                <div class="form-check mr-4">
+                                                    <input id="statut-en-exploitation" name="statut"
+                                                        class="form-check-input" type="radio" value="en_exploitation"
+                                                        required>
+                                                    <label class="form-check-label" for="statut-en-exploitation">En
+                                                        exploitation</label>
+                                                </div>
+                                                <div class="form-check mr-4 mt-2 sm:mt-0">
+                                                    <input id="statut-pas-en-exploitation" name="statut"
+                                                        class="form-check-input" type="radio"
+                                                        value="pas_en_exploitation">
+                                                    <label class="form-check-label" for="statut-pas-en-exploitation">Pas
+                                                        en exploitation</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-12">
+                                        <label for="structure-beneficiare-etat" class="form-label">Etat</label>
+                                        <select id="structure-beneficiare-etat" name="etat"
+                                            class="form-control flex-1">
+                                            <option value="deployer">Déployées</option>
+                                            <option value="maintenance">En maintenance</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-span-12">
+                                        <label for="structure-beneficiaire-commentaire"
+                                            class="form-label">Commentaire</label>
+                                        <textarea id="structure-beneficiaire-commentaire" name="commentaire" class="form-control flex-1 h-25"
+                                            placeholder="Entrez un commentaire..."></textarea>
+                                    </div>
+
+                                    <div class="col-span-12">
+                                        <label for="pos-form-2" class="form-label">Année d'exploitation</label>
+                                        <input id="pos-form-2" type="date" name="annee_exploitation"
+                                            class="form-control flex-1" placeholder="">
+                                    </div>
+
+                                    <div class="col-span-12">
+                                        <label for="pos-form-3" class="form-label">Année de déploiement</label>
+                                        <input id="pos-form-3" type="date" name="annee_deploiement"
+                                            class="form-control flex-1" placeholder="">
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="w-full mt-3 xl:mt-0 flex-1">
-                            <div class="flex flex-col sm:flex-row">
-                                <div class="form-check mr-4">
-                                    <input id="statut-en-exploitation" name="statut" class="form-check-input" type="radio" value="en_exploitation" required>
-                                    <label class="form-check-label" for="statut-en-exploitation">En exploitation</label>
+                                <div class="modal-footer text-right">
+                                    <button type="button" data-tw-dismiss="modal"
+                                        class="btn btn-outline-secondary w-32 mr-1">Annuler</button>
+                                    <button type="submit" class="btn btn-primary w-32">Enregistrer</button>
                                 </div>
-                                <div class="form-check mr-4 mt-2 sm:mt-0">
-                                    <input id="statut-pas-en-exploitation" name="statut" class="form-check-input" type="radio" value="pas_en_exploitation">
-                                    <label class="form-check-label" for="statut-pas-en-exploitation">Pas en exploitation</label>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
-
-                    <div class="col-span-12">
-                        <label for="structure-beneficiare-etat" class="form-label">Etat</label>
-                        <select id="structure-beneficiare-etat" name="etat" class="form-control flex-1">
-                            <option value="deployer">Déployées</option>
-                            <option value="maintenance">En maintenance</option>
-                        </select>
-                    </div>
-
-                    <div class="col-span-12">
-                        <label for="structure-beneficiaire-commentaire" class="form-label">Commentaire</label>
-                        <textarea id="structure-beneficiaire-commentaire" name="commentaire" class="form-control flex-1 h-25" placeholder="Entrez un commentaire..."></textarea>
-                    </div>
-
-                    <div class="col-span-12">
-                        <label for="pos-form-2" class="form-label">Année d'exploitation</label>
-                        <input id="pos-form-2" type="date" name="annee_exploitation" class="form-control flex-1" placeholder="">
-                    </div>
-
-                    <div class="col-span-12">
-                        <label for="pos-form-3" class="form-label">Année de déploiement</label>
-                        <input id="pos-form-3" type="date" name="annee_deploiement" class="form-control flex-1" placeholder="">
-                    </div>
                 </div>
-                <div class="modal-footer text-right">
-                    <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Annuler</button>
-                    <button type="submit" class="btn btn-primary w-32">Enregistrer</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
             </div>
         </div>
     </div>
     <!-- END: New Order Modal -->
+
+    <div id="edit-structure-modal" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="edit-structure-form" action="" method="POST">
+                    @csrf
+                    @method('PUT') <!-- Méthode PUT pour la modification -->
+
+                    <input type="hidden" name="id" id="edit-structure-id">
+
+                    <div class="modal-header">
+                        <h2 class="font-medium text-base mr-auto">Modifier Structure bénéficiaire</h2>
+                    </div>
+
+                    <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                        <div class="col-span-12">
+                            <label class="form-label">Nom de la structure</label>
+                            <input type="text" name="nom" id="edit-structure-nom" class="form-control">
+                        </div>
+
+                        <div class="col-span-12">
+                            <label class="form-label">Statut</label>
+                            <select name="statut" id="edit-structure-statut" class="form-control">
+                                <option value="en_exploitation">En exploitation</option>
+                                <option value="pas_en_exploitation">Pas en exploitation</option>
+                            </select>
+                        </div>
+
+                        <div class="col-span-12">
+                            <label class="form-label">État</label>
+                            <select name="etat" id="edit-structure-etat" class="form-control">
+                                <option value="deployer">Déployées</option>
+                                <option value="maintenance">En maintenance</option>
+                            </select>
+                        </div>
+
+                        <div class="col-span-12">
+                            <label class="form-label">Année d'exploitation</label>
+                            <input type="date" name="annee_exploitation" id="edit-structure-annee_exploitation"
+                                class="form-control">
+                        </div>
+
+                        <div class="col-span-12">
+                            <label class="form-label">Année de déploiement</label>
+                            <input type="date" name="annee_deploiement" id="edit-structure-annee_deploiement"
+                                class="form-control">
+                        </div>
+
+                        <div class="col-span-12">
+                            <label class="form-label">Commentaire</label>
+                            <textarea name="commentaire" id="edit-structure-commentaire" class="form-control"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer text-right">
+                        <button type="button" data-tw-dismiss="modal"
+                            class="btn btn-outline-secondary w-32">Annuler</button>
+                        <button type="submit" class="btn btn-primary w-32">Modifier</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- BEGIN: Delete Confirmation Modal -->
     <div id="delete-confirmation-modal-instance" class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -1291,7 +1512,7 @@
         <!-- END: Pagination -->
     </div>
     <!-- BEGIN: New Order Modal
-                                    -->
+                                        -->
     <div id="new-order-modal-amendement" class="modal" tabindex="-1" aria-hidden="true">
 
         <div class="modal-dialog modal-xl">
@@ -1310,7 +1531,8 @@
                         <div class="grid grid-cols-12 gap-6">
                             <div class="intro-y col-span-12 lg:col-span-6">
                                 <div class="col-span-12">
-                                    <label for="amendement-source" class="form-label">Source ( Auteur de l'amendement ) </label>
+                                    <label for="amendement-source" class="form-label">Source ( Auteur de l'amendement )
+                                    </label>
                                     <input id="amendement-source" name="source" type="text"
                                         class="form-control flex-1" placeholder="Entrez la source de l'amendement">
                                 </div>
@@ -1375,7 +1597,8 @@
                                 <div class="col-span-12 mt-3">
                                     <label for="responsable" class="form-label">Responsable </label>
                                     <input id="responsable" name="responsable" type="text"
-                                        class="form-control flex-1" placeholder="Entrez le responsable de la prise de l'amendement">
+                                        class="form-control flex-1"
+                                        placeholder="Entrez le responsable de la prise de l'amendement">
                                 </div>
 
                                 <div class="col-span-12 mt-3">
@@ -1387,9 +1610,10 @@
                                     </select>
                                 </div>
 
-                                 <!-- Description -->
-                                 <div class="col-span-12 mt-3">
-                                    <label for="amendement-description" class="form-label">Description ( Commentaire ) </label>
+                                <!-- Description -->
+                                <div class="col-span-12 mt-3">
+                                    <label for="amendement-description" class="form-label">Description ( Commentaire )
+                                    </label>
                                     <textarea id="amendement-description" name="description" class="form-control flex-1 h-25"
                                         placeholder="Entrez une description"></textarea>
                                 </div>
@@ -1532,7 +1756,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center text-gray-500">Aucune difficulté trouvée pour ce projet.
+                            <td colspan="6" class="text-center text-gray-500">Aucune difficulté trouvée pour ce
+                                projet.
                             </td>
                         </tr>
                     @endforelse
@@ -1681,6 +1906,262 @@
     <!-- END: Difficultes-->
 
     <!-- start: Difficultes script-->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".edit-fonctionnalite").forEach(button => {
+                button.addEventListener("click", function() {
+                    let id = this.getAttribute("data-id");
+                    let nom = this.getAttribute("data-nom");
+                    let description = this.getAttribute("data-description");
+                    let dateDebut = this.getAttribute("data-date-debut");
+                    let dateFin = this.getAttribute("data-date-fin");
+                    let statut = this.getAttribute("data-statut");
+
+                    document.getElementById("edit_fonctionnalite_id").value = id;
+                    document.getElementById("edit_nom").value = nom;
+                    document.getElementById("edit_description").value = description;
+                    document.getElementById("edit_date_debut").value = dateDebut;
+                    document.getElementById("edit_date_fin").value = dateFin;
+
+                    if (statut === "en cour") {
+                        document.getElementById("edit_statut_en_cour").checked = true;
+                    } else {
+                        document.getElementById("edit_statut_terminer").checked = true;
+                    }
+
+                    // Modifier l'action du formulaire avec l'ID de la fonctionnalité
+                    let form = document.getElementById("edit_fonctionnalite_form");
+                    form.action = `/fonctionnalites/update/${id}`;
+                });
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".delete-fonctionnalite").forEach(button => {
+                button.addEventListener("click", function() {
+                    let id = this.getAttribute("data-id");
+
+                    Swal.fire({
+                        title: "Êtes-vous sûr?",
+                        text: "Cette action est irréversible!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Oui, supprimer!",
+                        cancelButtonText: "Annuler"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch(`/fonctionnalites/delete/${id}`, {
+                                    method: "DELETE",
+                                    headers: {
+                                        "X-CSRF-TOKEN": document.querySelector(
+                                            'meta[name="csrf-token"]').getAttribute(
+                                            "content"),
+                                        "Content-Type": "application/json"
+                                    }
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        Swal.fire("Supprimé!",
+                                            "La fonctionnalité a été supprimée.",
+                                            "success");
+                                        setTimeout(() => {
+                                            location
+                                        .reload(); // Recharge la page après suppression
+                                        }, 1000);
+                                    } else {
+                                        Swal.fire("Erreur!",
+                                            "Une erreur s'est produite.", "error");
+                                    }
+                                })
+                                .catch(error => {
+                                    Swal.fire("Erreur!", "Impossible de supprimer.",
+                                        "error");
+                                });
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Sélectionne tous les boutons "Éditer"
+            document.querySelectorAll(".edit-technologie").forEach(button => {
+                button.addEventListener("click", function() {
+                    // Récupère les valeurs de l'attribut `data-`
+                    let id = this.getAttribute("data-id");
+                    let nom = this.getAttribute("data-nom");
+                    let description = this.getAttribute("data-description");
+                    let role = this.getAttribute("data-role");
+                    let version = this.getAttribute("data-version");
+                    let statut = this.getAttribute("data-statut");
+
+                    // Remplit le formulaire avec les valeurs récupérées
+                    document.getElementById("edit-id").value = id;
+                    document.getElementById("edit-nom").value = nom;
+                    document.getElementById("edit-description").value = description;
+                    document.getElementById("edit-role").value = role;
+                    document.getElementById("edit-version").value = version;
+
+                    // Gestion des boutons radio pour le statut
+                    if (statut === "actif") {
+                        document.getElementById("edit-statut-actif").checked = true;
+                    } else {
+                        document.getElementById("edit-statut-inactif").checked = true;
+                    }
+
+                    // Modifier l'action du formulaire pour envoyer la requête à la bonne route
+                    document.getElementById("edit_form").action = `/technologies/${id}/update`;
+                });
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Sélectionne tous les boutons "Supprimer"
+            document.querySelectorAll(".delete-technologie").forEach(button => {
+                button.addEventListener("click", function() {
+                    let id = this.getAttribute("data-id"); // Récupère l'ID de la technologie
+
+                    Swal.fire({
+                        title: "Êtes-vous sûr ?",
+                        text: "Cette action est irréversible !",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Oui, supprimer !",
+                        cancelButtonText: "Annuler"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Envoi de la requête AJAX pour supprimer
+                            fetch(`/technologies/${id}/delete`, {
+                                    method: "DELETE",
+                                    headers: {
+                                        "X-CSRF-TOKEN": document.querySelector(
+                                            'meta[name="csrf-token"]').getAttribute(
+                                            "content"),
+                                        "Content-Type": "application/json"
+                                    }
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        Swal.fire("Supprimé !",
+                                                "La technologie a été supprimée.",
+                                                "success")
+                                            .then(() => location
+                                        .reload()); // Recharge la page
+                                    } else {
+                                        Swal.fire("Erreur", "Une erreur est survenue.",
+                                            "error");
+                                    }
+                                })
+                                .catch(error => {
+                                    Swal.fire("Erreur", "Impossible de supprimer.",
+                                        "error");
+                                    console.error(error);
+                                });
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".edit-structure").forEach(button => {
+                button.addEventListener("click", function() {
+                    let id = this.dataset.id;
+                    let nom = this.dataset.nom;
+                    let statut = this.dataset.statut;
+                    let etat = this.dataset.etat;
+                    let annee_exploitation = this.dataset.annee_exploitation;
+                    let annee_deploiement = this.dataset.annee_deploiement;
+                    let commentaire = this.dataset.commentaire;
+
+                    document.getElementById("edit-structure-id").value = id;
+                    document.getElementById("edit-structure-nom").value = nom;
+                    document.getElementById("edit-structure-statut").value = statut;
+                    document.getElementById("edit-structure-etat").value = etat;
+                    document.getElementById("edit-structure-annee_exploitation").value =
+                        annee_exploitation;
+                    document.getElementById("edit-structure-annee_deploiement").value =
+                        annee_deploiement;
+                    document.getElementById("edit-structure-commentaire").value = commentaire;
+
+                    document.getElementById("edit-structure-form").action =
+                        "/structure-beneficiaire/" + id;
+                });
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".delete-structure").forEach(button => {
+                button.addEventListener("click", function() {
+                    let id = this.dataset.id;
+
+                    Swal.fire({
+                        title: "Êtes-vous sûr ?",
+                        text: "Cette action est irréversible !",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Oui, supprimer !",
+                        cancelButtonText: "Annuler"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch(`/structure-beneficiaire/${id}`, {
+                                    method: "DELETE",
+                                    headers: {
+                                        "X-CSRF-TOKEN": document.querySelector(
+                                            'meta[name="csrf-token"]').getAttribute(
+                                            "content")
+                                    }
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        Swal.fire("Supprimé!",
+                                            "La structure a été supprimée.",
+                                            "success");
+                                        setTimeout(() => location.reload(), 1000);
+                                    } else {
+                                        Swal.fire("Erreur!", "Une erreur est survenue.",
+                                            "error");
+                                    }
+                                })
+                                .catch(error => {
+                                    Swal.fire("Erreur!", "Impossible de supprimer.",
+                                        "error");
+                                });
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+
+
     <script>
         document.getElementById('difficulte-form').addEventListener('submit', function(event) {
             const fileInput = document.getElementById('difficulte-file');
