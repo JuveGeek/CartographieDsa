@@ -257,43 +257,44 @@ class PageController extends Controller
      */
     public function storeProjet(Request $request)
     {
+        
         // Validation des données
         $validated = $request->validate([
-            'nom'                   => 'required|string|max:255',
-            'description'           => 'required|string|max:255',
-            'date_debut'            => 'required|date',
-            'date_fin'              => 'required|date',
-            'statut'                => 'required|string|in:en_exploitation,pas_en_exploitation',
-            'structure_porteuse_id' => 'required|exists:structure_porteuses,id', // Vérifie si l'ID existe
-            'objectif_principal'    => 'required|string|max:255',
-            'public_cible'          => 'required|string|max:255',
-            'phase_actuelle'        => 'required|string|max:255',
-
+            'nom' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'date_debut' => 'nullable|date',
+            'date_fin' => 'nullable|date',
+            'statut' => 'required|string|in:en_exploitation,pas_en_exploitation',
+            'structure_porteuse_id' => 'required|exists:structure_porteuses,id',
+            'objectif_principal' => 'required|string|max:255',
+            'public_cible' => 'required|string|max:255',
+            'phase_actuelle' => 'nullable|string|max:255',
         ]);
+        
 
         // Vérification de l'existence d'un enregistrement avec les mêmes données
         $existingProjet = Projet::where('nom', $validated['nom'])
             ->where('description', $validated['description'])
-            ->where('date_debut', $validated['date_debut'])
-            ->where('date_fin', $validated['date_fin'])
+            ->where('date_debut', $validated['date_debut'] ?? null)
+            ->where('date_fin', $validated['date_fin'] ?? null)
             ->where('statut', $validated['statut'])
             ->where('structure_porteuse_id', $validated['structure_porteuse_id'])
             ->where('objectif_principal', $validated['objectif_principal'])
             ->where('public_cible', $validated['public_cible'])
-            ->where('phase_actuelle', $validated['phase_actuelle'])
+            ->where('phase_actuelle', $validated['phase_actuelle']?? null)
             ->first();
 
         // Enregistrement dans la base de données si aucune correspondance n'a été trouvée
         $projet = Projet::create([
             'nom'                   => $validated['nom'],
             'description'           => $validated['description'],
-            'date_debut'            => $validated['date_debut'],
-            'date_fin'              => $validated['date_fin'],
+            'date_debut'            => $validated['date_debut']?? null,
+            'date_fin'              => $validated['date_fin']?? null,
             'statut'                => $validated['statut'],
             'structure_porteuse_id' => $validated['structure_porteuse_id'],
             'objectif_principal'    => $validated['objectif_principal'],
             'public_cible'          => $validated['public_cible'],
-            'phase_actuelle'        => $validated['phase_actuelle'],
+            'phase_actuelle'        => $validated['phase_actuelle']?? null,
         ]);
 
         // Génération du nom de l'équipe en fonction du nom du projet
@@ -307,15 +308,65 @@ class PageController extends Controller
         return redirect('/projets-data-list-page')->with('success', 'projet ajouté avec succès!');
     }
 
-    public function showprojetsDataList()
+    public function editProjet($id)
     {
-        // Récupérer toutes les projets depuis la base de données
-        $projets = Projet::all();
-
-        // Passer les données à la vue
-        return view('pages/projets-data-list', compact('projets'));
-
+        $projet = Projet::findOrFail($id);
+        $structures =StructurePorteuse::all(); // Si vous avez un modèle Structure
+        return view('pages.projets-edit', compact('projet', 'structures'));
     }
+    
+
+     
+    public function updateProjet(Request $request, $id)
+{
+    // Validation des données
+    $validated = $request->validate([
+            'nom' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'date_debut' => 'nullable|date',
+            'date_fin' => 'nullable|date',
+            'statut' => 'required|string|in:en_exploitation,pas_en_exploitation',
+            'structure_porteuse_id' => 'required|exists:structure_porteuses,id',
+            'objectif_principal' => 'required|string|max:255',
+            'public_cible' => 'required|string|max:255',
+            'phase_actuelle' => 'nullable|string|max:255',
+    ]);
+
+    // Récupérer le projet existant
+    $projet = Projet::findOrFail($id);
+
+    // Mettre à jour les informations du projet
+    $projet->update($validated);
+
+    return redirect('/projets-data-list-page')->with('success', 'Projet mis à jour avec succès!');
+}
+
+
+public function destroyProjet(Request $request)
+{
+    $projetId = $request->input('projet_id'); // Récupérer l'ID envoyé dans l'AJAX
+    $projet   = Projet::findOrFail($projetId);
+    $projet->delete();
+
+    return response()->json(['message' => 'Utilisateur supprimé avec succès']);
+}
+
+    
+
+
+
+public function showprojetsDataList(Request $request)
+{
+    // Récupérer le nombre d'éléments par page depuis la requête, avec 10 par défaut
+    $perPage = $request->get('per_page', 10);
+
+    // Récupérer les projets paginés avec le nombre d'éléments par page
+    $projets = Projet::paginate($perPage);
+
+    // Passer les données à la vue
+    return view('pages.projets-data-list', compact('projets'));
+}
+
 
     // Méthode pour enregistrer un Structre porteuse
 

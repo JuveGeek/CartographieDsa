@@ -35,6 +35,11 @@ Route::middleware('auth')->group(function () {
     Route::controller(PageController::class)->group(function () {
         Route::get('/', 'dashboardOverview1')->name('dashboard-overview-1');
         Route::get('projets-form-page', 'projetsForm')->name('projets-form');
+        Route::get('projets-edit/edit/{id}','editProjet')->name('projets.edit');
+        Route::put('/projets/update/{id}','updateProjet')->name('projets.update');
+        Route::delete('/projets/delete','destroyProjet')->name('projets.destroy');
+
+
         Route::get('projets-data-list-page', 'projetsDataList')->name('projets-data-list');
         Route::get('dashboard-overview-2-page', 'dashboardOverview2')->name('dashboard-overview-2');
         Route::get('dashboard-overview-3-page', 'dashboardOverview3')->name('dashboard-overview-3');
@@ -105,6 +110,19 @@ Route::middleware('auth')->group(function () {
         Route::delete('/focal/delete', [PointFocalController::class, 'destroy'])->name('focals.delete');
 
         Route::get('/export-projet/{id}', [PageController::class, 'exportProjet'])->name('export.projet');
+
+        Route::put('/fonctionnalites/update/{id}', [FonctionnaliteController::class, 'update'])->name('fonctionnalites.update');
+        Route::delete('/fonctionnalites/delete/{id}', [FonctionnaliteController::class, 'destroy'])->name('fonctionnalites.destroy');
+
+        
+        Route::put('/technologies/{id}/update', [TechnologieController::class, 'update'])->name('technologies.update');
+        Route::delete('/technologies/{id}/delete', [TechnologieController::class, 'destroy'])->name('technologies.destroy');
+
+        Route::put('/structure-beneficiaire/{id}', [StructureBeneficiaireController::class, 'update'])->name('structure-beneficiaire.update');
+        Route::delete('/structure-beneficiaire/{id}', [StructureBeneficiaireController::class, 'destroy'])->name('structure-beneficiaire.destroy');
+
+
+
 
     });
 });
