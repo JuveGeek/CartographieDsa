@@ -31,14 +31,23 @@
 
                     <tr class="intro-x">
                         <td class="w-20">{{ $unProjet->nom }}</td>
-                        <td class="w-40">{{ $unProjet->objectif_principal }}</td>
-                        <td class="w-60">{{ $unProjet->public_cible }}</td>
-                        <td class="">
-
-                            <div class="w-240">
-                                {{ $unProjet->description }}
-
-                            </div>
+                        <td class="w-40">
+                        <a class="flex items-center  tooltip" href="javascript:;" 
+                       title="{{ $unProjet->objectif_principal }}">
+                       <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                        </a>  
+                        </td>
+                        <td class="w-60">
+                        <a class="flex items-center  tooltip" href="javascript:;" 
+                       title="{{ $unProjet->public_cible }}">
+                       <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                        </a>
+                        </td>
+                        <td class="w-60">
+                        <a class="flex items-center  tooltip" href="javascript:;" 
+                       title="{{ $unProjet->description }}">
+                       <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                        </a>  
                         </td>
                         <td class="w-20">
                             {{ $unProjet->structurePorteuse ? $unProjet->structurePorteuse->nom : 'Aucune structure porteuse' }}
@@ -1065,7 +1074,12 @@
                         <td class="w-40">{{ $structureBeneficiaire->etat}}</td>
                         <td class="w-40">{{ $structureBeneficiaire->annee_exploitation }}</td>
                         <td class="w-40">{{ $structureBeneficiaire->annee_deploiement }}</td>
-                        <td class="w-40">{{ $structureBeneficiaire->commentaire}}</td>
+                        <td class="w-40">
+                        <a class="flex items-center  tooltip" href="javascript:;" 
+                       title="{{ $structureBeneficiaire->commentaire}}">
+                       <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                        </a>
+                        </td>
 
                         <td class="table-report__action w-56">
 
